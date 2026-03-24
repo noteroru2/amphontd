@@ -1,0 +1,106 @@
+.longform {
+	padding-top: 2rem;
+	max-width: 920px;
+}
+.longform .kicker {
+	margin: 0;
+	font-size: 0.82rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--accent);
+}
+.longform h1 {
+	margin: 0.2rem 0 0.75rem;
+	line-height: 1.22;
+	font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+.longform .intro {
+	margin: 0;
+	color: var(--muted);
+	font-size: 1.02rem;
+	line-height: 1.7;
+}
+.longform section {
+	margin-top: 1.15rem;
+	padding: 1rem 1.05rem 1.1rem;
+	background: var(--surface);
+	border: 1px solid rgba(36, 48, 67, 0.12);
+	border-radius: var(--radius);
+}
+.longform h2 {
+	margin: 0 0 0.55rem;
+	font-size: clamp(1.18rem, 2.2vw, 1.5rem);
+	line-height: 1.3;
+}
+.longform h3 {
+	margin: 0.9rem 0 0.4rem;
+	font-size: 1.05rem;
+}
+.longform h4 {
+	margin: 0.75rem 0 0.35rem;
+	font-size: 0.98rem;
+	color: #3a4f64;
+}
+.longform h5 {
+	margin: 0.6rem 0 0.3rem;
+	font-size: 0.92rem;
+	color: var(--muted);
+}
+.longform p {
+	margin: 0.55rem 0;
+	color: #32465c;
+	line-height: 1.75;
+}
+.longform ul,
+.longform ol {
+	margin: 0.5rem 0;
+	padding-left: 1.1rem;
+	display: grid;
+	gap: 0.3rem;
+	color: #3a4f64;
+}
+.longform li::marker {
+	color: var(--accent);
+}
+.longform .highlight-box {
+	background: #fff8ee;
+	border-left: 4px solid #f0a830;
+	padding: 0.7rem 0.85rem;
+	border-radius: 0 var(--radius) var(--radius) 0;
+	margin-block: 0.6rem;
+	font-size: 0.95rem;
+	color: #483a1d;
+}
+.longform .faq details {
+	border-top: 1px dashed rgba(36, 48, 67, 0.18);
+	padding-top: 0.55rem;
+	margin-top: 0.55rem;
+}
+.longform .faq summary {
+	cursor: pointer;
+	font-weight: 700;
+}
+.longform .inline-contact {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.28rem;
+	padding: 0.18rem 0.45rem;
+	border-radius: 6px;
+	background: #06c755;
+	color: #fff;
+	font-weight: 700;
+	font-size: 0.88rem;
+	text-decoration: none;
+	vertical-align: baseline;
+}
+.longform .inline-contact:hover {
+	background: #05a948;
+	text-decoration: none;
+}
+.longform .phone-link {
+	color: #1e3a5f;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}

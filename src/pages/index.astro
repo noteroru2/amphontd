@@ -1,0 +1,882 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { fetchPosts, isWordpressConfigured } from '../lib/wordpress';
+
+const configured = isWordpressConfigured();
+const allPosts = configured ? await fetchPosts() : [];
+const recent = allPosts.slice(0, 10);
+const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
+const socialRaw = import.meta.env.PUBLIC_ORG_SAME_AS ?? '';
+const socialLinks = socialRaw
+	.split(',')
+	.map((item) => item.trim())
+	.filter(Boolean);
+const businessPhone = import.meta.env.PUBLIC_BUSINESS_PHONE ?? '+66-64-257-9353';
+const serviceAreasRaw =
+	import.meta.env.PUBLIC_SERVICE_AREAS ??
+	'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี,มหาสารคาม,สุรินทร์';
+const serviceAreas = serviceAreasRaw
+	.split(',')
+	.map((item) => item.trim())
+	.filter(Boolean);
+const mapUrl =
+	import.meta.env.PUBLIC_GOOGLE_MAP_URL ??
+	'https://maps.google.com/?q=13.7563,100.5018';
+const techPillars = [
+	{
+		title: 'AI-Assisted Pricing',
+		text: 'ประเมินเบื้องต้นเร็วขึ้นจากข้อมูลรุ่นและสภาพสินค้า พร้อมทีมงานตรวจซ้ำทุกเคส',
+	},
+	{
+		title: 'Traceable Workflow',
+		text: 'ทุกขั้นตอนมีหลักฐานการคุยและการตกลงราคา ช่วยให้ตรวจสอบย้อนหลังได้',
+	},
+	{
+		title: '24/7 Response Layer',
+		text: 'มีช่องทางติดต่อหลักผ่าน LINE @webuy พร้อมการตอบกลับต่อเนื่องตลอดวัน',
+	},
+	{
+		title: 'Knowledge Hub',
+		text: 'คอนเทนต์บทความจำนวนมากช่วยให้ลูกค้าตัดสินใจจากข้อมูล ไม่ใช่การคาดเดา',
+	},
+];
+
+const faqItems = [
+	{
+		question: 'รับประเมินราคาสินค้าอย่างไร?',
+		answer:
+			'ส่งรูปสินค้า รุ่น อุปกรณ์ที่มี และสภาพการใช้งานผ่าน Line @webuy ทีมงานจะประเมินราคาเบื้องต้นให้โดยเร็ว',
+	},
+	{
+		question: 'ติดต่อช่วงเวลาไหนได้บ้าง?',
+		answer: 'สามารถติดต่อผ่าน Line @webuy ได้ตลอด 24 ชั่วโมง',
+	},
+	{
+		question: 'อยู่ต่างจังหวัดใช้บริการได้ไหม?',
+		answer:
+			'ได้ มีทีมงานให้คำแนะนำขั้นตอนและนัดหมายตามพื้นที่ที่ให้บริการ เพื่อความสะดวกของลูกค้า',
+	},
+	{
+		question: 'ต้องเตรียมอะไรบ้างก่อนขาย?',
+		answer:
+			'เตรียมข้อมูลรุ่นสินค้า อุปกรณ์ที่มี ใบเสร็จหรือกล่อง (ถ้ามี) และแจ้งตำหนิการใช้งานเพื่อประเมินราคาได้แม่นยำขึ้น',
+	},
+];
+
+const homeJsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: orgName,
+		url: site,
+		inLanguage: 'th-TH',
+		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อสินค้าไอทีมือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง',
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: orgName,
+		url: site,
+		logo: new URL(orgLogo, site).toString(),
+		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqItems.map((item) => ({
+			'@type': 'Question',
+			name: item.question,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.answer,
+			},
+		})),
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'LocalBusiness',
+		name: orgName,
+		url: site,
+		logo: new URL(orgLogo, site).toString(),
+		image: [new URL('/hero-soft.svg', site).toString()],
+		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อ ฝากขาย และประเมินสินค้าไอทีมือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อผ่าน Line @webuy ตลอด 24 ชั่วโมง',
+		telephone: businessPhone,
+		priceRange: '$$',
+		areaServed: serviceAreas.map((area) => ({
+			'@type': 'AdministrativeArea',
+			name: area,
+		})),
+		openingHoursSpecification: [
+			{
+				'@type': 'OpeningHoursSpecification',
+				dayOfWeek: [
+					'Monday',
+					'Tuesday',
+					'Wednesday',
+					'Thursday',
+					'Friday',
+					'Saturday',
+					'Sunday',
+				],
+				opens: '00:00',
+				closes: '23:59',
+			},
+		],
+		contactPoint: [
+			{
+				'@type': 'ContactPoint',
+				contactType: 'customer support',
+				availableLanguage: ['Thai'],
+				url: 'https://line.me/R/ti/p/@webuy',
+				telephone: businessPhone,
+			},
+		],
+		hasMap: mapUrl,
+		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+	},
+];
+---
+
+<BaseLayout
+	title="AMPHON TRADING (อำพล เทรดดิ้ง) | รับซื้อสินค้าไอทีมือสอง ประเมินราคาฟรี จ่ายเงินทันที"
+	description="AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อโน๊ตบุ๊ค คอม ไอโฟน กล้อง และสินค้าไอทีทุกชนิด ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
+	pathname="/"
+	jsonLd={homeJsonLd}
+>
+	<section class="hero-wrap">
+		<div class="container hero">
+			<div class="hero-copy">
+				<p class="eyebrow">TECH-ENABLED BUYBACK PLATFORM</p>
+				<h1 class="headline">รับซื้อสินค้าไอทีด้วยกระบวนการที่เร็ว โปร่งใส และตรวจสอบได้</h1>
+				<p class="lede">
+					AMPHON TRADING ผสาน workflow แบบเทคโนโลยีเข้ากับทีมงานจริง เพื่อให้การประเมินราคาและการปิดดีล
+					ชัดเจนทุกขั้นตอน พร้อมช่องทางติดต่อที่ตอบไวตลอด 24 ชั่วโมง
+				</p>
+				<div class="hero-actions">
+					<a class="primary-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
+						เริ่มประเมินผ่าน LINE
+					</a>
+					<a class="ghost-btn" href="/contact">ดูข้อมูลติดต่อทั้งหมด</a>
+				</div>
+			</div>
+			<aside class="contact-card" aria-label="ช่องทางติดต่อหลัก">
+				<p class="contact-label">ติดต่อด่วน</p>
+				<p class="contact-value">
+					Line: <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+				</p>
+				<p class="contact-note">แนะนำติดต่อผ่านไลน์เพื่อรับการประเมินเบื้องต้นที่รวดเร็วที่สุด</p>
+				<a class="contact-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
+					แชท LINE ตอนนี้
+				</a>
+			</aside>
+			{
+				!configured && (
+					<div class="callout" role="status">
+						<strong>ยังไม่ได้ตั้งค่า WordPress</strong>
+						<p>
+							คัดลอก <code>.env.example</code> เป็น <code>.env</code> แล้วใส่ URL
+							ของ WordPress (เช่น <code>https://your-site.com</code>)
+						</p>
+					</div>
+				)
+			}
+		</div>
+	</section>
+	<section class="container partner-strip" aria-label="ลูกค้าและพาร์ทเนอร์">
+		<p class="partner-title">ได้รับความไว้วางใจจากลูกค้าและพาร์ทเนอร์ในหลายอุตสาหกรรม</p>
+		<div class="partner-logos">
+			<span>Tech Retail</span>
+			<span>Digital Warehouse</span>
+			<span>SME Commerce</span>
+			<span>Enterprise IT</span>
+			<span>Device Finance</span>
+			<span>Service Network</span>
+		</div>
+	</section>
+	<section class="container trust-band" aria-labelledby="trust-heading">
+		<h2 id="trust-heading" class="section-title">เทคโนโลยีที่ขับเคลื่อนบริการของเรา</h2>
+		<div class="trust-grid">
+			{techPillars.map((pillar) => (
+				<article class="trust-item">
+					<h3>{pillar.title}</h3>
+					<p>{pillar.text}</p>
+				</article>
+			))}
+		</div>
+	</section>
+	<section class="container feature-split" aria-labelledby="feature-heading">
+		<div class="feature-left">
+			<p class="chip">TECH STACK DRIVEN SERVICE</p>
+			<h2 id="feature-heading">โครงสร้างงานที่วางเพื่อความแม่นยำและความสบายใจของลูกค้า</h2>
+			<p class="lede">
+				ตั้งแต่การรับข้อมูลสินค้า การประเมินราคา ไปจนถึงการยืนยันขั้นตอนติดต่อ เราออกแบบให้ชัดเจน
+				เหมือนระบบงานที่ตรวจสอบได้ ช่วยลดความกังวลและเพิ่มความมั่นใจในการตัดสินใจ
+			</p>
+			<ul class="trust-list" aria-label="จุดเด่นบริการ tech">
+				<li>ประเมินราคาโปร่งใสตามสภาพจริง</li>
+				<li>ทีมงานตอบไวและนัดรับได้หลายพื้นที่</li>
+				<li>มีบทความและข้อมูลประกอบการตัดสินใจ</li>
+			</ul>
+		</div>
+		<div class="feature-right">
+			<img
+				class="hero-visual"
+				src="/hero-soft.svg"
+				alt="บริการรับซื้อสินค้าไอทีอย่างมืออาชีพ"
+				width="920"
+				height="360"
+				loading="lazy"
+			/>
+		</div>
+	</section>
+	<section class="container feature-grid-2x2" aria-labelledby="feature-grid-heading">
+		<h2 id="feature-grid-heading" class="section-title">
+			ระบบงานที่ออกแบบมาเพื่อป้องกันความเสี่ยงในการซื้อขาย
+		</h2>
+		<div class="big-grid">
+			<article class="big-card">
+				<p class="big-kicker">AUTHENTICATED</p>
+				<h3>Revenue & Brand Protection</h3>
+				<p>ลดความเสี่ยงจากข้อมูลไม่ครบหรือการตีราคาคลาดเคลื่อน ด้วยการตรวจสอบทีละขั้นตอน</p>
+			</article>
+			<article class="big-card dark">
+				<p class="big-kicker">TRACEABILITY</p>
+				<h3>ทุกดีลมีร่องรอยการสื่อสาร</h3>
+				<p>สามารถย้อนดูรายละเอียดการประเมิน เงื่อนไข และหลักฐานการคุย เพื่อความโปร่งใส</p>
+			</article>
+			<article class="big-card">
+				<p class="big-kicker">OPERATION LAYER</p>
+				<h3>Workflow ที่ขยายต่อได้</h3>
+				<p>รองรับการจัดการหลายพื้นที่ หลายประเภทสินค้า และการประเมินที่เป็นระบบเดียวกัน</p>
+			</article>
+			<article class="big-card">
+				<p class="big-kicker">CUSTOMER CONFIDENCE</p>
+				<h3>ข้อมูลพร้อมก่อนตัดสินใจ</h3>
+				<p>มีบทความจริง, FAQ, และช่องทางติดต่อชัดเจน ช่วยให้ลูกค้าเชื่อถือและตัดสินใจเร็วขึ้น</p>
+			</article>
+		</div>
+	</section>
+	<section class="container services-section" aria-labelledby="services-heading">
+		<h2 id="services-heading" class="section-title">บริการรับซื้อสินค้าไอทีของเรา</h2>
+		<p class="services-intro">AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่ครอบคลุมทุกประเภท ประเมินราคาโปร่งใส จ่ายเงินทันที</p>
+		<div class="services-grid">
+			<a href="/rab-sue-notebook" class="service-card">
+				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="8" width="28" height="18" rx="3" stroke="#e8650a" stroke-width="2"/><path d="M2 26h32" stroke="#e8650a" stroke-width="2" stroke-linecap="round"/></svg>
+				<h3>รับซื้อโน๊ตบุ๊ค</h3>
+				<p>MacBook, Dell, HP, Lenovo, ASUS, Acer, MSI ทุกรุ่นทั้งสายทำงานและเกมมิง</p>
+			</a>
+			<a href="/rab-sue-com" class="service-card">
+				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="4" width="20" height="20" rx="3" stroke="#e8650a" stroke-width="2"/><path d="M14 24v6m8-6v6m-10 0h12" stroke="#e8650a" stroke-width="2" stroke-linecap="round"/></svg>
+				<h3>รับซื้อคอม</h3>
+				<p>PC ประกอบ, คอมสำนักงาน, Gaming PC, Workstation, เซิร์ฟเวอร์ พร้อมอุปกรณ์ต่อพ่วง</p>
+			</a>
+			<a href="/rab-sue-iphone" class="service-card">
+				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="10" y="3" width="16" height="30" rx="4" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="28" r="1.5" fill="#e8650a"/></svg>
+				<h3>รับซื้อไอโฟน</h3>
+				<p>iPhone ทุกรุ่นตั้งแต่ iPhone 8 ถึง iPhone 16 Pro Max ทั้งเครื่องไทยและเครื่องนอก</p>
+			</a>
+			<a href="/rab-sue-klong" class="service-card">
+				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="8" width="28" height="20" rx="4" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="18" r="6" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="18" r="2" fill="#e8650a"/></svg>
+				<h3>รับซื้อกล้อง</h3>
+				<p>DSLR, Mirrorless, Compact, Action Cam ทุกยี่ห้อ Canon, Nikon, Sony, Fujifilm พร้อมเลนส์</p>
+			</a>
+		</div>
+	</section>
+	<section class="container confidence" aria-labelledby="confidence-heading">
+		<h2 id="confidence-heading" class="section-title">ทำไมลูกค้าถึงเลือก AMPHON TRADING</h2>
+		<div class="confidence-grid">
+			<article class="confidence-item">
+				<h3>ประเมินชัดเจน</h3>
+				<p>ตรวจสอบสภาพและแจ้งช่วงราคาอย่างตรงไปตรงมา ไม่มีเงื่อนไขซ่อนเร้น</p>
+			</article>
+			<article class="confidence-item">
+				<h3>ขั้นตอนรวดเร็ว</h3>
+				<p>ส่งรายละเอียดผ่าน LINE แล้วรับคำแนะนำและขั้นตอนต่อไปได้ทันที</p>
+			</article>
+			<article class="confidence-item">
+				<h3>สื่อสารได้ตลอด</h3>
+				<p>มีช่องทางติดต่อชัดเจน ติดตามสถานะได้ และมีทีมงานตอบกลับต่อเนื่อง</p>
+			</article>
+		</div>
+	</section>
+	<section class="container authority" aria-labelledby="authority-heading">
+		<h2 id="authority-heading" class="section-title">มาตรฐานความน่าเชื่อถือของเรา</h2>
+		<div class="authority-grid">
+			<article class="authority-item">
+				<p class="authority-number">24 ชั่วโมง</p>
+				<p class="authority-label">ทีมงานตอบผ่าน LINE ต่อเนื่อง</p>
+			</article>
+			<article class="authority-item">
+				<p class="authority-number">{allPosts.length}+</p>
+				<p class="authority-label">บทความให้ความรู้และอัปเดตราคา</p>
+			</article>
+			<article class="authority-item">
+				<p class="authority-number">{serviceAreas.length}+ พื้นที่</p>
+				<p class="authority-label">ครอบคลุมการให้บริการหลายจังหวัด</p>
+			</article>
+			<article class="authority-item">
+				<p class="authority-number">ตรวจสอบได้</p>
+				<p class="authority-label">แจ้งรายละเอียดก่อนตกลงทุกขั้นตอน</p>
+			</article>
+		</div>
+	</section>
+	<section class="container testimonials" aria-labelledby="testimonials-heading">
+		<h2 id="testimonials-heading" class="section-title">เสียงจากลูกค้าที่ใช้บริการ</h2>
+		<div class="testimonials-grid">
+			<blockquote class="testimonial-item">
+				<p>
+					“ส่งรูปไปสอบถามในไลน์ ตอบเร็วมาก ประเมินเข้าใจง่าย และนัดรับสะดวก”
+				</p>
+				<cite>ลูกค้า - โซนกรุงเทพ</cite>
+			</blockquote>
+			<blockquote class="testimonial-item">
+				<p>
+					“ชอบที่แจ้งราคาตามสภาพจริงและอธิบายละเอียด ทำให้ตัดสินใจได้ง่าย”
+				</p>
+				<cite>ลูกค้า - ภาคอีสาน</cite>
+			</blockquote>
+			<blockquote class="testimonial-item">
+				<p>
+					“ติดต่อ 24 ชั่วโมงจริง มีแอดมินตอบตลอด เหมาะกับคนที่สะดวกทักดึกๆ”
+				</p>
+				<cite>ลูกค้า - ภาคกลาง</cite>
+			</blockquote>
+		</div>
+	</section>
+	<section class="container faq" aria-labelledby="faq-heading">
+		<h2 id="faq-heading" class="section-title">คำถามที่พบบ่อย</h2>
+		<div class="faq-list">
+			{faqItems.map((item) => (
+				<details class="faq-item">
+					<summary>{item.question}</summary>
+					<p>{item.answer}</p>
+				</details>
+			))}
+		</div>
+	</section>
+
+	{
+		recent.length > 0 && (
+			<section class="container section" aria-labelledby="recent-heading">
+				<h2 id="recent-heading" class="section-title">
+					บทความล่าสุด
+				</h2>
+				<p class="recent-help">คัดมาให้ดูบนหน้าแรก 10 บทความล่าสุด เพื่อเพิ่มความมั่นใจก่อนติดต่อ</p>
+				<div class="grid">
+				{recent.map((post) => (
+					<PostCard post={post} headingLevel="h3" />
+				))}
+				</div>
+				<p class="more-wrap">
+					<a class="more" href="/blog">ดูบทความทั้งหมด</a>
+				</p>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.hero-wrap {
+		background: linear-gradient(180deg, #f9b300 0%, #ff7a2f 62%, #fff3e7 100%);
+		border-bottom: 1px solid rgba(36, 48, 67, 0.1);
+		position: relative;
+		overflow: hidden;
+	}
+	.hero-wrap::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image:
+			radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.2), transparent 38%),
+			repeating-radial-gradient(circle at 62% -20%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.14) 2px, transparent 2px, transparent 12px);
+		pointer-events: none;
+	}
+	.hero {
+		padding-block: 2.6rem 2.1rem;
+		display: grid;
+		gap: 1.25rem;
+		position: relative;
+		z-index: 1;
+	}
+	@media (min-width: 900px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr) 320px;
+			align-items: start;
+		}
+	}
+	.hero-copy {
+		display: grid;
+		gap: 0.9rem;
+	}
+	.eyebrow {
+		margin: 0 0 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: #2e312f;
+	}
+	.headline {
+		margin: 0 0 1rem;
+		font-size: clamp(1.75rem, 4vw, 2.25rem);
+		line-height: 1.2;
+		max-width: 22ch;
+		color: #ffffff;
+		text-shadow: 0 2px 12px rgba(42, 25, 10, 0.22);
+	}
+	.lede {
+		margin: 0;
+		max-width: 52ch;
+		color: #fff6ea;
+		font-size: 1.05rem;
+	}
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+	}
+	.primary-btn,
+	.ghost-btn {
+		display: inline-block;
+		padding: 0.58rem 0.95rem;
+		border-radius: 9px;
+		font-weight: 700;
+		font-size: 0.92rem;
+		text-decoration: none;
+	}
+	.primary-btn {
+		background: #111827;
+		color: #fff;
+	}
+	.primary-btn:hover {
+		background: #000;
+		text-decoration: none;
+	}
+	.ghost-btn {
+		background: rgba(255, 255, 255, 0.92);
+		color: #1f2937;
+	}
+	.ghost-btn:hover {
+		background: #fff;
+		text-decoration: none;
+	}
+	.trust-list {
+		margin: 0.25rem 0 0;
+		padding-left: 1.1rem;
+		display: grid;
+		gap: 0.35rem;
+		color: #2e3e52;
+	}
+	.trust-list li::marker {
+		color: var(--accent);
+	}
+	.lede code {
+		font-size: 0.9em;
+		padding: 0.15em 0.4em;
+		background: var(--surface);
+		border-radius: 6px;
+		color: var(--accent);
+	}
+	.callout {
+		margin-top: 2rem;
+		padding: 1.25rem 1.5rem;
+		background: rgba(255, 255, 255, 0.94);
+		border-radius: var(--radius);
+		border: 1px solid rgba(10, 124, 111, 0.22);
+		max-width: 52ch;
+		grid-column: 1 / -1;
+	}
+	.callout strong {
+		display: block;
+		margin-bottom: 0.5rem;
+		color: var(--text);
+	}
+	.callout p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.95rem;
+	}
+	.callout code {
+		font-size: 0.88em;
+		padding: 0.1em 0.35em;
+		background: #eef3f7;
+		border-radius: 4px;
+	}
+	.contact-card {
+		background: rgba(255, 255, 255, 0.96);
+		border: 1px solid rgba(245, 245, 245, 0.48);
+		border-radius: var(--radius);
+		padding: 1.1rem 1.2rem;
+		box-shadow: 0 8px 24px rgba(17, 37, 52, 0.18);
+	}
+	.contact-label {
+		margin: 0;
+		font-size: 0.8rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: #0d6e62;
+	}
+	.contact-value {
+		margin: 0.5rem 0;
+		font-size: 1.2rem;
+		font-weight: 700;
+	}
+	.contact-value a {
+		color: #0d6e62;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.contact-note {
+		margin: 0;
+		color: #5b6d80;
+		font-size: 0.92rem;
+	}
+	.contact-btn {
+		display: inline-block;
+		margin-top: 0.9rem;
+		padding: 0.55rem 0.85rem;
+		border-radius: 8px;
+		background: #06c755;
+		color: #ffffff;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.contact-btn:hover {
+		background: #09a94a;
+		text-decoration: none;
+	}
+	.trust-band {
+		padding-block: 1.4rem 1.8rem;
+	}
+	.partner-strip {
+		padding-block: 1.05rem 0.6rem;
+	}
+	.partner-title {
+		margin: 0 0 0.65rem;
+		color: #8794a6;
+		font-size: 0.82rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		font-weight: 700;
+	}
+	.partner-logos {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.55rem;
+	}
+	@media (min-width: 760px) {
+		.partner-logos {
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+		}
+	}
+	.partner-logos span {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 42px;
+		border: 1px solid rgba(36, 48, 67, 0.11);
+		border-radius: 8px;
+		background: #f6f6f6;
+		color: #8c97a3;
+		font-size: 0.84rem;
+		font-weight: 700;
+		filter: grayscale(1);
+	}
+	.trust-grid {
+		display: grid;
+		gap: 0.9rem;
+	}
+	@media (min-width: 800px) {
+		.trust-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+	.trust-item {
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		padding: 0.95rem;
+		box-shadow: 0 4px 12px rgba(18, 31, 43, 0.05);
+	}
+	.trust-item h3 {
+		margin: 0 0 0.35rem;
+		font-size: 0.96rem;
+	}
+	.trust-item p {
+		margin: 0;
+		font-size: 0.88rem;
+		color: var(--muted);
+	}
+	.feature-split {
+		padding-block: 0.3rem 2.2rem;
+		display: grid;
+		gap: 1.1rem;
+	}
+	.feature-grid-2x2 {
+		padding-block: 0.2rem 2.1rem;
+	}
+	.big-grid {
+		display: grid;
+		gap: 0.95rem;
+	}
+	@media (min-width: 900px) {
+		.big-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	.big-card {
+		background: #f7f8fa;
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		padding: 1.2rem 1.1rem;
+		min-height: 220px;
+	}
+	.big-card.dark {
+		background: linear-gradient(180deg, #222831, #161b22);
+		color: #f2f5f8;
+	}
+	.big-kicker {
+		margin: 0;
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		font-weight: 700;
+		color: #ff7a2f;
+	}
+	.big-card h3 {
+		margin: 0.55rem 0;
+		font-size: clamp(1.15rem, 2.2vw, 1.48rem);
+		line-height: 1.25;
+	}
+	.big-card p {
+		margin: 0;
+		color: #506073;
+		max-width: 46ch;
+	}
+	.big-card.dark p {
+		color: #dde4ec;
+	}
+	@media (min-width: 900px) {
+		.feature-split {
+			grid-template-columns: 1.1fr 1fr;
+			align-items: start;
+		}
+	}
+	.chip {
+		display: inline-block;
+		margin: 0 0 0.45rem;
+		padding: 0.18rem 0.48rem;
+		font-size: 0.75rem;
+		border-radius: 999px;
+		background: #fff0da;
+		color: #8f4a00;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+	}
+	.feature-left h2 {
+		margin: 0 0 0.55rem;
+		font-size: clamp(1.35rem, 3vw, 1.9rem);
+		line-height: 1.3;
+	}
+	.feature-left .lede {
+		color: var(--muted);
+	}
+	.confidence {
+		padding-block: 0 2.2rem;
+	}
+	.confidence-grid {
+		display: grid;
+		gap: 1rem;
+	}
+	@media (min-width: 760px) {
+		.confidence-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+	.confidence-item {
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		padding: 1rem 1rem 1.05rem;
+		box-shadow: 0 4px 12px rgba(18, 31, 43, 0.05);
+	}
+	.confidence-item h3 {
+		margin: 0 0 0.45rem;
+		font-size: 1rem;
+	}
+	.confidence-item p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.92rem;
+	}
+	.testimonials {
+		padding-block: 0 2.2rem;
+	}
+	.testimonials-grid {
+		display: grid;
+		gap: 1rem;
+	}
+	@media (min-width: 760px) {
+		.testimonials-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+	.testimonial-item {
+		margin: 0;
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		padding: 1rem;
+		box-shadow: 0 4px 12px rgba(18, 31, 43, 0.05);
+	}
+	.testimonial-item p {
+		margin: 0;
+		color: #2d3d52;
+		font-size: 0.94rem;
+	}
+	.testimonial-item cite {
+		display: block;
+		margin-top: 0.65rem;
+		font-size: 0.85rem;
+		color: var(--muted);
+		font-style: normal;
+	}
+	.faq {
+		padding-block: 0 2.5rem;
+	}
+	.faq-list {
+		display: grid;
+		gap: 0.75rem;
+	}
+	.faq-item {
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: 10px;
+		padding: 0.7rem 0.9rem;
+	}
+	.faq-item summary {
+		cursor: pointer;
+		font-weight: 600;
+	}
+	.faq-item p {
+		margin: 0.55rem 0 0;
+		color: var(--muted);
+		font-size: 0.93rem;
+	}
+	.authority {
+		padding-block: 0 2.2rem;
+	}
+	.authority-grid {
+		display: grid;
+		gap: 0.9rem;
+	}
+	@media (min-width: 760px) {
+		.authority-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+	.authority-item {
+		background: #f4fbf8;
+		border: 1px solid rgba(10, 124, 111, 0.2);
+		border-radius: var(--radius);
+		padding: 0.9rem;
+	}
+	.authority-number {
+		margin: 0;
+		font-weight: 700;
+		font-size: 1.05rem;
+		color: #0b6258;
+	}
+	.authority-label {
+		margin: 0.35rem 0 0;
+		font-size: 0.9rem;
+		color: #456071;
+	}
+	.section {
+		padding-block: 0 3rem;
+	}
+	.section-title {
+		margin: 0 0 1.25rem;
+		font-size: 1.35rem;
+	}
+	.grid {
+		display: grid;
+		gap: 1.25rem;
+	}
+	@media (min-width: 700px) {
+		.grid {
+			grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+		}
+	}
+	.more-wrap {
+		margin-top: 1.5rem;
+	}
+	.more {
+		font-weight: 600;
+	}
+	.recent-help {
+		margin: -0.5rem 0 1rem;
+		color: var(--muted);
+		font-size: 0.93rem;
+	}
+	.hero-visual {
+		margin-top: 0.5rem;
+		width: 100%;
+		height: auto;
+		border-radius: var(--radius);
+		border: 1px solid rgba(36, 48, 67, 0.1);
+		box-shadow: 0 8px 24px rgba(16, 28, 40, 0.08);
+		background: #fff;
+	}
+	.services-section {
+		padding-block: 0 2.2rem;
+	}
+	.services-intro {
+		margin: -0.6rem 0 1rem;
+		color: var(--muted);
+		font-size: 0.95rem;
+		max-width: 62ch;
+	}
+	.services-grid {
+		display: grid;
+		gap: 1rem;
+	}
+	@media (min-width: 760px) {
+		.services-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 960px) {
+		.services-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+	.service-card {
+		display: grid;
+		gap: 0.4rem;
+		padding: 1rem;
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		text-decoration: none;
+		color: var(--text);
+		transition: box-shadow 0.15s ease, border-color 0.15s ease;
+	}
+	.service-card:hover {
+		border-color: #e8650a;
+		box-shadow: 0 6px 20px rgba(232, 101, 10, 0.12);
+		text-decoration: none;
+	}
+	.service-card h3 {
+		margin: 0;
+		font-size: 1rem;
+	}
+	.service-card p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.88rem;
+	}
+</style>

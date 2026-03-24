@@ -1,0 +1,115 @@
+---
+interface Props {
+	heading?: string;
+	text?: string;
+	variant?: 'primary' | 'secondary';
+}
+
+const {
+	heading = 'อยากขายสินค้า? ติดต่อเราเลย',
+	text = 'ส่งรูป รุ่น สเปก และสภาพเครื่องมาได้เลย ทีมงานพร้อมประเมินให้เร็วที่สุด',
+	variant = 'primary',
+} = Astro.props;
+---
+
+<aside class:list={['cta-box', variant]} aria-label="ช่องทางติดต่อ">
+	<div class="cta-inner">
+		<h4 class="cta-heading">{heading}</h4>
+		<p class="cta-text">{text}</p>
+		<div class="cta-actions">
+			<a class="cta-line" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
+				<span class="cta-dot"></span> Line : @webuy
+			</a>
+			<a class="cta-phone" href="tel:0642579353">
+				<span class="cta-dot tel"></span> โทร 064-257-9353
+			</a>
+		</div>
+		<p class="cta-sub">ติดต่อได้ 24 ชั่วโมง ไม่มีวันหยุด</p>
+	</div>
+</aside>
+
+<style>
+	.cta-box {
+		border-radius: var(--radius);
+		padding: 1.15rem 1.1rem;
+		margin-block: 1.25rem;
+	}
+	.cta-box.primary {
+		background: linear-gradient(135deg, #fff4dc, #ffe2b3);
+		border: 1px solid #f0c35e;
+	}
+	.cta-box.secondary {
+		background: linear-gradient(135deg, #e7faf2, #d4f5e9);
+		border: 1px solid #66c4a0;
+	}
+	.cta-inner {
+		display: grid;
+		gap: 0.55rem;
+	}
+	.cta-heading {
+		margin: 0;
+		font-size: 1.1rem;
+		color: #2b1e06;
+	}
+	.secondary .cta-heading {
+		color: #0b3d2e;
+	}
+	.cta-text {
+		margin: 0;
+		color: #4e4027;
+		font-size: 0.95rem;
+	}
+	.secondary .cta-text {
+		color: #1a4d3b;
+	}
+	.cta-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+	.cta-line,
+	.cta-phone {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.48rem 0.75rem;
+		border-radius: 8px;
+		font-weight: 700;
+		font-size: 0.92rem;
+		text-decoration: none;
+	}
+	.cta-line {
+		background: #06c755;
+		color: #fff;
+	}
+	.cta-line:hover {
+		background: #05b04c;
+		text-decoration: none;
+	}
+	.cta-phone {
+		background: #1e3a5f;
+		color: #fff;
+	}
+	.cta-phone:hover {
+		background: #152c48;
+		text-decoration: none;
+	}
+	.cta-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #b5ffd0;
+		display: inline-block;
+	}
+	.cta-dot.tel {
+		background: #a5d4f7;
+	}
+	.cta-sub {
+		margin: 0;
+		font-size: 0.82rem;
+		color: #7a6e55;
+	}
+	.secondary .cta-sub {
+		color: #4a7261;
+	}
+</style>

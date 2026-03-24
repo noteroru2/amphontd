@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 ไม่พบหน้าที่คุณต้องการ | AMPHON TRADING" description="หน้าที่คุณกำลังมองหาไม่พบในระบบ กรุณากลับไปหน้าแรกหรือเลือกบริการที่ต้องการ" noindex={true}>
+	<section class="container not-found">
+		<h1>404</h1>
+		<p class="sub">ไม่พบหน้าที่คุณต้องการ</p>
+		<p class="desc">หน้านี้อาจถูกลบ ย้าย หรือ URL ไม่ถูกต้อง ลองเลือกจากเมนูด้านล่าง</p>
+		<nav class="quick-links" aria-label="ลิงก์แนะนำ">
+			<a href="/">หน้าแรก</a>
+			<a href="/blog">บทความ</a>
+			<a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a>
+			<a href="/rab-sue-com">รับซื้อคอม</a>
+			<a href="/rab-sue-iphone">รับซื้อไอโฟน</a>
+			<a href="/rab-sue-klong">รับซื้อกล้อง</a>
+			<a href="/contact">ติดต่อเรา</a>
+		</nav>
+		<p class="cta">หรือแอดไลน์ <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a> สอบถามทีมงานได้ 24 ชั่วโมง</p>
+	</section>
+</BaseLayout>
+
+<style>
+	.not-found {
+		padding-block: 3rem 4rem;
+		text-align: center;
+	}
+	.not-found h1 {
+		margin: 0;
+		font-size: clamp(4rem, 10vw, 7rem);
+		color: #e8650a;
+		line-height: 1;
+	}
+	.sub {
+		margin: 0.5rem 0;
+		font-size: 1.35rem;
+		font-weight: 700;
+	}
+	.desc {
+		margin: 0.5rem auto 1.5rem;
+		max-width: 48ch;
+		color: var(--muted);
+	}
+	.quick-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.6rem;
+	}
+	.quick-links a {
+		padding: 0.45rem 0.8rem;
+		border-radius: 8px;
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		font-weight: 600;
+		font-size: 0.92rem;
+	}
+	.quick-links a:hover {
+		border-color: #e8650a;
+		text-decoration: none;
+	}
+	.cta {
+		margin-top: 1.5rem;
+		color: var(--muted);
+	}
+	.cta a {
+		font-weight: 700;
+	}
+</style>

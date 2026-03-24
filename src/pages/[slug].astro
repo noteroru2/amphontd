@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { WPPost } from '../lib/wordpress';
+import { fetchPosts, getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/wordpress';
+
+export async function getStaticPaths() {
+	const reservedSlugs = new Set([
+		'blog',
+		'contact',
+		'rab-sue-notebook',
+		'rab-sue-com',
+		'rab-sue-iphone',
+		'rab-sue-klong',
+		'robots.txt',
+		'llms.txt',
+		'sitemap-index.xml',
+		'sitemap-0.xml',
+		'404',
+	]);
+	const posts = await fetchPosts();
+	const filtered = posts.filter((post) => !reservedSlugs.has(post.slug));
+	return filtered.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: WPPost;
+}
+
+const { post } = Astro.props;
+const featured = getFeaturedImageUrl(post);
+const featuredAlt = getFeaturedImageAlt(post);
+const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
+const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
+const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
+const articlePath = `/${post.slug}/`;
+const articleUrl = `${site}${articlePath}`;
+const articleJsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: plainTitle,
+		description: plainExcerpt || `บทความ ${plainTitle}`,
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': articleUrl,
+		},
+		datePublished: post.date,
+		dateModified: post.modified ?? post.date,
+		author: {
+			'@type': 'Organization',
+			name: orgName,
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: orgName,
+			logo: { '@type': 'ImageObject', url: new URL(orgLogo, site).toString() },
+		},
+		image: featured ? [featured] : undefined,
+		inLanguage: 'th-TH',
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+			{ '@type': 'ListItem', position: 2, name: 'บทความ', item: `${site}/blog/` },
+			{ '@type': 'ListItem', position: 3, name: plainTitle, item: articleUrl },
+		],
+	},
+];
+---
+
+<BaseLayout
+	title={`${plainTitle} | AMPHON TRADING`}
+	description={plainExcerpt || `อ่านบทความ ${plainTitle} จาก AMPHON TRADING`}
+	pathname={articlePath}
+	type="article"
+	ogImage={featured}
+	publishedTime={post.date}
+	modifiedTime={post.modified ?? post.date}
+	jsonLd={articleJsonLd}
+>
+	<article class="container article">
+		<header class="article-head">
+			<p class="back">
+				<a href="/blog/">← กลับไปหน้าบทความ</a>
+			</p>
+			<time class="date" datetime={post.date}>
+				{new Date(post.date).toLocaleDateString('th-TH', {
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				})}
+			</time>
+			<h1 class="title" set:html={post.title.rendered} />
+		</header>
+
+		{
+			featured && (
+				<img
+					class="hero-img"
+					src={featured}
+					alt={featuredAlt}
+					width="960"
+					height="540"
+					loading="eager"
+				/>
+			)
+		}
+
+		<div class="prose content" set:html={post.content.rendered} />
+	</article>
+</BaseLayout>
+
+<style>
+	.article {
+		padding-block: 2rem 4rem;
+		max-width: 720px;
+		margin-inline: auto;
+		overflow-x: hidden;
+	}
+	.article-head {
+		margin-bottom: 1.5rem;
+	}
+	.back {
+		margin: 0 0 1rem;
+		font-size: 0.9rem;
+	}
+	.back a {
+		color: var(--muted);
+	}
+	.back a:hover {
+		color: var(--accent);
+	}
+	.date {
+		display: block;
+		font-size: 0.9rem;
+		color: var(--muted);
+		margin-bottom: 0.5rem;
+	}
+	.title {
+		margin: 0;
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		line-height: 1.25;
+	}
+	.hero-img {
+		width: 100%;
+		height: auto;
+		border-radius: var(--radius);
+		margin-bottom: 2rem;
+	}
+	.content {
+		font-size: 1.05rem;
+	}
+	.content :global(a) {
+		word-break: break-word;
+	}
+	.content :global(img) {
+		max-width: 100% !important;
+		height: auto !important;
+		display: block;
+		margin-block: 1rem;
+		box-sizing: border-box;
+	}
+	.content :global(img[style*='width']) {
+		width: auto !important;
+		max-width: 100% !important;
+	}
+	.content :global(figure) {
+		max-width: 100% !important;
+		width: auto !important;
+		margin: 1rem 0;
+		box-sizing: border-box;
+	}
+	.content :global(figure img) {
+		margin-block: 0;
+	}
+	.content :global(.wp-block-image),
+	.content :global(.wp-caption),
+	.content :global(.alignnone),
+	.content :global(.aligncenter),
+	.content :global(.alignwide),
+	.content :global(.alignfull) {
+		max-width: 100% !important;
+		width: auto !important;
+		box-sizing: border-box;
+	}
+	.content :global(iframe) {
+		max-width: 100%;
+		border: 0;
+	}
+	.content :global(video) {
+		max-width: 100%;
+		height: auto;
+	}
+</style>

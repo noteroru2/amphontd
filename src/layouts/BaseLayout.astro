@@ -1,0 +1,450 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	ogImage?: string;
+	pathname?: string;
+	type?: 'website' | 'article';
+	publishedTime?: string;
+	modifiedTime?: string;
+	jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description = 'เว็บไซต์ที่ขับเคลื่อนโดย Astro + WordPress',
+	ogImage,
+	pathname = Astro.url.pathname,
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	jsonLd,
+	noindex = false,
+} = Astro.props;
+
+const site = new URL(import.meta.env.SITE_URL ?? 'https://example.com');
+const canonicalUrl = new URL(pathname, site).toString();
+const defaultImage = '/og-default.png';
+const imageUrl = new URL(ogImage ?? defaultImage, site).toString();
+const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const locale = import.meta.env.PUBLIC_SITE_LOCALE ?? 'th_TH';
+const twitterSite = import.meta.env.PUBLIC_TWITTER_SITE;
+const robotsContent = noindex
+	? 'noindex, nofollow, noarchive'
+	: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+---
+
+<!doctype html>
+<html lang="th">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#e8650a" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="author" content={orgName} />
+		<meta name="robots" content={robotsContent} />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="alternate" hreflang="th" href={canonicalUrl} />
+		<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:locale" content={locale} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={imageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageUrl} />
+		{twitterSite && <meta name="twitter:site" content={twitterSite} />}
+		{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+		{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+		{type === 'article' && <meta property="article:author" content={orgName} />}
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+			rel="stylesheet"
+		/>
+		{jsonLd &&
+			(Array.isArray(jsonLd) ? jsonLd : [jsonLd]).map((item) => (
+				<script type="application/ld+json" set:html={JSON.stringify(item)} />
+			))}
+		<style is:global>
+			:root {
+				--bg: #f8f5ef;
+				--surface: #ffffff;
+				--text: #243043;
+				--muted: #5f6f84;
+				--accent: #0a7c6f;
+				--accent-dim: #0b6258;
+				--radius: 12px;
+				--font: 'IBM Plex Sans Thai', 'IBM Plex Sans', system-ui, sans-serif;
+			}
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				min-height: 100vh;
+				font-family: var(--font);
+				background: radial-gradient(
+						ellipse 120% 80% at 50% -20%,
+						#fff3d9 0%,
+						transparent 52%
+					),
+					var(--bg);
+				color: var(--text);
+				line-height: 1.6;
+			}
+			a {
+				color: var(--accent);
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			.container {
+				width: min(960px, 92vw);
+				margin-inline: auto;
+				padding-block: 2rem 4rem;
+			}
+			.site-header {
+				border-bottom: 1px solid rgba(36, 48, 67, 0.1);
+				padding-block: 1rem;
+				background: rgba(248, 245, 239, 0.92);
+				backdrop-filter: blur(6px);
+			}
+			.contact-topbar {
+				background: #e8650a;
+				border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+				position: sticky;
+				top: 0;
+				z-index: 60;
+				box-shadow: 0 2px 12px rgba(10, 30, 40, 0.12);
+			}
+			.contact-topbar .container {
+				padding-block: 0.5rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.5rem;
+				font-size: 0.94rem;
+				color: #ecfff9;
+			}
+			.contact-topbar strong {
+				font-weight: 700;
+			}
+			.contact-topbar a {
+				color: #ffffff;
+				font-weight: 700;
+				text-decoration: underline;
+				text-underline-offset: 3px;
+			}
+			.contact-topbar a:hover {
+				color: #ffffff;
+			}
+			.site-header .container {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				padding-block: 0;
+				flex-wrap: wrap;
+			}
+			.brand {
+				font-weight: 700;
+				font-size: clamp(0.78rem, 1.5vw + 0.5rem, 1.05rem);
+				color: var(--text);
+				text-decoration: none;
+				line-height: 1.3;
+				max-width: min(100%, 20rem);
+			}
+			.brand:hover {
+				color: var(--accent);
+				text-decoration: none;
+			}
+			.nav {
+				display: flex;
+				gap: 1.25rem;
+			}
+			.nav a {
+				color: var(--muted);
+				font-weight: 500;
+			}
+			.nav a:hover {
+				color: var(--accent);
+			}
+			.cta-banner {
+				width: 100%;
+				background: linear-gradient(105deg, #0b3d5c 0%, #0a6b5c 48%, #0d5c4a 100%);
+				border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+			}
+			.cta-banner-inner {
+				width: min(960px, 92vw);
+				margin-inline: auto;
+				padding: 0.75rem 1rem;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.65rem 1rem;
+			}
+			.cta-banner-text {
+				margin: 0;
+				flex: 1 1 220px;
+				color: #f4fbfa;
+				font-size: clamp(0.9rem, 1.5vw + 0.4rem, 1.02rem);
+				font-weight: 600;
+				line-height: 1.45;
+				text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+			}
+			.cta-banner-text strong {
+				color: #fff59d;
+				font-weight: 800;
+			}
+			.cta-banner-actions {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.5rem;
+			}
+			.cta-banner-line,
+			.cta-banner-phone {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0.45rem 0.85rem;
+				border-radius: 999px;
+				font-weight: 700;
+				font-size: 0.88rem;
+				text-decoration: none;
+				white-space: nowrap;
+			}
+			.cta-banner-line {
+				background: #06c755;
+				color: #fff;
+				border: 1px solid rgba(255, 255, 255, 0.22);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+			}
+			.cta-banner-line:hover {
+				background: #05b34d;
+				color: #fff;
+				text-decoration: none;
+			}
+			.cta-banner-phone {
+				background: #fff;
+				color: #0b3d5c;
+				border: 1px solid rgba(255, 255, 255, 0.65);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+			}
+			.cta-banner-phone:hover {
+				background: #f0faf8;
+				color: #063047;
+				text-decoration: none;
+			}
+			.line-float {
+				position: fixed;
+				right: 14px;
+				bottom: 14px;
+				z-index: 70;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.45rem;
+				padding: 0.62rem 0.82rem;
+				border-radius: 999px;
+				background: #06c755;
+				color: #fff;
+				box-shadow: 0 8px 20px rgba(6, 120, 53, 0.34);
+				font-size: 0.9rem;
+				font-weight: 700;
+				text-decoration: none;
+			}
+			.line-float:hover {
+				background: #05b34d;
+				text-decoration: none;
+			}
+			.line-dot {
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 999px;
+				background: #dfffe8;
+			}
+			@media (min-width: 880px) {
+				.line-float {
+					display: none;
+				}
+			}
+			.site-footer {
+				border-top: 1px solid rgba(36, 48, 67, 0.12);
+				background: #f2ede3;
+				margin-top: 2rem;
+			}
+			.site-footer .container {
+				padding-block: 2rem;
+				display: grid;
+				gap: 1rem;
+			}
+			.footer-main {
+				display: grid;
+				gap: 0.6rem;
+			}
+			.footer-title {
+				margin: 0;
+				font-size: 1rem;
+				font-weight: 700;
+			}
+			.footer-text {
+				margin: 0;
+				color: var(--muted);
+				max-width: 68ch;
+				font-size: 0.95rem;
+			}
+			.footer-links {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.8rem 1rem;
+				font-size: 0.92rem;
+			}
+			.footer-bottom {
+				padding-top: 0.7rem;
+				border-top: 1px dashed rgba(36, 48, 67, 0.18);
+				color: var(--muted);
+				font-size: 0.86rem;
+			}
+			.prose {
+				max-width: 65ch;
+			}
+			.prose :global(img) {
+				max-width: 100%;
+				width: auto;
+				height: auto;
+				border-radius: var(--radius);
+				display: block;
+				box-sizing: border-box;
+			}
+			.prose :global(figure) {
+				max-width: 100%;
+				width: auto !important;
+				margin: 1.25rem 0;
+				box-sizing: border-box;
+			}
+			.prose :global(figcaption) {
+				font-size: 0.9rem;
+				color: var(--muted);
+				margin-top: 0.5rem;
+			}
+			.prose :global(.wp-block-image),
+			.prose :global(.wp-caption) {
+				max-width: 100% !important;
+				width: auto !important;
+				box-sizing: border-box;
+			}
+			.prose :global(.aligncenter) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.prose :global(p) {
+				margin-block: 1em;
+			}
+			.prose :global(h2),
+			.prose :global(h3) {
+				margin-top: 1.5em;
+				color: var(--text);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="contact-topbar" role="note" aria-label="ช่องทางติดต่อหลัก">
+			<div class="container">
+				<span>อยากขายสินค้า แอดไลน์</span>
+				<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+				<span>ติดต่อได้ 24 ชั่วโมง</span>
+			</div>
+		</div>
+		<header class="site-header">
+			<div class="container">
+				<a class="brand" href="/">AMPHON TRADING (อำพล เทรดดิ้ง)</a>
+				<nav class="nav" aria-label="หลัก">
+					<a href="/">หน้าแรก</a>
+					<a href="/blog">บทความ</a>
+					<a href="/rab-sue-com">รับซื้อคอม</a>
+					<a href="/rab-sue-iphone">รับซื้อไอโฟน</a>
+					<a href="/rab-sue-klong">รับซื้อกล้อง</a>
+					<a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a>
+					<a href="/contact">ติดต่อเรา</a>
+				</nav>
+			</div>
+		</header>
+		<section class="cta-banner" aria-label="รับซื้อสินค้าไอที ติดต่อเรา">
+			<div class="cta-banner-inner">
+				<p class="cta-banner-text">
+					<strong>อยากขายสินค้าไอที</strong> ทักหาเราเลย — แอดไลน์ <strong>@webuy</strong> หรือโทร
+					<strong>064-257-9353</strong> รับประเมินรวดเร็วทุกวัน
+				</p>
+				<div class="cta-banner-actions">
+					<a
+						class="cta-banner-line"
+						href="https://line.me/R/ti/p/@webuy"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						ไลน์ @webuy
+					</a>
+					<a class="cta-banner-phone" href="tel:0642579353">โทร 064-257-9353</a>
+				</div>
+			</div>
+		</section>
+		<slot />
+		<a
+			class="line-float"
+			href="https://line.me/R/ti/p/@webuy"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="แอดไลน์ @webuy ตลอด 24 ชั่วโมง"
+		>
+			<span class="line-dot"></span>
+			<span>LINE @webuy</span>
+		</a>
+		<footer class="site-footer">
+			<div class="container">
+				<div class="footer-main">
+					<p class="footer-title">AMPHON TRADING (อำพล เทรดดิ้ง) | รับซื้อ ฝาก ขาย สินค้าไอทีทุกชนิด</p>
+					<p class="footer-text">
+AMPHON TRADING (อำพล เทรดดิ้ง) บริการประเมินราคาและรับซื้อสินค้าไอทีแบบมืออาชีพ พร้อมบทความให้ความรู้ที่อ่านง่าย
+					เหมาะกับผู้ใช้งานและระบบค้นหา เพื่อให้ข้อมูลโปร่งใสและตัดสินใจได้มั่นใจขึ้น
+					</p>
+					<p class="footer-text">
+						ติดต่อหลัก:
+						<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">Line @webuy</a>
+						(ติดต่อได้ 24 ชั่วโมง)
+					</p>
+				</div>
+			<div class="footer-links" aria-label="ลิงก์สำคัญ">
+				<a href="/">หน้าแรก</a>
+				<a href="/blog">บทความ</a>
+				<a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a>
+				<a href="/rab-sue-com">รับซื้อคอม</a>
+				<a href="/rab-sue-iphone">รับซื้อไอโฟน</a>
+				<a href="/rab-sue-klong">รับซื้อกล้อง</a>
+				<a href="/contact">ติดต่อเรา</a>
+				<a href="/sitemap-index.xml">Sitemap</a>
+			</div>
+				<div class="footer-bottom">© {new Date().getFullYear()} AMPHON TRADING. All rights reserved.</div>
+			</div>
+		</footer>
+	</body>
+</html>

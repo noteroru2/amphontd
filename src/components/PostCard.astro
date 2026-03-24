@@ -1,0 +1,99 @@
+---
+import type { WPPost } from '../lib/wordpress';
+import { getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/wordpress';
+
+interface Props {
+	post: WPPost;
+	headingLevel?: 'h2' | 'h3';
+}
+
+const { post, headingLevel = 'h2' } = Astro.props;
+const img = getFeaturedImageUrl(post);
+const imgAlt = getFeaturedImageAlt(post);
+const excerptText = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
+const HeadingTag = headingLevel;
+---
+
+<article class="card">
+	{img && (
+		<a href={`/${post.slug}/`} class="thumb-wrap">
+			<img src={img} alt={imgAlt} class="thumb" loading="lazy" width="400" height="225" />
+		</a>
+	)}
+	<div class="body">
+		<time class="date" datetime={post.date}>
+			{new Date(post.date).toLocaleDateString('th-TH', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			})}
+		</time>
+		<HeadingTag class="title">
+			<a href={`/${post.slug}/`} set:html={post.title.rendered} />
+		</HeadingTag>
+		{excerptText && <p class="excerpt">{excerptText}</p>}
+		<a class="read" href={`/${post.slug}/`}>อ่านต่อ</a>
+	</div>
+</article>
+
+<style>
+	.card {
+		display: grid;
+		gap: 1rem;
+		background: var(--surface);
+		border-radius: var(--radius);
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+	}
+	@media (min-width: 640px) {
+		.card:has(.thumb-wrap) {
+			grid-template-columns: minmax(0, 280px) 1fr;
+		}
+	}
+	.thumb-wrap {
+		display: block;
+		line-height: 0;
+	}
+	.thumb {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		aspect-ratio: 16 / 9;
+	}
+	.body {
+		padding: 1.25rem 1.5rem 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.date {
+		font-size: 0.875rem;
+		color: var(--muted);
+	}
+	.title {
+		margin: 0;
+		font-size: 1.25rem;
+		line-height: 1.35;
+	}
+	.title :global(a) {
+		color: var(--text);
+		text-decoration: none;
+	}
+	.title :global(a:hover) {
+		color: var(--accent);
+	}
+	.excerpt {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.95rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.read {
+		margin-top: auto;
+		font-weight: 600;
+		font-size: 0.9rem;
+	}
+</style>

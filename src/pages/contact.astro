@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
+const addressLocality = import.meta.env.PUBLIC_ADDRESS_LOCALITY ?? 'กรุงเทพมหานคร';
+const addressRegion = import.meta.env.PUBLIC_ADDRESS_REGION ?? 'ประเทศไทย';
+const postalCode = import.meta.env.PUBLIC_POSTAL_CODE ?? '10200';
+const mapEmbedSrc =
+	import.meta.env.PUBLIC_GOOGLE_MAP_EMBED ??
+	'https://www.google.com/maps?q=13.7563,100.5018&z=12&output=embed';
+const mapUrl =
+	import.meta.env.PUBLIC_GOOGLE_MAP_URL ??
+	'https://maps.google.com/?q=13.7563,100.5018';
+const businessPhone = import.meta.env.PUBLIC_BUSINESS_PHONE ?? '+66-64-257-9353';
+const openingHours = import.meta.env.PUBLIC_OPENING_HOURS ?? 'เปิดบริการทุกวัน 24 ชั่วโมง';
+const serviceAreasRaw =
+	import.meta.env.PUBLIC_SERVICE_AREAS ??
+	'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
+const serviceAreas = serviceAreasRaw
+	.split(',')
+	.map((item) => item.trim())
+	.filter(Boolean);
+
+const contactJsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'ContactPage',
+		name: `ติดต่อเรา | ${siteName}`,
+		url: `${site}/contact/`,
+		mainEntity: {
+			'@type': 'LocalBusiness',
+			name: siteName,
+			telephone: businessPhone,
+			areaServed: serviceAreas.map((area) => ({
+				'@type': 'AdministrativeArea',
+				name: area,
+			})),
+			hasMap: mapUrl,
+			geo: {
+				'@type': 'GeoCoordinates',
+				latitude: 13.7563,
+				longitude: 100.5018,
+			},
+			openingHoursSpecification: [
+				{
+					'@type': 'OpeningHoursSpecification',
+					dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+					opens: '00:00',
+					closes: '23:59',
+				},
+			],
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality,
+				addressRegion,
+				postalCode,
+				addressCountry: 'TH',
+			},
+			contactPoint: {
+				'@type': 'ContactPoint',
+				contactType: 'customer support',
+				availableLanguage: ['Thai'],
+				url: 'https://line.me/R/ti/p/@webuy',
+				telephone: businessPhone,
+			},
+		},
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+			{ '@type': 'ListItem', position: 2, name: 'ติดต่อเรา', item: `${site}/contact/` },
+		],
+	},
+];
+---
+
+<BaseLayout
+	title="ติดต่อเรา | AMPHON TRADING"
+	description="ติดต่อทีมงาน AMPHON TRADING (อำพล เทรดดิ้ง) ผ่าน LINE @webuy พร้อมเวลาทำการและแผนที่"
+	pathname="/contact/"
+	jsonLd={contactJsonLd}
+>
+	<section class="container contact">
+		<div class="contact-head">
+			<p class="eyebrow">ติดต่อทีมงาน</p>
+			<h1>ช่องทางติดต่อหลักของ AMPHON TRADING (อำพล เทรดดิ้ง)</h1>
+			<p>
+				ต้องการประเมินราคาสินค้าหรือสอบถามบริการ ติดต่อเราผ่าน LINE ได้ทันที
+				พร้อมทีมงานตอบกลับต่อเนื่อง
+			</p>
+		</div>
+
+		<div class="contact-grid">
+			<article class="card">
+				<h2>ติดต่อด่วน</h2>
+				<p class="line-box">
+					Line:
+					<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+				</p>
+				<p>โทรศัพท์: <a href={`tel:${businessPhone.replace(/\s+/g, '')}`}>{businessPhone}</a></p>
+				<p>เวลาทำการ: {openingHours}</p>
+				<a class="btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
+					แชท LINE ตอนนี้
+				</a>
+			</article>
+
+			<article class="card">
+				<h2>พื้นที่ให้บริการ</h2>
+				<ul>
+					{serviceAreas.map((area) => (
+						<li>{area}</li>
+					))}
+				</ul>
+			</article>
+		</div>
+
+		<section class="map-wrap" aria-label="แผนที่">
+			<h2>แผนที่</h2>
+		<iframe
+			title="แผนที่ตำแหน่งบริการ"
+			src={mapEmbedSrc}
+			width="960"
+			height="400"
+			loading="lazy"
+			referrerpolicy="no-referrer-when-downgrade"
+		></iframe>
+		</section>
+	</section>
+</BaseLayout>
+
+<style>
+	.contact {
+		padding-top: 2rem;
+	}
+	.contact-head h1 {
+		margin: 0.2rem 0 0.65rem;
+		font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+	}
+	.contact-head p {
+		margin: 0;
+		max-width: 62ch;
+		color: var(--muted);
+	}
+	.eyebrow {
+		margin: 0;
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.contact-grid {
+		margin-top: 1.25rem;
+		display: grid;
+		gap: 1rem;
+	}
+	@media (min-width: 820px) {
+		.contact-grid {
+			grid-template-columns: 1.3fr 1fr;
+		}
+	}
+	.card {
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		padding: 1rem 1.05rem;
+		box-shadow: 0 6px 16px rgba(18, 31, 43, 0.05);
+	}
+	.card h2 {
+		margin: 0 0 0.6rem;
+		font-size: 1.1rem;
+	}
+	.card p {
+		margin: 0.4rem 0;
+	}
+	.line-box {
+		font-size: 1.08rem;
+		font-weight: 700;
+	}
+	.btn {
+		display: inline-block;
+		margin-top: 0.7rem;
+		padding: 0.55rem 0.9rem;
+		background: #06c755;
+		color: #fff;
+		border-radius: 8px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.btn:hover {
+		background: #04b84d;
+		text-decoration: none;
+	}
+	.card ul {
+		margin: 0;
+		padding-left: 1rem;
+		display: grid;
+		gap: 0.25rem;
+	}
+	.map-wrap {
+		margin-top: 1.2rem;
+	}
+	.map-wrap h2 {
+		margin: 0 0 0.55rem;
+		font-size: 1.2rem;
+	}
+	.map-wrap iframe {
+		width: 100%;
+		min-height: 340px;
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		background: #f3f3f3;
+	}
+</style>
