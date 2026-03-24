@@ -9,10 +9,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "start": "node scripts/start.mjs",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",
-    "astro": "^6.0.8"
+    "astro": "^6.0.8",
+    "serve": "^14.2.6"
   }
 }
