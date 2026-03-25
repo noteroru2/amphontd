@@ -1,4 +1,6 @@
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
 const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
 
 export function GET() {

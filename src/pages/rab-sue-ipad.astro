@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactBox from '../components/ContactBox.astro';
+import '../styles/longform.css';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const serviceAreasRaw =
+  import.meta.env.PUBLIC_SERVICE_AREAS ??
+  'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
+const serviceAreas = serviceAreasRaw
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const faqItems = [
+  {
+    q: 'รับซื้อ iPad รุ่นไหนบ้าง?',
+    a: 'รับซื้อ iPad ทุกรุ่นที่ยังใช้งานได้ เช่น iPad (Gen), iPad mini, iPad Air และ iPad Pro โดยประเมินตามรุ่น ความจุ Wi‑Fi/Cellular สภาพหน้าจอและบอดี้ สุขภาพแบตเตอรี่ และอุปกรณ์ที่มี',
+  },
+  {
+    q: 'iPad จอร้าว/ทัชกดไม่ติดรับซื้อไหม?',
+    a: 'รับประเมินได้ครับ ราคาจะปรับตามความเสียหายของจอและค่าอะไหล่ ทีมงานจะแจ้งเหตุผลการประเมินให้ชัดเจนก่อนตกลง',
+  },
+  {
+    q: 'ติด Apple ID / iCloud (Activation Lock) รับซื้อไหม?',
+    a: 'ต้องปลด Apple ID และปิด Find My iPad ก่อนส่งมอบครับ เครื่องที่ยังติดล็อกจะกระทบราคาอย่างมากและอาจไม่สามารถรับซื้อได้',
+  },
+  {
+    q: 'Apple Pencil / กล่อง / ใบเสร็จ มีผลต่อราคาไหม?',
+    a: 'มีผลครับ หากมี Apple Pencil, เคสคีย์บอร์ด, กล่อง, ใบเสร็จ หรืออะแดปเตอร์แท้ จะช่วยเพิ่มความน่าเชื่อถือและมักได้ราคาดีกว่า',
+  },
+];
+
+const jsonLd: Array<Record<string, unknown>> = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'รับซื้อ iPad มือสอง iPad Air iPad Pro iPad mini ประเมินราคาฟรี จ่ายทันที',
+    description:
+      'บริการรับซื้อ iPad มือสองทุกซีรีส์ iPad / iPad mini / iPad Air / iPad Pro ประเมินราคาโปร่งใสจากรุ่น ความจุ Wi‑Fi/Cellular สภาพจอ แบต และอุปกรณ์ที่มี ติดต่อ Line @webuy ได้ตลอด 24 ชั่วโมง',
+    inLanguage: 'th-TH',
+    author: { '@type': 'Organization', name: orgName },
+    publisher: { '@type': 'Organization', name: orgName },
+    mainEntityOfPage: `${site}/rab-sue-ipad/`,
+    datePublished: '2026-03-25',
+    dateModified: '2026-03-25',
+    image: [new URL('/og-default.png', site).toString()],
+    keywords:
+      'รับซื้อไอแพด, รับซื้อ iPad, ขาย iPad มือสอง, รับซื้อ iPad Pro, รับซื้อ iPad Air, รับซื้อ iPad mini, ประเมินราคา iPad, ขายไอแพดได้ราคาดี',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'บริการรับซื้อ iPad มือสอง',
+    description:
+      'รับซื้อ iPad มือสองทุกซีรีส์ iPad / mini / Air / Pro ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง',
+    provider: { '@type': 'Organization', name: orgName },
+    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+    serviceType: 'รับซื้อ iPad มือสอง',
+    url: `${site}/rab-sue-ipad/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+      { '@type': 'ListItem', position: 2, name: 'รับซื้อ iPad', item: `${site}/rab-sue-ipad/` },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="รับซื้อไอแพด iPad มือสอง | ประเมินราคาฟรี จ่ายเงินทันที | AMPHON TRADING"
+  description="AMPHON TRADING รับซื้อ iPad มือสองทุกรุ่น iPad Air iPad Pro iPad mini ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
+  pathname="/rab-sue-ipad/"
+  jsonLd={jsonLd}
+>
+  <div class="container">
+    <header class="article-head">
+      <p class="eyebrow">บริการรับซื้อไอแพด</p>
+      <h1>รับซื้อ iPad มือสองทุกรุ่น — iPad Pro / Air / mini ประเมินราคาฟรี จ่ายทันที</h1>
+      <p class="lead">
+        ส่งรุ่น ความจุ สภาพเครื่อง และอุปกรณ์ที่มี ผ่าน Line <strong>@webuy</strong> ทีมงานประเมินให้เร็ว โปร่งใส และนัดรับได้ตามพื้นที่
+      </p>
+    </header>
+  </div>
+
+  <main class="container prose">
+    <section>
+      <h2>ประเมินราคา iPad ดูอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>รุ่นและปี</strong>: iPad Pro (M‑series), iPad Air, iPad mini, iPad Gen</li>
+        <li><strong>ความจุ</strong>: 64/128/256/512GB หรือ 1–2TB</li>
+        <li><strong>Wi‑Fi หรือ Cellular</strong>: เครื่องใส่ซิมมักมีราคาดีกว่า</li>
+        <li><strong>สภาพจอ/ทัช</strong>: รอยขีด จอร้าว ทัชผิดปกติ</li>
+        <li><strong>สุขภาพแบต</strong>: แบตเสื่อม/ชาร์จไม่เข้า</li>
+        <li><strong>อุปกรณ์</strong>: กล่อง ใบเสร็จ อะแดปเตอร์ Apple Pencil/คีย์บอร์ด</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>รุ่น iPad ที่คนขายบ่อย (และมักได้ราคาดี)</h2>
+      <p>
+        ถ้าคุณไม่แน่ใจว่ารุ่นของคุณอยู่ในกลุ่มไหน ให้ส่งรูปหน้า “About” และหมายเลขรุ่น (Model) ผ่าน Line <strong>@webuy</strong>
+        ทีมงานช่วยเช็กให้ได้ทันที
+      </p>
+      <ul>
+        <li><strong>iPad Pro</strong>: จุดเด่นคือชิปแรง หน้าจอใหญ่ เหมาะกับงาน/เรียน ราคามือสองค่อนข้างแข็ง</li>
+        <li><strong>iPad Air</strong>: สเปกสมดุล น้ำหนักเบา เหมาะใช้งานทั่วไปและเรียนออนไลน์</li>
+        <li><strong>iPad mini</strong>: ขนาดพกพา เหมาะอ่าน/จด ราคามักนิ่งถ้าสภาพดี</li>
+        <li><strong>iPad (Gen)</strong>: กลุ่มใช้งานทั่วไป จำนวนเยอะ ราคาแปรตามความจุและสภาพ</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>ปัจจัยที่ทำให้ราคา iPad “ขึ้น” หรือ “ลง” แบบชัดเจน</h2>
+      <h3>จอและทัช</h3>
+      <p>
+        รอยเล็ก ๆ อาจกระทบราคาไม่มาก แต่จอร้าว/ทัชเพี้ยนจะกระทบมากขึ้นเพราะมีต้นทุนอะไหล่และความเสี่ยงการซ่อม
+      </p>
+      <h3>สภาพเครื่องและพอร์ตชาร์จ</h3>
+      <p>
+        iPad ที่พอร์ตชาร์จหลวม ชาร์จติด ๆ ดับ ๆ หรือมีรอยงอ จะถูกประเมินตามสภาพจริง แนะนำถ่ายวิดีโอเทสชาร์จสั้น ๆ แนบมาด้วย
+      </p>
+      <h3>Wi‑Fi vs Cellular</h3>
+      <p>
+        รุ่น Cellular มักได้ราคาดีกว่าเพราะใช้งานได้ยืดหยุ่นกว่า แต่ก็ต้องดูรุ่น/ปี/ความจุประกอบด้วย
+      </p>
+      <h3>อุปกรณ์เสริม</h3>
+      <p>
+        Apple Pencil, คีย์บอร์ด, กล่อง และใบเสร็จ ช่วยเพิ่มความมั่นใจและทำให้เสนอราคาได้ง่ายขึ้น
+      </p>
+    </section>
+
+    <section>
+      <h2>เช็กลิสต์ก่อนขาย iPad</h2>
+      <ol>
+        <li>สำรองข้อมูล (iCloud หรือคอมพิวเตอร์)</li>
+        <li>ออกจาก Apple ID และปิด Find My iPad</li>
+        <li>ลบข้อมูลและรีเซ็ตเครื่อง (Erase All Content and Settings)</li>
+        <li>ถอดซิม (ถ้ามี) และเตรียมอุปกรณ์ที่มากับเครื่อง</li>
+      </ol>
+      <p>
+        ถ้าคุณมีอุปกรณ์ Apple อื่น ๆ ที่อยากขายพร้อมกัน เช่น <a href="/rab-sue-iphone">รับซื้อไอโฟน</a> หรือ <a href="/rab-sue-macbook">รับซื้อ MacBook</a>
+        สามารถส่งรายการมาเป็นชุดเดียวได้ จะประเมินได้เร็วขึ้น
+      </p>
+    </section>
+
+    <section>
+      <h2>อยากได้ราคาประเมินเร็ว ต้องส่งอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>รุ่นเต็ม + ความจุ</strong> (เช่น iPad Air 5 256GB)</li>
+        <li><strong>Wi‑Fi หรือ Cellular</strong></li>
+        <li><strong>รูปเครื่องทุกมุม</strong> + รูปหน้าจอขณะเปิดใช้งาน</li>
+        <li><strong>ตำหนิ</strong> (ถ้ามี) เช่น จอร้าว รอยงอ พอร์ตชาร์จหลวม</li>
+        <li><strong>อุปกรณ์</strong> ที่มี (Pencil/คีย์บอร์ด/กล่อง/ใบเสร็จ)</li>
+      </ul>
+      <p>
+        ส่งทั้งหมดนี้ผ่านไลน์ <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+        หรือดูช่องทางทั้งหมดที่หน้า <a href="/contact">ติดต่อเรา</a>
+      </p>
+    </section>
+
+    <section class="faq">
+      <h2>คำถามที่พบบ่อยเกี่ยวกับการรับซื้อ iPad</h2>
+      {faqItems.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section>
+      <h2>บริการรับซื้ออื่น ๆ ของ AMPHON TRADING</h2>
+      <p>ถ้าคุณขายหลายชิ้นพร้อมกัน เราสามารถประเมินเป็นชุดเดียวเพื่อให้ปิดดีลได้เร็วขึ้น</p>
+      <ul>
+        <li><a href="/rab-sue-iphone">รับซื้อไอโฟน</a> — ประเมินจากรุ่น ความจุ สุขภาพแบต และสถานะ iCloud</li>
+        <li><a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a> — Notebook ทุกยี่ห้อ รวมถึงเกมมิงและสายทำงาน</li>
+        <li><a href="/rab-sue-macbook">รับซื้อ MacBook</a> — Air/Pro ทั้ง Intel และ M‑series</li>
+        <li><a href="/rab-sue-lamphong">รับซื้อลำโพง</a> — JBL/Marshall และรุ่นยอดนิยมอื่น ๆ</li>
+        <li><a href="/blog">บทความ</a> — เคล็ดลับเตรียมเครื่องก่อนขายและแนวทางประเมินราคา</li>
+      </ul>
+    </section>
+  </main>
+
+  <ContactBox
+    heading="อยากขาย iPad ตอนนี้?"
+    text="ส่งรุ่น ความจุ และรูปเครื่องผ่านไลน์ ทีมงานประเมินให้ทันที"
+    ctaText="แอดไลน์ @webuy"
+  />
+</BaseLayout>

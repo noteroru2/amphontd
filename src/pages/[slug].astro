@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { WPPost } from '../lib/wordpress';
 import { fetchPosts, getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/wordpress';
+import { getSiteOrigin } from '../lib/site';
+import { autoLinkHtml } from '../lib/autolink';
 
 export async function getStaticPaths() {
 	const reservedSlugs = new Set([
@@ -11,6 +13,9 @@ export async function getStaticPaths() {
 		'rab-sue-com',
 		'rab-sue-iphone',
 		'rab-sue-klong',
+		'rab-sue-ipad',
+		'rab-sue-macbook',
+		'rab-sue-lamphong',
 		'robots.txt',
 		'llms.txt',
 		'sitemap-index.xml',
@@ -34,11 +39,55 @@ const featured = getFeaturedImageUrl(post);
 const featuredAlt = getFeaturedImageAlt(post);
 const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
 const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
 const articlePath = `/${post.slug}/`;
 const articleUrl = `${site}${articlePath}`;
+
+const autoLinkRules = [
+	{
+		patterns: [
+			'รับซื้อโน๊ตบุ๊ค',
+			'รับซื้อโน๊ตบุ๊ก',
+			/รับซื้อ\s*(?:โน๊ตบุ๊ค|โน๊ตบุ๊ก|notebook|laptop)/i,
+		],
+		href: '/rab-sue-notebook/',
+		title: 'รับซื้อโน๊ตบุ๊คมือสอง',
+	},
+	{
+		patterns: ['รับซื้อคอม', /รับซื้อ\s*(?:คอม|คอมพิวเตอร์|computer|pc)/i],
+		href: '/rab-sue-com/',
+		title: 'รับซื้อคอมพิวเตอร์',
+	},
+	{
+		patterns: ['รับซื้อไอโฟน', /รับซื้อ\s*(?:ไอโฟน|iphone)/i],
+		href: '/rab-sue-iphone/',
+		title: 'รับซื้อไอโฟน iPhone',
+	},
+	{
+		patterns: ['รับซื้อกล้อง', /รับซื้อ\s*(?:กล้อง|camera)/i],
+		href: '/rab-sue-klong/',
+		title: 'รับซื้อกล้องมือสอง',
+	},
+	{
+		patterns: ['รับซื้อไอแพด', /รับซื้อ\s*(?:ไอแพด|ipad)/i],
+		href: '/rab-sue-ipad/',
+		title: 'รับซื้อ iPad',
+	},
+	{
+		patterns: ['รับซื้อ macbook', 'รับซื้อ MacBook', /รับซื้อ\s*macbook/i],
+		href: '/rab-sue-macbook/',
+		title: 'รับซื้อ MacBook',
+	},
+	{
+		patterns: ['รับซื้อลำโพง', /รับซื้อ\s*(?:ลำโพง|speaker)/i, /(?:JBL|Marshall)\b/i],
+		href: '/rab-sue-lamphong/',
+		title: 'รับซื้อลำโพง JBL / Marshall',
+	},
+];
+
+const linkedHtml = autoLinkHtml(post.content.rendered, autoLinkRules, { maxLinksTotal: 10, maxPerHref: 1 });
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -113,7 +162,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			)
 		}
 
-		<div class="prose content" set:html={post.content.rendered} />
+		<div class="prose content" set:html={linkedHtml} />
 	</article>
 </BaseLayout>
 

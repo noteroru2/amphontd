@@ -2,10 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { fetchPosts, isWordpressConfigured } from '../../lib/wordpress';
+import { getSiteOrigin } from '../../lib/site';
 
 const configured = isWordpressConfigured();
 const posts = configured ? await fetchPosts() : [];
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const site = getSiteOrigin();
 const listJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',

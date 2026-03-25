@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSiteOrigin } from '../lib/site';
 
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const site = getSiteOrigin();
 const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
 const addressLocality = import.meta.env.PUBLIC_ADDRESS_LOCALITY ?? 'กรุงเทพมหานคร';
 const addressRegion = import.meta.env.PUBLIC_ADDRESS_REGION ?? 'ประเทศไทย';

@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactBox from '../components/ContactBox.astro';
+import '../styles/longform.css';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const serviceAreasRaw =
+  import.meta.env.PUBLIC_SERVICE_AREAS ??
+  'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
+const serviceAreas = serviceAreasRaw
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const faqItems = [
+  {
+    q: 'รับซื้อลำโพง JBL / Marshall รุ่นไหนบ้าง?',
+    a: 'รับซื้อลำโพงยอดนิยมหลายรุ่น เช่น Marshall (Acton, Stanmore, Woburn, Emberton, Kilburn) และ JBL (Flip, Charge, Xtreme, Boombox, PartyBox) โดยประเมินจากรุ่น สภาพเครื่อง เสียงลำโพง แบต และอุปกรณ์ที่มี',
+  },
+  {
+    q: 'ลำโพงแบตเสื่อม/ชาร์จไม่เข้า รับซื้อไหม?',
+    a: 'รับประเมินได้ครับ ราคาจะปรับตามต้นทุนซ่อมและอะไหล่ แนะนำแจ้งอาการตามจริงและแนบวิดีโอทดสอบเสียง',
+  },
+  {
+    q: 'ลำโพงแท้/ปลอมเช็กอย่างไร?',
+    a: 'ทีมงานจะตรวจรุ่น ซีเรียล และรายละเอียดภายนอก/ภายในตามรุ่น หากมีใบเสร็จ กล่อง หรือหลักฐานการซื้อจะช่วยให้ตรวจสอบได้เร็วและเพิ่มความมั่นใจ',
+  },
+  {
+    q: 'ขายด่วนต้องส่งข้อมูลอะไรบ้าง?',
+    a: 'ส่งรุ่นเต็ม + รูปทุกมุม + ภาพพอร์ต/ปุ่ม + วิดีโอทดสอบเสียง/บลูทูธ + อุปกรณ์ที่มี ผ่าน Line @webuy ทีมงานประเมินได้เร็วขึ้นมาก',
+  },
+];
+
+const jsonLd: Array<Record<string, unknown>> = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'รับซื้อลำโพง JBL / Marshall มือสอง ประเมินราคาฟรี จ่ายเงินทันที',
+    description:
+      'รับซื้อลำโพง JBL และ Marshall มือสอง ประเมินราคาโปร่งใสจากรุ่น สภาพเสียง แบตเตอรี่ และอุปกรณ์ที่มี ติดต่อ Line @webuy ได้ตลอด 24 ชั่วโมง',
+    inLanguage: 'th-TH',
+    author: { '@type': 'Organization', name: orgName },
+    publisher: { '@type': 'Organization', name: orgName },
+    mainEntityOfPage: `${site}/rab-sue-lamphong/`,
+    datePublished: '2026-03-25',
+    dateModified: '2026-03-25',
+    image: [new URL('/og-default.png', site).toString()],
+    keywords:
+      'รับซื้อลำโพง, รับซื้อลำโพง JBL, รับซื้อลำโพง Marshall, ขายลำโพงมือสอง, ประเมินราคาลำโพง, รับซื้อ Marshall Emberton, รับซื้อ JBL Charge',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'บริการรับซื้อลำโพง JBL / Marshall มือสอง',
+    description:
+      'รับซื้อลำโพง JBL และ Marshall มือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง',
+    provider: { '@type': 'Organization', name: orgName },
+    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+    serviceType: 'รับซื้อลำโพงมือสอง',
+    url: `${site}/rab-sue-lamphong/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+      { '@type': 'ListItem', position: 2, name: 'รับซื้อลำโพง', item: `${site}/rab-sue-lamphong/` },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="รับซื้อลำโพง JBL / Marshall มือสอง | ประเมินราคาฟรี จ่ายเงินทันที | AMPHON TRADING"
+  description="AMPHON TRADING รับซื้อลำโพง JBL / Marshall มือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
+  pathname="/rab-sue-lamphong/"
+  jsonLd={jsonLd}
+>
+  <div class="container">
+    <header class="article-head">
+      <p class="eyebrow">บริการรับซื้อลำโพง</p>
+      <h1>รับซื้อลำโพง JBL / Marshall มือสอง — ประเมินราคาฟรี จ่ายเงินทันที</h1>
+      <p class="lead">
+        ส่งรุ่น + รูปทุกมุม + วิดีโอทดสอบเสียง ผ่าน Line <strong>@webuy</strong> ทีมงานประเมินให้เร็ว พร้อมแนะนำการแพ็กส่งที่ปลอดภัย
+      </p>
+    </header>
+  </div>
+
+  <main class="container prose">
+    <section>
+      <h2>ประเมินราคาลำโพงดูอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>รุ่น/ซีรีส์</strong>: JBL Flip/Charge/Xtreme/Boombox/PartyBox, Marshall Emberton/Kilburn/Acton/Stanmore/Woburn</li>
+        <li><strong>สภาพเสียง</strong>: แตกพร่า เบสหาย ปรับวอลุ่มผิดปกติ</li>
+        <li><strong>แบตเตอรี่</strong>: อึด/เสื่อม ชาร์จเข้า-ไม่เข้า</li>
+        <li><strong>การเชื่อมต่อ</strong>: Bluetooth, AUX, USB, ปุ่มกด</li>
+        <li><strong>อุปกรณ์</strong>: สายชาร์จ อะแดปเตอร์แท้ กล่อง ใบเสร็จ</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>รุ่นยอดนิยมที่คนขายบ่อย</h2>
+      <h3>Marshall</h3>
+      <ul>
+        <li>Emberton / Emberton II — พกพา ใช้บลูทูธเป็นหลัก</li>
+        <li>Kilburn / Kilburn II — เสียงดัง เหมาะฟังในบ้าน/ร้าน</li>
+        <li>Acton / Stanmore / Woburn — กลุ่มตั้งโต๊ะ ให้มิติเสียงดี ราคาขึ้นกับสภาพและอุปกรณ์</li>
+      </ul>
+      <h3>JBL</h3>
+      <ul>
+        <li>Flip / Charge — พกพา แบตมีผลต่อราคา</li>
+        <li>Xtreme / Boombox — กำลังขับสูง ดูสภาพดอกลำโพงและแบตเป็นหลัก</li>
+        <li>PartyBox — เน้นงานปาร์ตี้/ไมค์/ไฟ ต้องทดสอบฟังก์ชันให้ครบ</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>ปัญหาที่พบบ่อย (และกระทบราคา)</h2>
+      <ul>
+        <li><strong>เสียงแตก/เบสหาย</strong>: มักเกี่ยวกับดอกลำโพงหรือวงจรขยาย</li>
+        <li><strong>แบตเสื่อม</strong>: เปิดได้ไม่นานหรือดับเอง</li>
+        <li><strong>ชาร์จไม่เข้า</strong>: พอร์ตหลวม/วงจรชาร์จมีปัญหา</li>
+        <li><strong>เชื่อมต่อ Bluetooth ไม่เสถียร</strong>: อาจต้องเช็กบอร์ด/เฟิร์มแวร์</li>
+      </ul>
+      <p>
+        ถ้าอุปกรณ์อื่น ๆ อย่างโทรศัพท์/โน๊ตบุ๊คอยากขายพร้อมกัน ลองดู <a href="/rab-sue-iphone">รับซื้อไอโฟน</a> และ <a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>เช็กลิสต์ก่อนขายลำโพง</h2>
+      <ol>
+        <li>ชาร์จแบตให้พอทดสอบ และถ่ายวิดีโอทดสอบเสียง 15–30 วินาที</li>
+        <li>ทดสอบ Bluetooth / AUX และปุ่มหลัก</li>
+        <li>ถ่ายรูปหมายเลขรุ่น/ซีเรียล (ถ้ามี) และพอร์ตต่าง ๆ</li>
+        <li>เตรียมอุปกรณ์ที่มากับเครื่องให้ครบ</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>อยากได้ราคาประเมินเร็ว ต้องส่งอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>รุ่นเต็ม</strong> (เช่น Marshall Emberton II)</li>
+        <li><strong>รูปทุกมุม</strong> + รูปพอร์ต/ปุ่ม/ตำหนิ</li>
+        <li><strong>วิดีโอทดสอบเสียง</strong> 15–30 วินาที (เพิ่ม-ลดวอลุ่ม + เพลง/เสียงพูด)</li>
+        <li><strong>การเชื่อมต่อ</strong>: Bluetooth/AUX ใช้งานได้ไหม</li>
+        <li><strong>อุปกรณ์</strong>: สายชาร์จ/อะแดปเตอร์/กล่อง/ใบเสร็จ</li>
+      </ul>
+      <p>
+        ส่งผ่านไลน์ <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+        หรือดูช่องทางทั้งหมดที่หน้า <a href="/contact">ติดต่อเรา</a>
+      </p>
+    </section>
+
+    <section class="faq">
+      <h2>คำถามที่พบบ่อยเกี่ยวกับการรับซื้อลำโพง</h2>
+      {faqItems.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section>
+      <h2>บริการรับซื้ออื่น ๆ ของ AMPHON TRADING</h2>
+      <p>ถ้าคุณขายหลายชิ้นพร้อมกัน เราสามารถประเมินเป็นชุดเดียวเพื่อให้สะดวกขึ้น</p>
+      <ul>
+        <li><a href="/rab-sue-iphone">รับซื้อไอโฟน</a> — ประเมินจากรุ่น ความจุ สภาพ และสถานะ iCloud</li>
+        <li><a href="/rab-sue-ipad">รับซื้อไอแพด</a> — iPad Air/mini/Pro</li>
+        <li><a href="/rab-sue-macbook">รับซื้อ MacBook</a> — Air/Pro ทั้ง Intel และ M‑series</li>
+        <li><a href="/rab-sue-com">รับซื้อคอมพิวเตอร์</a> — PC ประกอบ/คอมเกมมิง/คอมสำนักงาน</li>
+        <li><a href="/blog">บทความ</a> — แนวทางเตรียมของก่อนขายให้ได้ราคาดี</li>
+      </ul>
+    </section>
+  </main>
+
+  <ContactBox
+    heading="อยากขายลำโพง JBL / Marshall ตอนนี้?"
+    text="ส่งรุ่น + รูป + วิดีโอทดสอบเสียงผ่านไลน์ เพื่อประเมินทันที"
+    ctaText="แอดไลน์ @webuy"
+  />
+</BaseLayout>

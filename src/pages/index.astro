@@ -2,11 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { fetchPosts, isWordpressConfigured } from '../lib/wordpress';
+import { getSiteOrigin } from '../lib/site';
 
 const configured = isWordpressConfigured();
 const allPosts = configured ? await fetchPosts() : [];
 const recent = allPosts.slice(0, 10);
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
 const socialRaw = import.meta.env.PUBLIC_ORG_SAME_AS ?? '';

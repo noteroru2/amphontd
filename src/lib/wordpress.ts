@@ -38,9 +38,18 @@ export function isWordpressConfigured(): boolean {
 	return Boolean(getBaseUrl());
 }
 
-const FETCH_TIMEOUT_MS = 12000;
-const MAX_PAGES = 50;
-const MAX_POSTS = 250;
+function readNumberEnv(key: string, fallback: number): number {
+	const raw = (import.meta.env as Record<string, unknown>)[key];
+	if (typeof raw !== 'string') return fallback;
+	const n = Number(raw);
+	return Number.isFinite(n) ? n : fallback;
+}
+
+// Defaults are generous to allow "all posts" for most sites.
+// You can override in Coolify env to reduce build time if needed.
+const FETCH_TIMEOUT_MS = readNumberEnv('PUBLIC_WORDPRESS_TIMEOUT_MS', 12000);
+const MAX_PAGES = readNumberEnv('PUBLIC_WORDPRESS_MAX_PAGES', 0); // 0 = unlimited
+const MAX_POSTS = readNumberEnv('PUBLIC_WORDPRESS_MAX_POSTS', 0); // 0 = unlimited
 
 async function fetchJsonWithTimeout(url: string): Promise<Response> {
 	return fetch(url, {
@@ -57,7 +66,7 @@ export async function fetchPosts(): Promise<WPPost[]> {
 	let page = 1;
 	let totalPages = 1;
 
-	while (page <= totalPages && page <= MAX_PAGES) {
+	while (page <= totalPages && (MAX_PAGES <= 0 || page <= MAX_PAGES)) {
 		const url = new URL(`${base}/wp-json/wp/v2/posts`);
 		url.searchParams.set('per_page', '100');
 		url.searchParams.set('page', String(page));
@@ -83,10 +92,7 @@ export async function fetchPosts(): Promise<WPPost[]> {
 
 		const posts = (await res.json()) as WPPost[];
 		allPosts.push(...posts);
-		if (allPosts.length >= MAX_POSTS) {
-			allPosts.length = MAX_POSTS;
-			break;
-		}
+		if (MAX_POSTS > 0 && allPosts.length >= MAX_POSTS) break;
 		page++;
 	}
 

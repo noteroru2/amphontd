@@ -1,4 +1,6 @@
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
 
 export function GET() {
 	const body = `User-agent: *

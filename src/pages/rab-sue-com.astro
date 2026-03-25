@@ -2,8 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactBox from '../components/ContactBox.astro';
 import '../styles/longform.css';
+import { getSiteOrigin } from '../lib/site';
 
-const site = import.meta.env.SITE_URL ?? 'https://example.com';
+const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const serviceAreasRaw =
 	import.meta.env.PUBLIC_SERVICE_AREAS ??
@@ -784,6 +785,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 				<li><a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a> — MacBook, Dell, HP, Lenovo, ASUS, Acer, MSI ทุกรุ่น</li>
 				<li><a href="/rab-sue-iphone">รับซื้อไอโฟน</a> — iPhone ทุกรุ่นตั้งแต่ iPhone 8 ถึง iPhone 16 Pro Max</li>
 				<li><a href="/rab-sue-klong">รับซื้อกล้อง</a> — DSLR, Mirrorless, Compact ทุกยี่ห้อ พร้อมเลนส์และอุปกรณ์เสริม</li>
+				<li><a href="/rab-sue-ipad">รับซื้อไอแพด</a> — iPad, iPad Air, iPad mini, iPad Pro ทุกรุ่น</li>
+				<li><a href="/rab-sue-macbook">รับซื้อ MacBook</a> — MacBook Air/Pro (Intel, M1/M2/M3/M4)</li>
+				<li><a href="/rab-sue-lamphong">รับซื้อลำโพง</a> — JBL/Marshall และรุ่นยอดนิยมอื่น ๆ</li>
 			</ul>
 		</section>
 	</article>

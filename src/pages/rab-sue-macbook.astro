@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactBox from '../components/ContactBox.astro';
+import '../styles/longform.css';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+const serviceAreasRaw =
+  import.meta.env.PUBLIC_SERVICE_AREAS ??
+  'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
+const serviceAreas = serviceAreasRaw
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const faqItems = [
+  {
+    q: 'รับซื้อ MacBook รุ่นไหนบ้าง?',
+    a: 'รับซื้อ MacBook Air และ MacBook Pro ทั้ง Intel และ Apple Silicon (M1/M2/M3/M4) โดยประเมินจากปี รุ่น ชิป RAM SSD รอบชาร์จ (cycle count) สภาพจอ/บอดี้ และอุปกรณ์ที่มี',
+  },
+  {
+    q: 'MacBook ติด Apple ID / Find My Mac รับซื้อไหม?',
+    a: 'ต้องปลด Apple ID และปิด Find My Mac ก่อนส่งมอบครับ ถ้ายังติด Activation Lock จะกระทบราคาอย่างมากและอาจไม่สามารถรับซื้อได้',
+  },
+  {
+    q: 'แบตเสื่อม/คีย์บอร์ดมีปัญหายังขายได้ไหม?',
+    a: 'ขายได้ครับ ราคาจะปรับตามต้นทุนซ่อมและผลต่อการใช้งาน แจ้งอาการตรง ๆ ตั้งแต่แรกจะช่วยให้ประเมินได้แม่นยำ',
+  },
+  {
+    q: 'ต้องเตรียมข้อมูลอะไรเพื่อประเมินเร็วที่สุด?',
+    a: 'ส่งรุ่นเต็ม + ชิป (Intel/M1/M2/M3/M4) + RAM/SSD + cycle count + สภาพเครื่อง + รูปทุกมุม ผ่าน Line @webuy ทีมงานจะตอบช่วงราคาได้เร็วขึ้นมาก',
+  },
+];
+
+const jsonLd: Array<Record<string, unknown>> = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'รับซื้อ MacBook มือสอง MacBook Air / Pro ได้ราคาสูง จ่ายเงินทันที',
+    description:
+      'บริการรับซื้อ MacBook มือสองทุกรุ่น Air/Pro ทั้ง Intel และ M‑series ประเมินราคาโปร่งใสตามชิป RAM SSD cycle count สภาพจอ/บอดี้ และอุปกรณ์ที่มี ติดต่อ Line @webuy ได้ตลอด 24 ชั่วโมง',
+    inLanguage: 'th-TH',
+    author: { '@type': 'Organization', name: orgName },
+    publisher: { '@type': 'Organization', name: orgName },
+    mainEntityOfPage: `${site}/rab-sue-macbook/`,
+    datePublished: '2026-03-25',
+    dateModified: '2026-03-25',
+    image: [new URL('/og-default.png', site).toString()],
+    keywords:
+      'รับซื้อ macbook, รับซื้อ MacBook Air, รับซื้อ MacBook Pro, ขาย macbook มือสอง, ประเมินราคา macbook, รับซื้อ macbook m1, รับซื้อ macbook m2, รับซื้อ macbook m3',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'บริการรับซื้อ MacBook มือสอง',
+    description:
+      'รับซื้อ MacBook Air/Pro มือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง',
+    provider: { '@type': 'Organization', name: orgName },
+    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+    serviceType: 'รับซื้อ MacBook มือสอง',
+    url: `${site}/rab-sue-macbook/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+      { '@type': 'ListItem', position: 2, name: 'รับซื้อ MacBook', item: `${site}/rab-sue-macbook/` },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="รับซื้อ MacBook มือสอง | Air / Pro | ประเมินราคาฟรี จ่ายเงินทันที | AMPHON TRADING"
+  description="AMPHON TRADING รับซื้อ MacBook มือสองทุกรุ่น MacBook Air / Pro ทั้ง Intel และ M1/M2/M3 ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง"
+  pathname="/rab-sue-macbook/"
+  jsonLd={jsonLd}
+>
+  <div class="container">
+    <header class="article-head">
+      <p class="eyebrow">บริการรับซื้อ MacBook</p>
+      <h1>รับซื้อ MacBook Air / Pro มือสอง — ได้ราคาดี จ่ายเงินทันที</h1>
+      <p class="lead">
+        ส่งรุ่น ชิป RAM SSD และรอบชาร์จผ่าน Line <strong>@webuy</strong> ทีมงานประเมินเร็ว โปร่งใส และแนะนำวิธีเตรียมเครื่องก่อนส่งมอบ
+      </p>
+    </header>
+  </div>
+
+  <main class="container prose">
+    <section>
+      <h2>ประเมินราคา MacBook ดูอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>ชิป/รุ่น</strong>: Intel หรือ M‑series (M1/M2/M3/M4)</li>
+        <li><strong>RAM/SSD</strong>: ยิ่งสูงมูลค่ายิ่งดี โดยเฉพาะรุ่น Pro</li>
+        <li><strong>รอบชาร์จ (Cycle Count)</strong>: บอกสุขภาพแบตโดยรวม</li>
+        <li><strong>สภาพจอ</strong>: dead pixel, burn‑in, รอยกด/รอยแตก</li>
+        <li><strong>คีย์บอร์ด/ทัชแพด</strong>: ปุ่มจม/ดับเบิลคลิก</li>
+        <li><strong>การล็อกบัญชี</strong>: ต้องปลด Apple ID และปิด Find My Mac</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>รุ่น MacBook ที่คนขายบ่อย (และปิดดีลไว)</h2>
+      <ul>
+        <li><strong>MacBook Air</strong>: เหมาะเรียน/ทำงานทั่วไป ราคาขึ้นกับชิปและความจุเป็นหลัก</li>
+        <li><strong>MacBook Pro 13/14/16</strong>: กลุ่มทำงานหนัก ราคาอ่อนไหวกับ RAM/SSD และสภาพจอมากเป็นพิเศษ</li>
+        <li><strong>Intel รุ่นเก่า</strong>: ยังขายได้ แต่ราคาจะขึ้นกับสภาพและแบต รวมถึงรุ่นที่ยังอัปเดต macOS ได้</li>
+      </ul>
+      <p>
+        ถ้าคุณมีทั้ง MacBook และอุปกรณ์ Apple อื่น ๆ เช่น iPhone/iPad สามารถส่งมาประเมินพร้อมกันได้ที่
+        <a href="/rab-sue-iphone">รับซื้อไอโฟน</a> และ <a href="/rab-sue-ipad">รับซื้อไอแพด</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>สิ่งที่ทำให้ราคา MacBook ขึ้น/ลงมากที่สุด</h2>
+      <h3>RAM/SSD (โดยเฉพาะรุ่น Pro)</h3>
+      <p>รุ่นที่ RAM สูงและ SSD ใหญ่ มักได้ราคาดีกว่าเพราะอัปเกรดภายหลังไม่ได้ในหลายรุ่น</p>
+      <h3>Cycle Count และสุขภาพแบต</h3>
+      <p>แบตเสื่อมหนักจะกระทบราคา เพราะค่าเปลี่ยนแบต MacBook ไม่ถูกและมีผลต่อการใช้งานจริง</p>
+      <h3>จอ (รอยกด/เส้น/เดดพิกเซล)</h3>
+      <p>ปัญหาจอเป็นหนึ่งในต้นทุนซ่อมที่สูงที่สุด แนะนำถ่ายรูปพื้นหลังสีขาว/ดำเพื่อให้เห็นตำหนิชัด</p>
+      <h3>Activation Lock</h3>
+      <p>
+        ถ้ายังผูก Apple ID หรือเปิด Find My Mac อยู่ จะทำให้โอนเครื่องไม่ได้ตามปกติ จึงต้องปลดก่อนเสมอ
+      </p>
+    </section>
+
+    <section>
+      <h2>เช็กลิสต์ก่อนขาย MacBook</h2>
+      <ol>
+        <li>สำรองข้อมูล (Time Machine / iCloud Drive)</li>
+        <li>Sign out Apple ID และปิด Find My Mac</li>
+        <li>ลบข้อมูลและติดตั้ง macOS ใหม่ (Erase / Reinstall)</li>
+        <li>ตรวจสอบว่าเครื่องเข้าหน้า Setup ได้ (Hello / Choose language)</li>
+      </ol>
+      <p>
+        ถ้าคุณไม่สะดวกทำเอง บอกทีมงานได้ เราจะช่วยแนะนำขั้นตอนที่ปลอดภัยที่สุดผ่านไลน์
+        <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>อยากได้ราคาประเมินเร็ว ต้องส่งอะไรบ้าง?</h2>
+      <ul>
+        <li><strong>รุ่น + ปี</strong> (เช่น MacBook Pro 14\" 2023)</li>
+        <li><strong>ชิป</strong> (Intel / M1 / M2 / M3 / M4)</li>
+        <li><strong>RAM/SSD</strong></li>
+        <li><strong>Cycle Count</strong> (รอบชาร์จ) + สภาพแบต</li>
+        <li><strong>รูปเครื่องทุกมุม</strong> + รูปหน้าจอแสดงสเปก</li>
+        <li><strong>ตำหนิ</strong> (จอ, บอดี้, คีย์บอร์ด, พอร์ต)</li>
+      </ul>
+      <p>
+        ส่งข้อมูลผ่าน Line @webuy หรือดูช่องทางทั้งหมดที่หน้า <a href="/contact">ติดต่อเรา</a>
+      </p>
+    </section>
+
+    <section class="faq">
+      <h2>คำถามที่พบบ่อยเกี่ยวกับการรับซื้อ MacBook</h2>
+      {faqItems.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section>
+      <h2>บริการรับซื้ออื่น ๆ ของ AMPHON TRADING</h2>
+      <p>ถ้าคุณต้องการขายพร้อมกันหลายประเภท เรารับประเมินเป็นชุดได้</p>
+      <ul>
+        <li><a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a> — Notebook ทุกยี่ห้อ (Windows/เกมมิง/สายทำงาน)</li>
+        <li><a href="/rab-sue-iphone">รับซื้อไอโฟน</a> — iPhone ทุกรุ่น ประเมินจากสภาพจริง</li>
+        <li><a href="/rab-sue-ipad">รับซื้อไอแพด</a> — iPad Air/mini/Pro</li>
+        <li><a href="/rab-sue-lamphong">รับซื้อลำโพง</a> — JBL/Marshall</li>
+        <li><a href="/blog">บทความ</a> — แนวทางเตรียมเครื่องก่อนขาย</li>
+      </ul>
+    </section>
+  </main>
+
+  <ContactBox
+    heading="อยากขาย MacBook ตอนนี้?"
+    text="ส่งรุ่น ชิป RAM SSD และรูปเครื่องผ่านไลน์ เพื่อประเมินราคาทันที"
+    ctaText="แอดไลน์ @webuy"
+  />
+</BaseLayout>

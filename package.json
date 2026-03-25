@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",
     "astro": "^6.0.8",
+    "node-html-parser": "^6.1.13",
     "serve": "^14.2.6"
   }
 }
