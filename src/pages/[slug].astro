@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { WPPost } from '../lib/wordpress';
-import { fetchPosts, getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/wordpress';
+import { fetchPosts, getFeaturedImageAttrs, getFeaturedImageUrl } from '../lib/wordpress';
 import { getSiteOrigin } from '../lib/site';
 import { autoLinkHtml } from '../lib/autolink';
+import { enhancePostContentImages } from '../lib/wp-content-images';
 
 export async function getStaticPaths() {
 	const reservedSlugs = new Set([
@@ -35,8 +36,12 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const featured = getFeaturedImageUrl(post);
-const featuredAlt = getFeaturedImageAlt(post);
+const featuredAttrs = getFeaturedImageAttrs(post);
+const featuredUrl = getFeaturedImageUrl(post);
+const wpPublicBase =
+	typeof import.meta.env.PUBLIC_WORDPRESS_URL === 'string'
+		? import.meta.env.PUBLIC_WORDPRESS_URL.replace(/\/+$/, '')
+		: '';
 const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
 const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
 const site = getSiteOrigin();
@@ -87,7 +92,11 @@ const autoLinkRules = [
 	},
 ];
 
-const linkedHtml = autoLinkHtml(post.content.rendered, autoLinkRules, { maxLinksTotal: 10, maxPerHref: 1 });
+const linkedHtml = enhancePostContentImages(
+	autoLinkHtml(post.content.rendered, autoLinkRules, { maxLinksTotal: 10, maxPerHref: 1 }),
+	wpPublicBase,
+);
+
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -109,7 +118,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			name: orgName,
 			logo: { '@type': 'ImageObject', url: new URL(orgLogo, site).toString() },
 		},
-		image: featured ? [featured] : undefined,
+		image: featuredUrl ? [featuredUrl] : undefined,
 		inLanguage: 'th-TH',
 	},
 	{
@@ -129,11 +138,13 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	description={plainExcerpt || `อ่านบทความ ${plainTitle} จาก AMPHON TRADING`}
 	pathname={articlePath}
 	type="article"
-	ogImage={featured}
+	ogImage={featuredUrl}
 	publishedTime={post.date}
 	modifiedTime={post.modified ?? post.date}
 	jsonLd={articleJsonLd}
 >
+	{wpPublicBase && <link rel="preconnect" href={wpPublicBase} crossorigin slot="head" />}
+	{wpPublicBase && <link rel="dns-prefetch" href={wpPublicBase} slot="head" />}
 	<article class="container article">
 		<header class="article-head">
 			<p class="back">
@@ -150,14 +161,18 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		</header>
 
 		{
-			featured && (
+			featuredAttrs && (
 				<img
 					class="hero-img"
-					src={featured}
-					alt={featuredAlt}
-					width="960"
-					height="540"
+					src={featuredAttrs.src}
+					srcset={featuredAttrs.srcset}
+					sizes={featuredAttrs.sizes}
+					alt={featuredAttrs.alt}
+					width={featuredAttrs.width}
+					height={featuredAttrs.height}
 					loading="eager"
+					decoding="async"
+					fetchpriority="high"
 				/>
 			)
 		}

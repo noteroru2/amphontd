@@ -3,6 +3,23 @@
  * เอกสาร: https://developer.wordpress.org/rest-api/
  */
 
+export interface WPMediaSize {
+	file?: string;
+	width?: number;
+	height?: number;
+	source_url?: string;
+}
+
+export interface WPEmbeddedMedia {
+	source_url: string;
+	alt_text?: string;
+	media_details?: {
+		width?: number;
+		height?: number;
+		sizes?: Record<string, WPMediaSize>;
+	};
+}
+
 export interface WPPost {
 	id: number;
 	date: string;
@@ -13,10 +30,7 @@ export interface WPPost {
 	content: { rendered: string };
 	link: string;
 	_embedded?: {
-		'wp:featuredmedia'?: Array<{
-			source_url: string;
-			alt_text?: string;
-		}>;
+		'wp:featuredmedia'?: WPEmbeddedMedia[];
 	};
 }
 
@@ -132,6 +146,78 @@ export async function fetchPostBySlug(slug: string): Promise<WPPost | null> {
 export function getFeaturedImageUrl(post: WPPost): string | undefined {
 	const media = post._embedded?.['wp:featuredmedia']?.[0];
 	return media?.source_url;
+}
+
+export type FeaturedImageAttrs = {
+	src: string;
+	srcset: string;
+	sizes: string;
+	width: number;
+	height: number;
+	alt: string;
+};
+
+function resolveMediaSizeUrl(media: WPEmbeddedMedia, size: WPMediaSize): string | undefined {
+	if (size.source_url) return size.source_url;
+	const file = size.file;
+	const full = media.source_url;
+	if (!file || !full) return undefined;
+	try {
+		const base = new URL(full);
+		const path = base.pathname;
+		const idx = path.lastIndexOf('/');
+		if (idx === -1) return undefined;
+		const dir = path.slice(0, idx + 1);
+		return `${base.origin}${dir}${file}`;
+	} catch {
+		return undefined;
+	}
+}
+
+/**
+ * Build responsive attributes from embedded mediaDetails (WordPress REST _embed).
+ * Helps LCP by letting the browser pick a smaller file than full-size `source_url`.
+ */
+export function getFeaturedImageAttrs(post: WPPost): FeaturedImageAttrs | null {
+	const media = post._embedded?.['wp:featuredmedia']?.[0];
+	if (!media?.source_url) return null;
+
+	const md = media.media_details;
+	const alt = getFeaturedImageAlt(post);
+	const fullW = md?.width ?? 1200;
+	const fullH = md?.height ?? Math.max(1, Math.round((fullW * 9) / 16));
+
+	const pairs: Array<{ url: string; w: number }> = [];
+
+	const sizes = md?.sizes;
+	if (sizes) {
+		for (const s of Object.values(sizes)) {
+			const url = resolveMediaSizeUrl(media, s);
+			const w = s.width;
+			if (url && typeof w === 'number' && w > 0) pairs.push({ url, w });
+		}
+	}
+
+	pairs.push({ url: media.source_url, w: fullW });
+
+	const byW = new Map<number, string>();
+	for (const { url, w } of pairs) {
+		const cur = byW.get(w);
+		if (!cur || url.length < cur.length) byW.set(w, url);
+	}
+
+	const sorted = [...byW.entries()].sort((a, b) => a[0] - b[0]);
+	const srcset = sorted.map(([w, url]) => `${url} ${w}w`).join(', ');
+	const src = sorted.length ? sorted[sorted.length - 1][1] : media.source_url;
+
+	return {
+		src,
+		srcset,
+		sizes: '(max-width: 720px) 100vw, 720px',
+		width: fullW,
+		height: fullH,
+		alt,
+	};
 }
 
 export function getFeaturedImageAlt(post: WPPost): string {

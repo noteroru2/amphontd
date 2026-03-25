@@ -14,6 +14,10 @@ const siteUrl =
 export default defineConfig({
 	site: siteUrl,
 	trailingSlash: 'always',
+	build: {
+		// Inlines global CSS into HTML to cut a render-blocking stylesheet request (small total CSS budget).
+		inlineStylesheets: 'always',
+	},
 	integrations: [
 		sitemap({
 			changefreq: 'weekly',
