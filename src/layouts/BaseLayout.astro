@@ -126,42 +126,13 @@ const robotsContent = noindex
 				background: rgba(248, 245, 239, 0.92);
 				backdrop-filter: blur(6px);
 			}
-			.contact-topbar {
-				background: #e8650a;
-				border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-				position: sticky;
-				top: 0;
-				z-index: 60;
-				box-shadow: 0 2px 12px rgba(10, 30, 40, 0.12);
-			}
-			.contact-topbar .container {
-				padding-block: 0.5rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 0.5rem;
-				font-size: 0.94rem;
-				color: #ecfff9;
-			}
-			.contact-topbar strong {
-				font-weight: 700;
-			}
-			.contact-topbar a {
-				color: #ffffff;
-				font-weight: 700;
-				text-decoration: underline;
-				text-underline-offset: 3px;
-			}
-			.contact-topbar a:hover {
-				color: #ffffff;
-			}
 			.site-header .container {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				gap: 1rem;
 				padding-block: 0;
-				flex-wrap: wrap;
+				position: relative;
 			}
 			.brand {
 				font-weight: 700;
@@ -175,9 +146,71 @@ const robotsContent = noindex
 				color: var(--accent);
 				text-decoration: none;
 			}
+			.nav-toggle {
+				display: none;
+				align-items: center;
+				justify-content: center;
+				width: 2.75rem;
+				height: 2.75rem;
+				padding: 0;
+				border: 1px solid rgba(36, 48, 67, 0.12);
+				border-radius: 10px;
+				background: var(--surface);
+				color: var(--text);
+				cursor: pointer;
+				flex-shrink: 0;
+				box-shadow: 0 1px 3px rgba(36, 48, 67, 0.06);
+				transition:
+					background 0.2s,
+					border-color 0.2s,
+					box-shadow 0.2s;
+			}
+			.nav-toggle:hover {
+				background: #faf8f4;
+				border-color: rgba(10, 124, 111, 0.25);
+			}
+			.nav-toggle:focus-visible {
+				outline: 2px solid var(--accent);
+				outline-offset: 2px;
+			}
+			.nav-toggle-bars {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				gap: 5px;
+				width: 1.15rem;
+			}
+			.nav-toggle-bars span {
+				display: block;
+				height: 2px;
+				width: 100%;
+				border-radius: 1px;
+				background: currentColor;
+				transition:
+					transform 0.22s ease,
+					opacity 0.2s ease;
+				transform-origin: center;
+			}
+			.nav-toggle[aria-expanded='true'] .nav-toggle-bars span:nth-child(1) {
+				transform: translateY(7px) rotate(45deg);
+			}
+			.nav-toggle[aria-expanded='true'] .nav-toggle-bars span:nth-child(2) {
+				opacity: 0;
+				transform: scaleX(0);
+			}
+			.nav-toggle[aria-expanded='true'] .nav-toggle-bars span:nth-child(3) {
+				transform: translateY(-7px) rotate(-45deg);
+			}
 			.nav {
 				display: flex;
+				flex-wrap: nowrap;
 				gap: 1.25rem;
+				align-items: center;
+			}
+			@media (min-width: 768px) {
+				.site-header .container {
+					flex-wrap: nowrap;
+				}
 			}
 			.nav a {
 				color: var(--muted);
@@ -185,6 +218,80 @@ const robotsContent = noindex
 			}
 			.nav a:hover {
 				color: var(--accent);
+			}
+			@media (max-width: 767px) {
+				.site-header .container {
+					flex-wrap: wrap;
+					row-gap: 0;
+				}
+				.brand {
+					max-width: calc(100% - 3.25rem);
+				}
+				.nav-toggle {
+					display: inline-flex;
+					margin-left: auto;
+				}
+				.nav {
+					flex-direction: column;
+					align-items: stretch;
+					width: 100%;
+					margin-top: 0;
+					padding: 0;
+					gap: 0;
+					max-height: 0;
+					overflow: hidden;
+					opacity: 0;
+					visibility: hidden;
+					pointer-events: none;
+					transition:
+						max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+						opacity 0.28s ease,
+						visibility 0.38s,
+						padding 0.38s ease,
+						margin 0.38s ease;
+					border-top: 1px solid transparent;
+				}
+				.nav.nav--open {
+					max-height: 28rem;
+					opacity: 1;
+					visibility: visible;
+					pointer-events: auto;
+					margin-top: 0.9rem;
+					padding-top: 0.65rem;
+					border-top-color: rgba(36, 48, 67, 0.1);
+				}
+				.nav a {
+					display: flex;
+					align-items: center;
+					padding: 0.9rem 0.65rem;
+					margin: 0 -0.65rem;
+					border-radius: var(--radius);
+					color: var(--text);
+					font-weight: 600;
+					font-size: 0.98rem;
+					text-decoration: none;
+					border-bottom: 1px solid rgba(36, 48, 67, 0.06);
+					transition:
+						background 0.15s ease,
+						color 0.15s ease;
+				}
+				.nav a:last-child {
+					border-bottom: none;
+				}
+				.nav a:hover,
+				.nav a:focus-visible {
+					background: rgba(10, 124, 111, 0.08);
+					color: var(--accent-dim);
+					text-decoration: none;
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.nav {
+					transition: none;
+				}
+				.nav-toggle-bars span {
+					transition: none;
+				}
 			}
 			.cta-banner {
 				width: 100%;
@@ -368,17 +475,23 @@ const robotsContent = noindex
 		</style>
 	</head>
 	<body>
-		<div class="contact-topbar" role="note" aria-label="ช่องทางติดต่อหลัก">
-			<div class="container">
-				<span>อยากขายสินค้า แอดไลน์</span>
-				<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
-				<span>ติดต่อได้ 24 ชั่วโมง</span>
-			</div>
-		</div>
 		<header class="site-header">
 			<div class="container">
 				<a class="brand" href="/">AMPHON TRADING (อำพล เทรดดิ้ง)</a>
-				<nav class="nav" aria-label="หลัก">
+				<button
+					type="button"
+					class="nav-toggle"
+					aria-expanded="false"
+					aria-controls="main-nav"
+					aria-label="เปิดเมนู"
+				>
+					<span class="nav-toggle-bars" aria-hidden="true">
+						<span></span>
+						<span></span>
+						<span></span>
+					</span>
+				</button>
+				<nav class="nav" id="main-nav" aria-label="หลัก">
 					<a href="/">หน้าแรก</a>
 					<a href="/blog">บทความ</a>
 					<a href="/rab-sue-com">รับซื้อคอม</a>
@@ -446,5 +559,51 @@ AMPHON TRADING (อำพล เทรดดิ้ง) บริการปร�
 				<div class="footer-bottom">© {new Date().getFullYear()} AMPHON TRADING. All rights reserved.</div>
 			</div>
 		</footer>
+		<script is:inline>
+			(function () {
+				const toggle = document.querySelector('.nav-toggle');
+				const nav = document.getElementById('main-nav');
+				if (!toggle || !nav) return;
+				const mq = window.matchMedia('(max-width: 767px)');
+
+				function syncInert() {
+					if (!mq.matches) {
+						nav.removeAttribute('inert');
+						return;
+					}
+					if (toggle.getAttribute('aria-expanded') === 'true') nav.removeAttribute('inert');
+					else nav.setAttribute('inert', '');
+				}
+
+				function setExpanded(open) {
+					toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+					toggle.setAttribute('aria-label', open ? 'ปิดเมนู' : 'เปิดเมนู');
+					nav.classList.toggle('nav--open', open);
+					syncInert();
+				}
+
+				toggle.addEventListener('click', function () {
+					const open = toggle.getAttribute('aria-expanded') !== 'true';
+					setExpanded(open);
+				});
+
+				nav.querySelectorAll('a').forEach(function (link) {
+					link.addEventListener('click', function () {
+						if (mq.matches) setExpanded(false);
+					});
+				});
+
+				mq.addEventListener('change', function (e) {
+					if (!e.matches) setExpanded(false);
+					else syncInert();
+				});
+
+				syncInert();
+
+				document.addEventListener('keydown', function (e) {
+					if (e.key === 'Escape' && mq.matches) setExpanded(false);
+				});
+			})();
+		</script>
 	</body>
 </html>
