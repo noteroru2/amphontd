@@ -38,6 +38,17 @@ export function isWordpressConfigured(): boolean {
 	return Boolean(getBaseUrl());
 }
 
+const FETCH_TIMEOUT_MS = 12000;
+const MAX_PAGES = 50;
+const MAX_POSTS = 250;
+
+async function fetchJsonWithTimeout(url: string): Promise<Response> {
+	return fetch(url, {
+		headers: { Accept: 'application/json' },
+		signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+	});
+}
+
 export async function fetchPosts(): Promise<WPPost[]> {
 	const base = getBaseUrl();
 	if (!base) return [];
@@ -46,15 +57,19 @@ export async function fetchPosts(): Promise<WPPost[]> {
 	let page = 1;
 	let totalPages = 1;
 
-	while (page <= totalPages) {
+	while (page <= totalPages && page <= MAX_PAGES) {
 		const url = new URL(`${base}/wp-json/wp/v2/posts`);
 		url.searchParams.set('per_page', '100');
 		url.searchParams.set('page', String(page));
 		url.searchParams.set('_embed', '1');
 
-		const res = await fetch(url.toString(), {
-			headers: { Accept: 'application/json' },
-		});
+		let res: Response;
+		try {
+			res = await fetchJsonWithTimeout(url.toString());
+		} catch (error) {
+			console.error(`[wordpress] fetch posts page ${page} timeout/error`, error);
+			break;
+		}
 
 		if (!res.ok) {
 			console.error(`[wordpress] fetch posts page ${page} failed: ${res.status} ${res.statusText}`);
@@ -68,6 +83,10 @@ export async function fetchPosts(): Promise<WPPost[]> {
 
 		const posts = (await res.json()) as WPPost[];
 		allPosts.push(...posts);
+		if (allPosts.length >= MAX_POSTS) {
+			allPosts.length = MAX_POSTS;
+			break;
+		}
 		page++;
 	}
 
@@ -85,9 +104,13 @@ export async function fetchPostBySlug(slug: string): Promise<WPPost | null> {
 	url.searchParams.set('slug', slug);
 	url.searchParams.set('_embed', '1');
 
-	const res = await fetch(url.toString(), {
-		headers: { Accept: 'application/json' },
-	});
+	let res: Response;
+	try {
+		res = await fetchJsonWithTimeout(url.toString());
+	} catch (error) {
+		console.error(`[wordpress] fetch post "${slug}" timeout/error`, error);
+		return null;
+	}
 
 	if (!res.ok) {
 		console.error(

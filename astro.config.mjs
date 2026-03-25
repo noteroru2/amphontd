@@ -4,7 +4,11 @@ import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
-const siteUrl = env.SITE_URL ?? 'https://example.com';
+const siteUrl =
+	env.SITE_URL ??
+		(env.COOLIFY_FQDN ? `https://${env.COOLIFY_FQDN}` : null) ??
+		env.COOLIFY_URL ??
+		'https://example.com';
 
 // https://astro.build/config
 export default defineConfig({
