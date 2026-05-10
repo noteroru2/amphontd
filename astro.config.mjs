@@ -24,15 +24,17 @@ export default defineConfig({
 			priority: 0.7,
 			serialize(item) {
 				const url = item.url;
-				if (url.endsWith('/rab-sue-notebook/') || url.endsWith('/rab-sue-com/') || url.endsWith('/rab-sue-iphone/') || url.endsWith('/rab-sue-klong/') || url.endsWith('/contact/')) {
-					item.changefreq = 'weekly';
-					item.priority = 0.9;
-				}
 				if (url === siteUrl + '/' || url === siteUrl) {
 					item.changefreq = 'daily';
 					item.priority = 1.0;
-				}
-				if (url.includes('/blog/') && url !== siteUrl + '/blog/') {
+				} else if (
+					url.match(
+						/\/(rab-sue-notebook|rab-sue-com|rab-sue-iphone|rab-sue-klong|rab-sue-ipad|rab-sue-macbook|rab-sue-lamphong|contact|about|evaluate-price)\/$/
+					)
+				) {
+					item.changefreq = 'weekly';
+					item.priority = 0.9;
+				} else if (url.includes('/blog/') && url !== siteUrl + '/blog/') {
 					item.changefreq = 'monthly';
 					item.priority = 0.6;
 				}

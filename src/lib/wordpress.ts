@@ -119,7 +119,14 @@ export async function fetchPosts(): Promise<WPPost[]> {
 			if (tp) totalPages = parseInt(tp, 10) || 1;
 		}
 
-		const posts = (await res.json()) as WPPost[];
+		let posts: WPPost[] = [];
+		try {
+			posts = (await res.json()) as WPPost[];
+		} catch (e) {
+			console.error(`[wordpress] fetch posts page ${page} failed to parse JSON. API might be down or returning HTML.`, e);
+			break;
+		}
+
 		allPosts.push(...posts);
 		if (MAX_POSTS > 0 && allPosts.length >= MAX_POSTS) break;
 		page++;
