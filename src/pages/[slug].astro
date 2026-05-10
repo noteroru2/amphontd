@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { WPPost } from '../lib/wordpress';
-import { fetchPosts, getFeaturedImageAttrs, getFeaturedImageUrl } from '../lib/wordpress';
+import { fetchPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostTags } from '../lib/wordpress';
 import { getSiteOrigin } from '../lib/site';
 import { autoLinkHtml } from '../lib/autolink';
 import { enhancePostContentImages } from '../lib/wp-content-images';
@@ -38,6 +38,7 @@ interface Props {
 const { post } = Astro.props;
 const featuredAttrs = getFeaturedImageAttrs(post);
 const featuredUrl = getFeaturedImageUrl(post);
+const tags = getPostTags(post);
 const wpPublicBase =
 	typeof import.meta.env.PUBLIC_WORDPRESS_URL === 'string'
 		? import.meta.env.PUBLIC_WORDPRESS_URL.replace(/\/+$/, '')
@@ -120,6 +121,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		},
 		image: featuredUrl ? [featuredUrl] : undefined,
 		inLanguage: 'th-TH',
+		isAccessibleForFree: true,
+		...(tags.length > 0 && { keywords: tags.join(', ') }),
 	},
 	{
 		'@context': 'https://schema.org',

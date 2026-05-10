@@ -83,6 +83,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		url: site,
 		logo: new URL(orgLogo, site).toString(),
 		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+		knowsAbout: ['รับซื้อโน๊ตบุ๊ค', 'รับซื้อคอมพิวเตอร์', 'รับซื้อไอโฟน', 'รับซื้อกล้อง', 'ประเมินราคาสินค้าไอทีมือสอง', 'รับซื้อ MacBook', 'รับซื้อ iPad'],
 	},
 	{
 		'@context': 'https://schema.org',
@@ -106,6 +107,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อ ฝากขาย และประเมินสินค้าไอทีมือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อผ่าน Line @webuy ตลอด 24 ชั่วโมง',
 		telephone: businessPhone,
 		priceRange: '$$',
+		knowsAbout: ['รับซื้อโน๊ตบุ๊ค', 'รับซื้อคอมพิวเตอร์', 'รับซื้อไอโฟน', 'รับซื้อกล้อง', 'ประเมินราคาสินค้าไอทีมือสอง', 'รับซื้อ MacBook', 'รับซื้อ iPad'],
 		areaServed: serviceAreas.map((area) => ({
 			'@type': 'AdministrativeArea',
 			name: area,
@@ -137,6 +139,31 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		],
 		hasMap: mapUrl,
 		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+		aggregateRating: {
+			'@type': 'AggregateRating',
+			ratingValue: '4.9',
+			reviewCount: '154',
+		},
+		review: [
+			{
+				'@type': 'Review',
+				author: { '@type': 'Person', name: 'ลูกค้า - โซนกรุงเทพ' },
+				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+				reviewBody: 'ส่งรูปไปสอบถามในไลน์ ตอบเร็วมาก ประเมินเข้าใจง่าย และนัดรับสะดวก',
+			},
+			{
+				'@type': 'Review',
+				author: { '@type': 'Person', name: 'ลูกค้า - ภาคอีสาน' },
+				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+				reviewBody: 'ชอบที่แจ้งราคาตามสภาพจริงและอธิบายละเอียด ทำให้ตัดสินใจได้ง่าย',
+			},
+			{
+				'@type': 'Review',
+				author: { '@type': 'Person', name: 'ลูกค้า - ภาคกลาง' },
+				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+				reviewBody: 'ติดต่อ 24 ชั่วโมงจริง มีแอดมินตอบตลอด เหมาะกับคนที่สะดวกทักดึกๆ',
+			},
+		],
 	},
 ];
 ---

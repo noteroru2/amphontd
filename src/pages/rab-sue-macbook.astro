@@ -7,191 +7,256 @@ import { getSiteOrigin } from '../lib/site';
 const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const serviceAreasRaw =
-  import.meta.env.PUBLIC_SERVICE_AREAS ??
-  'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
+	import.meta.env.PUBLIC_SERVICE_AREAS ??
+	'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี,มหาสารคาม,สุรินทร์';
 const serviceAreas = serviceAreasRaw
-  .split(',')
-  .map((item) => item.trim())
-  .filter(Boolean);
+	.split(',')
+	.map((item) => item.trim())
+	.filter(Boolean);
 
 const faqItems = [
-  {
-    q: 'รับซื้อ MacBook รุ่นไหนบ้าง?',
-    a: 'รับซื้อ MacBook Air และ MacBook Pro ทั้ง Intel และ Apple Silicon (M1/M2/M3/M4) โดยประเมินจากปี รุ่น ชิป RAM SSD รอบชาร์จ (cycle count) สภาพจอ/บอดี้ และอุปกรณ์ที่มี',
-  },
-  {
-    q: 'MacBook ติด Apple ID / Find My Mac รับซื้อไหม?',
-    a: 'ต้องปลด Apple ID และปิด Find My Mac ก่อนส่งมอบครับ ถ้ายังติด Activation Lock จะกระทบราคาอย่างมากและอาจไม่สามารถรับซื้อได้',
-  },
-  {
-    q: 'แบตเสื่อม/คีย์บอร์ดมีปัญหายังขายได้ไหม?',
-    a: 'ขายได้ครับ ราคาจะปรับตามต้นทุนซ่อมและผลต่อการใช้งาน แจ้งอาการตรง ๆ ตั้งแต่แรกจะช่วยให้ประเมินได้แม่นยำ',
-  },
-  {
-    q: 'ต้องเตรียมข้อมูลอะไรเพื่อประเมินเร็วที่สุด?',
-    a: 'ส่งรุ่นเต็ม + ชิป (Intel/M1/M2/M3/M4) + RAM/SSD + cycle count + สภาพเครื่อง + รูปทุกมุม ผ่าน Line @webuy ทีมงานจะตอบช่วงราคาได้เร็วขึ้นมาก',
-  },
+	{
+		q: 'รับซื้อ MacBook รุ่นไหนบ้าง?',
+		a: 'เรารับซื้อ MacBook ทุกรุ่น ทั้ง MacBook Air และ MacBook Pro ตั้งแต่รุ่นที่ใช้ชิป Intel ปี 2018 ขึ้นไป จนถึงรุ่นล่าสุดที่ใช้ Apple Silicon (M1, M2, M3, M4, M5 Series) ราคาประเมินอิงตามความต้องการของตลาด สเปก และสภาพจริง',
+	},
+	{
+		q: 'MacBook เครื่องติดล็อกบริษัท (MDM) หรือติด iCloud รับซื้อไหม?',
+		a: 'เครื่องที่ติดล็อกบริษัท (Mobile Device Management - MDM) หรือติด Activation Lock (iCloud) จะไม่สามารถรับซื้อในราคาปกติได้ครับ ผู้ขายต้องปลดล็อกให้เรียบร้อยก่อนส่งมอบ หากไม่สามารถปลดได้ เครื่องจะตีเป็นอะไหล่ซึ่งราคาจะต่ำมาก',
+	},
+	{
+		q: 'รอบชาร์จแบตเตอรี่ (Cycle Count) มีผลต่อราคาแค่ไหน?',
+		a: 'มีผลค่อนข้างชัดเจนครับ Cycle Count ที่สูง (เช่น เกิน 500-1000 รอบ ขึ้นอยู่กับรุ่น) หรือสถานะ Service Recommended บ่งบอกว่าแบตเตอรี่เสื่อมแล้ว เราจะต้องหักค่าเสื่อมตามต้นทุนการเปลี่ยนแบตเตอรี่ใหม่ของรุ่นนั้นๆ',
+	},
+	{
+		q: 'MacBook จอลอก จอแตก หรือคีย์บอร์ดพิมพ์ไม่ติด รับซื้อไหม?',
+		a: 'รับซื้อครับ แต่ราคาจะลดลงตามต้นทุนการเปลี่ยนอะไหล่ ตัวอย่างเช่น จอของ MacBook Pro รุ่นใหม่มีราคาสูงมาก หากจอแตกราคาประเมินจะถูกหักลบด้วยค่าเปลี่ยนจออย่างโปร่งใส แจ้งตำหนิก่อนประเมินจะช่วยให้ได้ราคาสุทธิที่แม่นยำ',
+	},
+	{
+		q: 'มีกล่องและอุปกรณ์แท้ครบ ช่วยเพิ่มราคาไหม?',
+		a: 'ช่วยได้ครับ เครื่องที่มีกล่องตรง Serial Number อะแดปเตอร์แท้ และสายชาร์จสภาพดี จะขายต่อได้ง่ายกว่า ทำให้เราสามารถประเมินให้ในราคาที่สูงกว่าเครื่องที่มีแต่ตัวเครื่องเปล่าๆ เล็กน้อย',
+	},
+	{
+		q: 'ต้องเตรียมข้อมูลอะไรเพื่อประเมินให้เร็วที่สุด?',
+		a: 'แนะนำให้ถ่ายรูปหน้าต่าง "About This Mac" (เกี่ยวกับ Mac เครื่องนี้) เพื่อโชว์รุ่น ชิป RAM สตอเรจ พร้อมถ่ายหน้า System Information ส่วนของ Battery (แสดง Cycle Count) และถ่ายรูปตัวเครื่องรอบด้าน ส่งมาทาง Line @webuy ครับ',
+	},
+	{
+		q: 'อัปเกรด macOS ไม่ได้แล้ว ยังมีราคาไหม?',
+		a: 'ยังมีราคาครับ แต่อาจจะจัดอยู่ในกลุ่มเครื่องใช้งานพื้นฐาน (Entry-level) ราคาจะลดหลั่นลงไปตามข้อจำกัดในการลงโปรแกรมเวอร์ชันใหม่ๆ',
+	},
+	{
+		q: 'รับเงินช่องทางไหนบ้าง?',
+		a: 'หลังจากตรวจเช็คเครื่องว่าตรงตามสภาพที่คุยกันไว้ เราจะโอนเงินเข้าบัญชีธนาคารของคุณเต็มจำนวนทันที ปลอดภัย รวดเร็ว และมีสลิปหลักฐานชัดเจน',
+	},
+	{
+		q: 'อยู่ต่างจังหวัด ขาย MacBook ได้อย่างไร?',
+		a: 'ง่ายมากครับ ทักแชทประเมินราคาผ่าน Line @webuy ให้เรียบร้อย เมื่อตกลงราคากันได้แล้ว คุณสามารถแพ็คเครื่องส่งพัสดุ (แนะนำให้ทำประกันพัสดุ) เมื่อทีมงานรับและเช็คเครื่องเสร็จ จะโอนเงินให้ทันทีครับ',
+	},
 ];
 
-const jsonLd: Array<Record<string, unknown>> = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'รับซื้อ MacBook มือสอง MacBook Air / Pro ได้ราคาสูง จ่ายเงินทันที',
-    description:
-      'บริการรับซื้อ MacBook มือสองทุกรุ่น Air/Pro ทั้ง Intel และ M‑series ประเมินราคาโปร่งใสตามชิป RAM SSD cycle count สภาพจอ/บอดี้ และอุปกรณ์ที่มี ติดต่อ Line @webuy ได้ตลอด 24 ชั่วโมง',
-    inLanguage: 'th-TH',
-    author: { '@type': 'Organization', name: orgName },
-    publisher: { '@type': 'Organization', name: orgName },
-    mainEntityOfPage: `${site}/rab-sue-macbook/`,
-    datePublished: '2026-03-25',
-    dateModified: '2026-03-25',
-    image: [new URL('/og-default.png', site).toString()],
-    keywords:
-      'รับซื้อ macbook, รับซื้อ MacBook Air, รับซื้อ MacBook Pro, ขาย macbook มือสอง, ประเมินราคา macbook, รับซื้อ macbook m1, รับซื้อ macbook m2, รับซื้อ macbook m3',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqItems.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: 'บริการรับซื้อ MacBook มือสอง',
-    description:
-      'รับซื้อ MacBook Air/Pro มือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง',
-    provider: { '@type': 'Organization', name: orgName },
-    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
-    serviceType: 'รับซื้อ MacBook มือสอง',
-    url: `${site}/rab-sue-macbook/`,
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
-      { '@type': 'ListItem', position: 2, name: 'รับซื้อ MacBook', item: `${site}/rab-sue-macbook/` },
-    ],
-  },
+const articleJsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: 'รับซื้อ MacBook มือสอง ทุกรุ่น Air/Pro ให้ราคาดี ประเมินไว จ่ายสดทันที',
+		description:
+			'บริการรับซื้อ MacBook มือสองทุกรุ่น (Intel, M1, M2, M3, M4, M5) ประเมินราคาโปร่งใสตามชิปเซ็ต RAM SSD และ Cycle Count พร้อมคำแนะนำการเช็คเครื่องก่อนขาย',
+		inLanguage: 'th-TH',
+		author: { '@type': 'Organization', name: orgName },
+		publisher: { '@type': 'Organization', name: orgName },
+		mainEntityOfPage: `${site}/rab-sue-macbook/`,
+		datePublished: '2026-03-25',
+		dateModified: '2026-03-25',
+		image: [new URL('/og-default.png', site).toString()],
+		keywords:
+			'รับซื้อ macbook, รับซื้อ MacBook Air, รับซื้อ MacBook Pro, ขาย macbook มือสอง, ประเมินราคา macbook, รับซื้อ macbook m3, รับซื้อ macbook m4, รับซื้อ macbook m5, ขายแมคบุ๊ค',
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqItems.map((item) => ({
+			'@type': 'Question',
+			name: item.q,
+			acceptedAnswer: { '@type': 'Answer', text: item.a },
+		})),
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Service',
+		name: 'บริการรับซื้อ MacBook มือสอง',
+		description:
+			'รับซื้อ MacBook Air และ MacBook Pro มือสอง ทุกรุ่น (Intel & Apple Silicon) ประเมินราคาโปร่งใส จ่ายเงินโอนทันที ให้บริการทั่วประเทศ',
+		provider: { '@type': 'Organization', name: orgName },
+		areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+		serviceType: 'รับซื้อ MacBook มือสอง',
+		url: `${site}/rab-sue-macbook/`,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
+			{ '@type': 'ListItem', position: 2, name: 'รับซื้อ MacBook', item: `${site}/rab-sue-macbook/` },
+		],
+	},
 ];
 ---
 
 <BaseLayout
-  title="รับซื้อ MacBook มือสอง | Air / Pro | ประเมินราคาฟรี จ่ายเงินทันที | AMPHON TRADING"
-  description="AMPHON TRADING รับซื้อ MacBook มือสองทุกรุ่น MacBook Air / Pro ทั้ง Intel และ M1/M2/M3 ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง"
-  pathname="/rab-sue-macbook/"
-  jsonLd={jsonLd}
+	title="รับซื้อ MacBook มือสอง | Air/Pro ชิป M1-M5 ให้ราคาสูง | AMPHON TRADING"
+	description="AMPHON TRADING รับซื้อ MacBook มือสองทุกรุ่น ทั้ง MacBook Air และ Pro ชิป Intel และ M-Series ประเมินตาม Cycle Count อย่างโปร่งใส จ่ายเงินทันที 24 ชม."
+	pathname="/rab-sue-macbook"
+	type="article"
+	jsonLd={articleJsonLd}
 >
-  <div class="container">
-    <header class="article-head">
-      <p class="eyebrow">บริการรับซื้อ MacBook</p>
-      <h1>รับซื้อ MacBook Air / Pro มือสอง — ได้ราคาดี จ่ายเงินทันที</h1>
-      <p class="lead">
-        ส่งรุ่น ชิป RAM SSD และรอบชาร์จผ่าน Line <strong>@webuy</strong> ทีมงานประเมินเร็ว โปร่งใส และแนะนำวิธีเตรียมเครื่องก่อนส่งมอบ
-      </p>
-    </header>
-  </div>
+	<article class="container longform">
+		<header>
+			<p class="kicker">MacBook Buyback Guide 2026</p>
+			<h1>รับซื้อ MacBook มือสอง ครบทุกรุ่น (Air/Pro) อัปเดตราคาล่าสุด ให้ราคาสูง จ่ายเงินไว</h1>
+			<p class="intro">
+				อยากเปลี่ยน Mac เครื่องใหม่ หรือมี MacBook วางทิ้งไว้ไม่ได้ใช้? <strong>AMPHON TRADING</strong> บริการรับซื้อ MacBook มือสองครอบคลุมตั้งแต่รุ่น Intel เจนเก่า ไปจนถึงรุ่นเรือธงที่ใช้ชิป <strong>Apple Silicon (M1, M2, M3, M4, M5 Series)</strong> เราเข้าใจว่าสเปกของ Mac แตกต่างกันไปตาม Customization ไม่ว่าจะเป็นการอัปเกรด Unified Memory (RAM) หรือเพิ่มความจุ SSD เราจึงประเมินราคาตามสเปกจริงอย่างแม่นยำ พร้อมอธิบายเหตุผลการหักลบราคาตามรอบชาร์จ (Cycle Count) อย่างโปร่งใส ไม่กดราคามั่วซั่ว พร้อมให้บริการตลอด 24 ชั่วโมง ทักมาคุยรายละเอียดได้ที่ <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">Line @webuy</a> หรือโทร <a class="phone-link" href="tel:0642579353">064-257-9353</a> ครับ
+			</p>
+		</header>
 
-  <main class="container prose">
-    <section>
-      <h2>ประเมินราคา MacBook ดูอะไรบ้าง?</h2>
-      <ul>
-        <li><strong>ชิป/รุ่น</strong>: Intel หรือ M‑series (M1/M2/M3/M4)</li>
-        <li><strong>RAM/SSD</strong>: ยิ่งสูงมูลค่ายิ่งดี โดยเฉพาะรุ่น Pro</li>
-        <li><strong>รอบชาร์จ (Cycle Count)</strong>: บอกสุขภาพแบตโดยรวม</li>
-        <li><strong>สภาพจอ</strong>: dead pixel, burn‑in, รอยกด/รอยแตก</li>
-        <li><strong>คีย์บอร์ด/ทัชแพด</strong>: ปุ่มจม/ดับเบิลคลิก</li>
-        <li><strong>การล็อกบัญชี</strong>: ต้องปลด Apple ID และปิด Find My Mac</li>
-      </ul>
-    </section>
+		<!-- ==================== Section 1 ==================== -->
+		<section>
+			<h2>เหตุผลที่ควรขาย MacBook กับเรา</h2>
+			<p>
+				การขายอุปกรณ์ระดับโปรอย่าง MacBook ต้องการความเชี่ยวชาญในการประเมิน เนื่องจากมูลค่าของ Unified Memory (RAM 16GB, 24GB, 36GB ฯลฯ) และ SSD ที่อัปเกรดมา รวมถึงประเภทของชิป (Pro, Max, Ultra) มีผลต่อราคาสูงมาก ร้านรับซื้อที่ไม่มีความรู้ลึกพออาจตีราคาเหมาเป็นรุ่นเริ่มต้น ทำให้คุณเสียเปรียบ
+			</p>
+			<h3>ความเชี่ยวชาญและความรวดเร็ว</h3>
+			<ul>
+				<li><strong>ประเมินละเอียดทุก CTO (Configure-to-Order)</strong>: เรารู้ดีว่า RAM ที่เพิ่มมามีมูลค่าสูงในยุค AI เราให้ราคาที่สมเหตุสมผลตามสเปกจริง</li>
+				<li><strong>โปร่งใสเรื่องแบตเตอรี่และจอ</strong>: เราขอดู Cycle Count และสภาพจอ หากมีจุดเสื่อม เราจะอธิบายว่าต้องหักค่าเปลี่ยนเท่าไร ไม่ใช้อารมณ์กดราคา</li>
+				<li><strong>รับมือกับเครื่องติด MDM หรือมีปัญหา</strong>: เรามีคำแนะนำชัดเจน และประเมินเป็นอะไหล่ให้หากเครื่องไม่สามารถใช้งานปกติได้</li>
+				<li><strong>ระบบจ่ายเงินโอนทันใจ</strong>: ตรวจเครื่องเสร็จ จ่ายเงินเข้าบัญชีทันที ปิดดีลไว ไม่ต้องรอ</li>
+			</ul>
+		</section>
 
-    <section>
-      <h2>รุ่น MacBook ที่คนขายบ่อย (และปิดดีลไว)</h2>
-      <ul>
-        <li><strong>MacBook Air</strong>: เหมาะเรียน/ทำงานทั่วไป ราคาขึ้นกับชิปและความจุเป็นหลัก</li>
-        <li><strong>MacBook Pro 13/14/16</strong>: กลุ่มทำงานหนัก ราคาอ่อนไหวกับ RAM/SSD และสภาพจอมากเป็นพิเศษ</li>
-        <li><strong>Intel รุ่นเก่า</strong>: ยังขายได้ แต่ราคาจะขึ้นกับสภาพและแบต รวมถึงรุ่นที่ยังอัปเดต macOS ได้</li>
-      </ul>
-      <p>
-        ถ้าคุณมีทั้ง MacBook และอุปกรณ์ Apple อื่น ๆ เช่น iPhone/iPad สามารถส่งมาประเมินพร้อมกันได้ที่
-        <a href="/rab-sue-iphone">รับซื้อไอโฟน</a> และ <a href="/rab-sue-ipad">รับซื้อไอแพด</a>
-      </p>
-    </section>
+		<!-- ==================== Section 2 ==================== -->
+		<section>
+			<h2>ปัจจัยหลักที่ส่งผลต่อราคารับซื้อ MacBook</h2>
+			<p>
+				เราไม่ได้ดูแค่ปีที่ซื้อ แต่เราวิเคราะห์ลึกลงไปถึงสถานะฮาร์ดแวร์ ต่อไปนี้คือจุดที่ส่งผลต่อราคารับซื้อมากที่สุด:
+			</p>
 
-    <section>
-      <h2>สิ่งที่ทำให้ราคา MacBook ขึ้น/ลงมากที่สุด</h2>
-      <h3>RAM/SSD (โดยเฉพาะรุ่น Pro)</h3>
-      <p>รุ่นที่ RAM สูงและ SSD ใหญ่ มักได้ราคาดีกว่าเพราะอัปเกรดภายหลังไม่ได้ในหลายรุ่น</p>
-      <h3>Cycle Count และสุขภาพแบต</h3>
-      <p>แบตเสื่อมหนักจะกระทบราคา เพราะค่าเปลี่ยนแบต MacBook ไม่ถูกและมีผลต่อการใช้งานจริง</p>
-      <h3>จอ (รอยกด/เส้น/เดดพิกเซล)</h3>
-      <p>ปัญหาจอเป็นหนึ่งในต้นทุนซ่อมที่สูงที่สุด แนะนำถ่ายรูปพื้นหลังสีขาว/ดำเพื่อให้เห็นตำหนิชัด</p>
-      <h3>Activation Lock</h3>
-      <p>
-        ถ้ายังผูก Apple ID หรือเปิด Find My Mac อยู่ จะทำให้โอนเครื่องไม่ได้ตามปกติ จึงต้องปลดก่อนเสมอ
-      </p>
-    </section>
+			<h3>1. สถาปัตยกรรมชิปเซ็ต (Apple Silicon vs Intel)</h3>
+			<p>
+				ในปัจจุบัน (ปี 2026) ชิปตระกูล <strong>M-Series (M3, M4, M5)</strong> ครองตลาดมือสองเป็นหลัก และมีมูลค่าสูงมาก โดยเฉพาะรุ่น M-Pro และ M-Max ส่วนเครื่องที่ใช้ชิป <strong>Intel</strong> แม้จะมีราคาลดลงตามอายุขัยการซัพพอร์ตซอฟต์แวร์ แต่ยังมีมูลค่าอยู่สำหรับผู้เริ่มต้น หรือเครื่องสำรอง เรารับซื้อทั้งคู่ครับ
+			</p>
 
-    <section>
-      <h2>เช็กลิสต์ก่อนขาย MacBook</h2>
-      <ol>
-        <li>สำรองข้อมูล (Time Machine / iCloud Drive)</li>
-        <li>Sign out Apple ID และปิด Find My Mac</li>
-        <li>ลบข้อมูลและติดตั้ง macOS ใหม่ (Erase / Reinstall)</li>
-        <li>ตรวจสอบว่าเครื่องเข้าหน้า Setup ได้ (Hello / Choose language)</li>
-      </ol>
-      <p>
-        ถ้าคุณไม่สะดวกทำเอง บอกทีมงานได้ เราจะช่วยแนะนำขั้นตอนที่ปลอดภัยที่สุดผ่านไลน์
-        <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
-      </p>
-    </section>
+			<h3>2. Unified Memory (RAM) และ SSD</h3>
+			<p>
+				MacBook ยุคใหม่ไม่สามารถอัปเกรด RAM และ SSD ภายหลังได้ เครื่องที่อัปเกรด RAM มาเป็น 16GB, 24GB, 36GB หรือ 64GB จะเป็นที่ต้องการในตลาดโปร (ตัดต่อวิดีโอ, ทำเพลง, รัน AI โมเดล) ทำให้ได้ราคาสูงกว่า Base Model อย่างเห็นได้ชัด
+			</p>
 
-    <section>
-      <h2>อยากได้ราคาประเมินเร็ว ต้องส่งอะไรบ้าง?</h2>
-      <ul>
-        <li><strong>รุ่น + ปี</strong> (เช่น MacBook Pro 14\" 2023)</li>
-        <li><strong>ชิป</strong> (Intel / M1 / M2 / M3 / M4)</li>
-        <li><strong>RAM/SSD</strong></li>
-        <li><strong>Cycle Count</strong> (รอบชาร์จ) + สภาพแบต</li>
-        <li><strong>รูปเครื่องทุกมุม</strong> + รูปหน้าจอแสดงสเปก</li>
-        <li><strong>ตำหนิ</strong> (จอ, บอดี้, คีย์บอร์ด, พอร์ต)</li>
-      </ul>
-      <p>
-        ส่งข้อมูลผ่าน Line @webuy หรือดูช่องทางทั้งหมดที่หน้า <a href="/contact">ติดต่อเรา</a>
-      </p>
-    </section>
+			<h3>3. สุขภาพแบตเตอรี่ (Cycle Count & Condition)</h3>
+			<p>
+				วิธีเช็คง่ายๆ คือไปที่ <em>System Settings > General > About > System Report > Power</em> ดูบรรทัดที่เขียนว่า <strong>Cycle Count</strong> และ <strong>Condition</strong> (ปกติ, แนะนำให้รับบริการ) หากรอบชาร์จเกิน 500-1000 รอบ หรือสถานะแจ้งเตือนให้ Service ราคาประเมินจะถูกหักลบด้วยค่าเปลี่ยนแบตเตอรี่ใหม่
+			</p>
 
-    <section class="faq">
-      <h2>คำถามที่พบบ่อยเกี่ยวกับการรับซื้อ MacBook</h2>
-      {faqItems.map((item) => (
-        <details>
-          <summary>{item.q}</summary>
-          <p>{item.a}</p>
-        </details>
-      ))}
-    </section>
+			<h3>4. หน้าจอ (Display Condition)</h3>
+			<p>
+				จอของ MacBook โดยเฉพาะรุ่นจอ Liquid Retina XDR มีต้นทุนอะไหล่ที่แพงมาก หากมีรอยขีดข่วนลึก, ลอก (Staingate), เดดพิกเซล (Dead Pixel) หรือจอแตก จะกระทบราคาแรงที่สุด แนะนำให้ถ่ายรูปพื้นหลังสีขาวล้วนให้ทีมงานดูครับ
+			</p>
+			
+			<h3>5. การล็อกระบบ (Activation Lock & MDM)</h3>
+			<p>
+				<strong>ต้องไม่มีการล็อก</strong> ใดๆ เครื่องต้องสามารถ Sign out จาก Apple ID, ปิด Find My Mac และรีเซ็ตกลับเป็นค่าโรงงานได้ หากเป็นเครื่ององค์กร ต้องปลด Profile MDM (Mobile Device Management) ออกให้หมดก่อนขาย
+			</p>
+		</section>
 
-    <section>
-      <h2>บริการรับซื้ออื่น ๆ ของ AMPHON TRADING</h2>
-      <p>ถ้าคุณต้องการขายพร้อมกันหลายประเภท เรารับประเมินเป็นชุดได้</p>
-      <ul>
-        <li><a href="/rab-sue-notebook">รับซื้อโน๊ตบุ๊ค</a> — Notebook ทุกยี่ห้อ (Windows/เกมมิง/สายทำงาน)</li>
-        <li><a href="/rab-sue-iphone">รับซื้อไอโฟน</a> — iPhone ทุกรุ่น ประเมินจากสภาพจริง</li>
-        <li><a href="/rab-sue-ipad">รับซื้อไอแพด</a> — iPad Air/mini/Pro</li>
-        <li><a href="/rab-sue-lamphong">รับซื้อลำโพง</a> — JBL/Marshall</li>
-        <li><a href="/blog">บทความ</a> — แนวทางเตรียมเครื่องก่อนขาย</li>
-      </ul>
-    </section>
-  </main>
+		<ContactBox heading="เช็คสเปก MacBook ของคุณแล้วใช่ไหม?" text="ส่งภาพ About This Mac และ Cycle Count มาประเมินราคาฟรีทาง Line @webuy ได้เลย" variant="primary" />
 
-  <ContactBox
-    heading="อยากขาย MacBook ตอนนี้?"
-    text="ส่งรุ่น ชิป RAM SSD และรูปเครื่องผ่านไลน์ เพื่อประเมินราคาทันที"
-    ctaText="แอดไลน์ @webuy"
-  />
+		<!-- ==================== Section 3 ==================== -->
+		<section>
+			<h2>การเตรียมตัวและการรีเซ็ต MacBook ก่อนขาย</h2>
+			<p>
+				เพื่อความปลอดภัยของข้อมูลส่วนตัวและเพิ่มความรวดเร็วในการตรวจรับ นี่คือขั้นตอนมาตรฐานที่คุณควรทำก่อนส่งมอบเครื่องให้เรา:
+			</p>
+
+			<h3>ขั้นตอนที่ 1: สำรองข้อมูล (Backup)</h3>
+			<p>
+				เสียบ External Drive แล้วเปิดแอป <strong>Time Machine</strong> ปล่อยให้ระบบแบคอัปข้อมูลทั้งหมด หรือโยนไฟล์งานสำคัญขึ้น iCloud Drive / Google Drive ให้เรียบร้อย
+			</p>
+
+			<h3>ขั้นตอนที่ 2: ปิด Find My Mac & ออกจาก Apple ID</h3>
+			<p>
+				ไปที่ <em>System Settings > [ชื่อของคุณ]</em> เลื่อนลงไปกด <strong>Sign Out</strong> ระบบจะถามรหัสผ่านเพื่อปิดการใช้งาน Find My Mac ขั้นตอนนี้จำเป็นมากเพื่อปลด Activation Lock
+			</p>
+
+			<h3>ขั้นตอนที่ 3: ยกเลิกการผูกบัญชีซอฟต์แวร์อื่นๆ (ถ้ามี)</h3>
+			<p>
+				หากคุณใช้โปรแกรมที่มี License ผูกกับเครื่อง เช่น Adobe Creative Cloud, Microsoft Office หรือปลั๊กอินทำเพลงต่างๆ อย่าลืม Sign out หรือ Deactivate เครื่องนี้ออกจากระบบด้วย
+			</p>
+
+			<h3>ขั้นตอนที่ 4: ลบข้อมูลทั้งหมด (Erase All Content and Settings)</h3>
+			<p>
+				สำหรับ macOS รุ่นใหม่ (Monterey ขึ้นไป) คุณสามารถไปที่ <em>System Settings > General > Transfer or Reset</em> แล้วเลือก <strong>Erase All Content and Settings</strong> กรอกรหัสผ่าน เครื่องจะลบข้อมูลและกลับไปสู่หน้าจอ "Hello" เหมือนซื้อใหม่ได้อย่างรวดเร็วและหมดจด
+			</p>
+			
+			<div class="highlight-box">
+				<strong>ทำไม่เป็น ไม่ต้องห่วง:</strong> หากคุณติดขัดในขั้นตอนการล้างเครื่อง ทักหาเราที่ <a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">Line @webuy</a> ทีมงานจะอธิบายทีละสเต็ปอย่างละเอียดครับ
+			</div>
+		</section>
+
+		<!-- ==================== Section 4 ==================== -->
+		<section>
+			<h2>ข้อมูลที่ต้องใช้เพื่อขอประเมินราคาให้ "เป๊ะที่สุด"</h2>
+			<p>
+				ไม่อยากถูกปรับราคาหน้างาน? ส่งข้อมูลมาให้ครบตามเช็กลิสต์นี้ เราจะตีราคาได้ใกล้เคียงกับราคาจบที่สุด:
+			</p>
+			<ul>
+				<li><strong>รุ่นปี และ ชิปเซ็ต:</strong> แคปภาพจากหน้า "About This Mac" (เช่น MacBook Pro 14-inch, Nov 2026, M5 Pro)</li>
+				<li><strong>ความจุ RAM และ SSD:</strong> แจ้งให้ชัดเจนว่าอัปเกรดมาหรือไม่</li>
+				<li><strong>Cycle Count:</strong> แคปภาพหน้า System Information หมวด Power</li>
+				<li><strong>รูปถ่ายรอบตัวเครื่อง:</strong> ฝาบน, ฝาล่าง, มุมทั้ง 4, หน้าจอเปิดไฟ, และคีย์บอร์ด</li>
+				<li><strong>อุปกรณ์เสริม:</strong> แจ้งว่ามีกล่องตรง Serial Number, หัวชาร์จ, หรือสายชาร์จแท้สภาพดีหรือไม่</li>
+				<li><strong>ตำหนิ:</strong> (ถ้ามี) รอยบิ่น รอยกระแทก ลำโพงแตก จอลอก แจ้งตรงๆ ได้เลยครับ</li>
+			</ul>
+		</section>
+
+		<!-- ==================== Section 5 ==================== -->
+		<section>
+			<h2>พื้นที่ให้บริการและการจัดส่ง (ทั่วประเทศ)</h2>
+			<p>
+				AMPHON TRADING รองรับการรับซื้อจากลูกค้าทั่วประเทศ ด้วยรูปแบบบริการที่ยืดหยุ่น:
+			</p>
+			<h3>1. ลูกค้าในกรุงเทพฯ และปริมณฑล</h3>
+			<p>
+				สามารถนัดจุดรับส่งตามที่ตกลงกัน หรือเข้ามาส่งมอบโดยตรง ทีมงานตรวจสภาพปุ๊บ โอนเงินเข้าบัญชีปั๊บ
+			</p>
+			<h3>2. ลูกค้าต่างจังหวัด (ส่งพัสดุ)</h3>
+			<p>
+				เรามีลูกค้าจากทั่วประเทศ ({serviceAreas.join(', ')}) คุณสามารถแพ็คกันกระแทกอย่างหนา (แนะนำใช้กล่องเดิมซ้อนกล่องใหม่) แล้วจัดส่งผ่าน Kerry, Flash, หรือไปรษณีย์ไทย <strong>(แนะนำให้ซื้อประกันพัสดุเต็มมูลค่าเครื่อง)</strong> เมื่อของถึงมือทีมงานและสเปก/สภาพตรงตามที่คุยในแชท เราโอนยอดให้ทันที ไม่มีตุกติก
+			</p>
+		</section>
+
+		<ContactBox heading="อยากเปลี่ยน Mac ใหม่ หรือต้องการเงินทุน?" text="ทักแชทส่งสเปกมาเลยครับ เราพร้อมประเมินและโอนไวตลอด 24 ชั่วโมง" variant="secondary" />
+
+		<!-- ==================== FAQ Section ==================== -->
+		<section class="faq">
+			<h2>คำถามที่พบบ่อยเกี่ยวกับการรับซื้อ MacBook</h2>
+			{faqItems.map((item) => (
+				<details>
+					<summary>{item.q}</summary>
+					<p>{item.a}</p>
+				</details>
+			))}
+		</section>
+
+		<!-- ==================== Internal Links ==================== -->
+		<section>
+			<h2>บริการรับซื้อสินค้าไอทีอื่นๆ ของเรา</h2>
+			<p>หากคุณจะโล๊ะอุปกรณ์ทั้งระบบ เรารับซื้อเหมาเป็นชุดได้ครับ:</p>
+			<ul>
+				<li><a href="/rab-sue-iphone">รับซื้อ iPhone</a> — ทุกรุ่น อัปเดตราคาล่าสุด</li>
+				<li><a href="/rab-sue-ipad">รับซื้อ iPad</a> — iPad Air, mini, Pro ทุก Gen</li>
+				<li><a href="/rab-sue-notebook">รับซื้อ Notebook (Windows)</a> — Dell, HP, Lenovo, ASUS, Acer, MSI</li>
+				<li><a href="/rab-sue-com">รับซื้อคอมพิวเตอร์ตั้งโต๊ะ</a> — PC ประกอบ, Workstation</li>
+				<li><a href="/rab-sue-klong">รับซื้อกล้องและเลนส์</a> — DSLR, Mirrorless</li>
+				<li><a href="/rab-sue-lamphong">รับซื้อลำโพง</a> — Marshall, JBL และอุปกรณ์ Gadget อื่นๆ</li>
+			</ul>
+		</section>
+	</article>
 </BaseLayout>
+

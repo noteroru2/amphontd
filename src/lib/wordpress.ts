@@ -31,6 +31,7 @@ export interface WPPost {
 	link: string;
 	_embedded?: {
 		'wp:featuredmedia'?: WPEmbeddedMedia[];
+		'wp:term'?: Array<Array<{ taxonomy: string; name: string }>>;
 	};
 }
 
@@ -40,6 +41,20 @@ export function normalizeWpSlug(slug: string): string {
 	} catch {
 		return slug;
 	}
+}
+
+export function getPostTags(post: WPPost): string[] {
+	const terms = post._embedded?.['wp:term'];
+	if (!terms) return [];
+	const tags: string[] = [];
+	for (const termGroup of terms) {
+		for (const term of termGroup) {
+			if (term.taxonomy === 'post_tag') {
+				tags.push(term.name);
+			}
+		}
+	}
+	return tags;
 }
 
 function getBaseUrl(): string | null {

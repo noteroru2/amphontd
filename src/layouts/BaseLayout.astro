@@ -36,6 +36,23 @@ const twitterSite = import.meta.env.PUBLIC_TWITTER_SITE;
 const robotsContent = noindex
 	? 'noindex, nofollow, noarchive'
 	: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+
+const webPageJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: title,
+	description: description,
+	url: canonicalUrl,
+	inLanguage: 'th-TH',
+	potentialAction: {
+		'@type': 'ReadAction',
+		target: [canonicalUrl]
+	}
+};
+
+const finalJsonLd = jsonLd 
+	? (Array.isArray(jsonLd) ? [...jsonLd, webPageJsonLd] : [jsonLd, webPageJsonLd])
+	: [webPageJsonLd];
 ---
 
 <!doctype html>
