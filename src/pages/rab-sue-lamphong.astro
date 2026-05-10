@@ -77,8 +77,7 @@ const jsonLd: Array<Record<string, unknown>> = [
     name: 'บริการรับซื้อลำโพง Bluetooth มือสอง',
     description:
       'รับซื้อลำโพงมือสองแบรนด์ดัง JBL, Marshall, Bose, Harman Kardon ประเมินราคาโปร่งใส จ่ายเงินโอนทันที ให้บริการทั่วประเทศ',
-    provider: { '@type': 'Organization', name: orgName },
-    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+    provider: { '@id': `${site}/#organization` },    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
     serviceType: 'รับซื้อลำโพงมือสอง',
     url: `${site}/rab-sue-lamphong/`,
   },

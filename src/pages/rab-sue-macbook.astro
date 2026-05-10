@@ -61,8 +61,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		description:
 			'บริการรับซื้อ MacBook มือสองทุกรุ่น (Intel, M1, M2, M3, M4, M5) ประเมินราคาโปร่งใสตามชิปเซ็ต RAM SSD และ Cycle Count พร้อมคำแนะนำการเช็คเครื่องก่อนขาย',
 		inLanguage: 'th-TH',
-		author: { '@type': 'Organization', name: orgName },
-		publisher: { '@type': 'Organization', name: orgName },
+		author: { '@id': `${site}/#organization` },
+		publisher: { '@id': `${site}/#organization` },
 		mainEntityOfPage: `${site}/rab-sue-macbook/`,
 		datePublished: '2026-03-25',
 		dateModified: '2026-03-25',
@@ -260,4 +260,6 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		</section>
 	</article>
 </BaseLayout>
+
+ayout>
 

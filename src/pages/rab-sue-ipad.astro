@@ -81,8 +81,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
     name: 'บริการรับซื้อ iPad มือสอง',
     description:
       'รับซื้อ iPad มือสองทุกซีรีส์ iPad / mini / Air / Pro ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชั่วโมง ให้บริการทั่วประเทศ',
-    provider: { '@type': 'Organization', name: orgName },
-    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
+    provider: { '@id': `${site}/#organization` },    areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
     serviceType: 'รับซื้อ iPad มือสอง',
     url: `${site}/rab-sue-ipad/`,
   },

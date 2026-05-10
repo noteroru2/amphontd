@@ -89,7 +89,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		name: 'บริการรับซื้อไอโฟน',
 		description:
 			'บริการรับซื้อ iPhone มือสองทุกรุ่น ตั้งแต่ iPhone 8 ถึง iPhone 16 Pro Max ทั้งเครื่องไทยและเครื่องนอก ประเมินราคาโปร่งใส จ่ายเงินทันที',
-		provider: { '@type': 'Organization', name: orgName },
+		provider: { '@id': `${site}/#organization` },
 		areaServed: serviceAreas.map((area) => ({ '@type': 'AdministrativeArea', name: area })),
 		serviceType: 'รับซื้อ iPhone มือสอง',
 		url: `${site}/rab-sue-iphone/`,
