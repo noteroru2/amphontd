@@ -187,7 +187,8 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 					<a class="primary-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
 						เริ่มประเมินผ่าน LINE
 					</a>
-					<a class="ghost-btn" href="/contact">ดูข้อมูลติดต่อทั้งหมด</a>
+					<a class="ghost-btn" href="/evaluate-price">วิธีประเมินราคา & ความปลอดภัย</a>
+					<a class="ghost-btn" href="/contact">ติดต่อเรา</a>
 				</div>
 			</div>
 			<aside class="contact-card" aria-label="ช่องทางติดต่อหลัก">
@@ -287,6 +288,27 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 			</article>
 		</div>
 	</section>
+	<section class="container process-section" aria-labelledby="process-heading">
+		<h2 id="process-heading" class="section-title text-center">3 ขั้นตอนง่ายๆ ในการขายสินค้ากับเรา</h2>
+		<div class="process-grid">
+			<article class="process-card">
+				<div class="process-num">1</div>
+				<h3>ส่งข้อมูลประเมิน</h3>
+				<p>ทัก Line <a href="https://line.me/R/ti/p/@webuy">@webuy</a> ส่งรูปและสเปกสินค้า ทีมงานแจ้งราคาประเมินเบื้องต้นทันที</p>
+			</article>
+			<article class="process-card">
+				<div class="process-num">2</div>
+				<h3>นัดหมายหรือส่งพัสดุ</h3>
+				<p>เลือกจุดนัดรับที่สะดวก หรือส่งพัสดุมาที่สำนักงานกลางตามคำแนะนำของทีมงาน</p>
+			</article>
+			<article class="process-card">
+				<div class="process-num">3</div>
+				<h3>ตรวจเช็คและรับเงิน</h3>
+				<p>เมื่อตรวจสภาพสินค้าตรงตามที่แจ้ง เราโอนเงินเข้าบัญชีหรือจ่ายเงินสดให้เต็มจำนวนทันที</p>
+			</article>
+		</div>
+	</section>
+
 	<section class="container services-section" aria-labelledby="services-heading">
 		<h2 id="services-heading" class="section-title">บริการรับซื้อสินค้าไอทีของเรา</h2>
 		<p class="services-intro">AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่ครอบคลุมทุกประเภท ประเมินราคาโปร่งใส จ่ายเงินทันที</p>
@@ -351,6 +373,18 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 			</article>
 		</div>
 	</section>
+
+	<section class="container areas-section" aria-labelledby="areas-heading">
+		<h2 id="areas-heading" class="section-title">พื้นที่ให้บริการรับซื้อ</h2>
+		<p class="areas-intro">เรามีทีมงานพร้อมนัดรับและให้บริการครอบคลุมหลายจังหวัด และรองรับการจัดส่งพัสดุจากทั่วประเทศ</p>
+		<div class="areas-grid">
+			{serviceAreas.map((area) => (
+				<span class="area-tag">{area}</span>
+			))}
+			<span class="area-tag highlight">และจัดส่งพัสดุทั่วไทย</span>
+		</div>
+	</section>
+
 	<section class="container testimonials" aria-labelledby="testimonials-heading">
 		<h2 id="testimonials-heading" class="section-title">เสียงจากลูกค้าที่ใช้บริการ</h2>
 		<div class="testimonials-grid">
@@ -906,5 +940,89 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		margin: 0;
 		color: var(--muted);
 		font-size: 0.88rem;
+	}
+
+	/* Process Section */
+	.process-section {
+		padding-block: 2.5rem;
+		border-top: 1px solid rgba(36, 48, 67, 0.05);
+	}
+	.process-grid {
+		display: grid;
+		gap: 1.5rem;
+		margin-top: 1.5rem;
+	}
+	@media (min-width: 760px) {
+		.process-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.process-card {
+		text-align: center;
+		padding: 1.5rem;
+		background: #fff;
+		border-radius: var(--radius);
+		border: 1px solid rgba(36, 48, 67, 0.08);
+		position: relative;
+	}
+	.process-num {
+		width: 40px;
+		height: 40px;
+		background: var(--accent);
+		color: #fff;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 700;
+		margin: 0 auto 1rem;
+		font-size: 1.2rem;
+	}
+	.process-card h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.1rem;
+	}
+	.process-card p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.92rem;
+		line-height: 1.5;
+	}
+
+	/* Areas Section */
+	.areas-section {
+		padding-block: 2.5rem;
+		background: #fafbfc;
+		margin-top: 2rem;
+		border-radius: 20px;
+	}
+	.areas-intro {
+		text-align: center;
+		color: var(--muted);
+		margin-bottom: 1.5rem;
+	}
+	.areas-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		justify-content: center;
+	}
+	.area-tag {
+		padding: 0.4rem 0.9rem;
+		background: #fff;
+		border: 1px solid rgba(36, 48, 67, 0.1);
+		border-radius: 99px;
+		font-size: 0.88rem;
+		color: #4b5c72;
+		font-weight: 500;
+	}
+	.area-tag.highlight {
+		background: #fff0da;
+		border-color: #ffd8a8;
+		color: #8f4a00;
+		font-weight: 700;
+	}
+	.text-center {
+		text-align: center;
 	}
 </style>

@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactBox from '../components/ContactBox.astro';
+import '../styles/longform.css';
+import { getSiteOrigin } from '../lib/site';
+
+const site = getSiteOrigin();
+const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'วิธีประเมินราคาสินค้าไอทีและข้อควรปฏิบัติก่อนขาย | AMPHON TRADING',
+    description: 'คู่มือการประเมินราคามือถือ โน๊ตบุ๊ค คอมพิวเตอร์ และขั้นตอนการล้างข้อมูลอย่างปลอดภัยก่อนส่งมอบให้ร้านรับซื้อ',
+    url: `${site}/evaluate-price/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'วิธีล้างข้อมูล (Wipe Data) ก่อนขายอุปกรณ์ไอที',
+    step: [
+      {
+        '@type': 'HowToStep',
+        name: 'Backup ข้อมูล',
+        text: 'สำรองข้อมูลสำคัญลง Cloud หรือ External Drive',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Sign Out บัญชี',
+        text: 'ออกจากระบบ Apple ID, Google Account และ Microsoft Account',
+      },
+      {
+        '@type': 'HowToStep',
+        name: 'Factory Reset',
+        text: 'ทำการล้างเครื่องคืนค่าโรงงาน เพื่อลบข้อมูลส่วนตัวทั้งหมด',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="วิธีประเมินราคาและขั้นตอนก่อนขาย | AMPHON TRADING"
+  description="เรียนรู้วิธีเช็คราคาสินค้าไอทีมือสองเบื้องต้น และขั้นตอนการเตรียมเครื่อง/ล้างข้อมูลให้ปลอดภัยก่อนขาย"
+  pathname="/evaluate-price/"
+  jsonLd={jsonLd}
+>
+  <article class="container longform">
+    <header>
+      <p class="kicker">Seller Guide & Safety</p>
+      <h1>คู่มือประเมินราคาสินค้าไอที และวิธีเตรียมเครื่องก่อนขายให้ปลอดภัย</h1>
+      <p class="intro">
+        หลายคนกังวลเรื่องการถูกกดราคา หรือกังวลว่าข้อมูลส่วนตัวจะหลุดรอดไปเมื่อขายเครื่องมือสอง บทความนี้ <strong>AMPHON TRADING</strong> จะมาสรุปเกณฑ์ที่ร้านรับซื้อใช้ประเมินราคา และขั้นตอนการล้างข้อมูล (Wipe Data) ที่ถูกต้องเพื่อให้คุณขายเครื่องได้อย่างสบายใจที่สุด
+      </p>
+    </header>
+
+    <section>
+      <h2>เกณฑ์การประเมินราคา (Price Evaluation Criteria)</h2>
+      <p>ราคาของสินค้าไอทีไม่ได้ขึ้นอยู่กับ "ราคาตอนซื้อ" แต่ขึ้นอยู่กับ "มูลค่าตลาดปัจจุบัน" และสภาพของเครื่องเป็นหลัก:</p>
+      <ul>
+        <li><strong>สเปกภายใน (Hardware):</strong> เช่น ชิปเซ็ต (M1, M2, Core i7), RAM, SSD ยิ่งสเปกสูง ราคายิ่งดี</li>
+        <li><strong>สภาพภายนอก (Cosmetic):</strong> รอยบุบ รอยแตก หรือรอยขีดข่วน มีผลต่อการนำไปขายต่อ</li>
+        <li><strong>สุขภาพแบตเตอรี่ (Battery Health):</strong> หากแบตเสื่อม (ต่ำกว่า 80%) ราคาจะถูกหักลบตามค่าเปลี่ยนแบต</li>
+        <li><strong>อุปกรณ์เสริม (Accessories):</strong> กล่องเดิม สายชาร์จแท้ และใบเสร็จ ช่วยเพิ่มมูลค่าได้ 500-1,000 บาท</li>
+        <li><strong>การรับประกัน (Warranty):</strong> เครื่องที่ยังมีประกันศูนย์เหลืออยู่ จะได้ราคาสูงกว่าเครื่องหมดประกันชัดเจน</li>
+      </ul>
+    </section>
+
+    <section class="safety-box">
+      <h2>ความปลอดภัยของข้อมูล (Data Privacy)</h2>
+      <p>ก่อนส่งมอบเครื่องให้เรา หรือร้านรับซื้อใดๆ คุณ <strong>ต้อง</strong> ทำตามขั้นตอนเหล่านี้เพื่อความปลอดภัย:</p>
+      
+      <h3>1. สำหรับ iPhone / iPad / MacBook</h3>
+      <ul>
+        <li><strong>Sign out iCloud:</strong> เข้าไปที่หน้า Profile แล้วเลือก Sign Out เพื่อปิดระบบ Find My</li>
+        <li><strong>Unpair Apple Watch:</strong> หากมีการเชื่อมต่อนาฬิกาไว้ ให้ยกเลิกการจับคู่ก่อน</li>
+        <li><strong>Erase All Content:</strong> ใช้คำสั่ง "ลบข้อมูลและการตั้งค่าทั้งหมด" เพื่อคืนค่าโรงงาน</li>
+      </ul>
+
+      <h3>2. สำหรับโน๊ตบุ๊ค Windows / PC</h3>
+      <ul>
+        <li><strong>Sign out Accounts:</strong> ออกจากระบบ Microsoft Account และเบราว์เซอร์ (Chrome/Edge)</li>
+        <li><strong>Remove Password:</strong> ยกเลิกการใส่รหัสผ่านเข้าเครื่อง</li>
+        <li><strong>Reset this PC:</strong> เลือกตัวเลือก "Remove everything" เพื่อล้างเครื่องแบบหมดจด</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>ทำไมต้องประเมินราคากับ AMPHON TRADING?</h2>
+      <p>เราเน้นความโปร่งใสเป็นอันดับหนึ่ง เราจะแจ้งราคาตามสภาพที่คุณแจ้งจริง และอธิบายส่วนต่างที่หักลบอย่างชัดเจน ไม่มีการแจ้งราคาสูงเกินจริงในแชทเพื่อไปกดราคาหน้างาน</p>
+      <div class="highlight-box">
+        <strong>ประเมินฟรี 24 ชม.</strong> เพียงแอดไลน์และส่งรูปสเปกเครื่องมาให้เรา ทีมงานจะตอบกลับภายในไม่กี่นาที
+      </div>
+    </section>
+
+    <ContactBox 
+      heading="เริ่มประเมินราคาตอนนี้" 
+      text="ทักแชทคุยกับทีมงานเพื่อรับราคาประเมินเบื้องต้นได้ทันที"
+      ctaText="แอดไลน์ @webuy"
+    />
+  </article>
+</BaseLayout>
+
+<style>
+  .safety-box {
+    background: #fff5f5;
+    border: 2px solid #feb2b2;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-block: 2rem;
+  }
+  .safety-box h2 {
+    color: #c53030;
+    margin-top: 0;
+  }
+</style>

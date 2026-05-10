@@ -1,0 +1,23 @@
+{
+  "name": "AMPHON TRADING (อำพล เทรดดิ้ง)",
+  "short_name": "AMPHON",
+  "description": "แพลตฟอร์มประเมินราคาและรับซื้อสินค้าไอทีมือสองตลอด 24 ชั่วโมง",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f5ef",
+  "theme_color": "#e8650a",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "shopping", "utilities"]
+}
