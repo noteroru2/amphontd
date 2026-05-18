@@ -12,8 +12,14 @@ export function getSiteOrigin(): string {
   return 'https://example.com';
 }
 
+/** Ensures internal paths match `trailingSlash: 'always'` in astro.config. */
+export function withTrailingSlash(pathname: string): string {
+  if (!pathname || pathname === '/') return '/';
+  const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  return normalized.endsWith('/') ? normalized : `${normalized}/`;
+}
+
 export function getSiteUrl(pathname: string): string {
   const base = getSiteOrigin();
-  const path = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  return `${base}${path}`;
+  return `${base}${withTrailingSlash(pathname)}`;
 }

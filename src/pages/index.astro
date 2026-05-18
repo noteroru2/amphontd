@@ -227,8 +227,8 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 					<a class="primary-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
 						เริ่มประเมินผ่าน LINE
 					</a>
-					<a class="ghost-btn" href="/evaluate-price">วิธีประเมินราคา & ความปลอดภัย</a>
-					<a class="ghost-btn" href="/contact">ติดต่อเรา</a>
+					<a class="ghost-btn" href="/evaluate-price/">วิธีประเมินราคา & ความปลอดภัย</a>
+					<a class="ghost-btn" href="/contact/">ติดต่อเรา</a>
 				</div>
 			</div>
 			<aside class="contact-card" aria-label="ช่องทางติดต่อหลัก">
@@ -241,17 +241,6 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 					แชท LINE ตอนนี้
 				</a>
 			</aside>
-			{
-				!configured && (
-					<div class="callout" role="status">
-						<strong>ยังไม่ได้ตั้งค่า WordPress</strong>
-						<p>
-							คัดลอก <code>.env.example</code> เป็น <code>.env</code> แล้วใส่ URL
-							ของ WordPress (เช่น <code>https://your-site.com</code>)
-						</p>
-					</div>
-				)
-			}
 		</div>
 	</section>
 	<section class="container partner-strip" aria-label="ลูกค้าและพาร์ทเนอร์">
@@ -353,22 +342,22 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		<h2 id="services-heading" class="section-title">บริการรับซื้อสินค้าไอทีของเรา</h2>
 		<p class="services-intro">AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่ครอบคลุมทุกประเภท ประเมินราคาโปร่งใส จ่ายเงินทันที</p>
 		<div class="services-grid">
-			<a href="/rab-sue-notebook" class="service-card">
+			<a href="/rab-sue-notebook/" class="service-card">
 				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="8" width="28" height="18" rx="3" stroke="#e8650a" stroke-width="2"/><path d="M2 26h32" stroke="#e8650a" stroke-width="2" stroke-linecap="round"/></svg>
 				<h3>รับซื้อโน๊ตบุ๊ค</h3>
 				<p>MacBook, Dell, HP, Lenovo, ASUS, Acer, MSI ทุกรุ่นทั้งสายทำงานและเกมมิง</p>
 			</a>
-			<a href="/rab-sue-com" class="service-card">
+			<a href="/rab-sue-com/" class="service-card">
 				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="4" width="20" height="20" rx="3" stroke="#e8650a" stroke-width="2"/><path d="M14 24v6m8-6v6m-10 0h12" stroke="#e8650a" stroke-width="2" stroke-linecap="round"/></svg>
 				<h3>รับซื้อคอม</h3>
 				<p>PC ประกอบ, คอมสำนักงาน, Gaming PC, Workstation, เซิร์ฟเวอร์ พร้อมอุปกรณ์ต่อพ่วง</p>
 			</a>
-			<a href="/rab-sue-iphone" class="service-card">
+			<a href="/rab-sue-iphone/" class="service-card">
 				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="10" y="3" width="16" height="30" rx="4" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="28" r="1.5" fill="#e8650a"/></svg>
 				<h3>รับซื้อไอโฟน</h3>
 				<p>iPhone ทุกรุ่นตั้งแต่ iPhone 8 ถึง iPhone 16 Pro Max ทั้งเครื่องไทยและเครื่องนอก</p>
 			</a>
-			<a href="/rab-sue-klong" class="service-card">
+			<a href="/rab-sue-klong/" class="service-card">
 				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="8" width="28" height="20" rx="4" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="18" r="6" stroke="#e8650a" stroke-width="2"/><circle cx="18" cy="18" r="2" fill="#e8650a"/></svg>
 				<h3>รับซื้อกล้อง</h3>
 				<p>DSLR, Mirrorless, Compact, Action Cam ทุกยี่ห้อ Canon, Nikon, Sony, Fujifilm พร้อมเลนส์</p>
@@ -606,7 +595,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 				))}
 				</div>
 				<p class="more-wrap">
-					<a class="more" href="/blog">ดูบทความทั้งหมด</a>
+					<a class="more" href="/blog/">ดูบทความทั้งหมด</a>
 				</p>
 			</section>
 		)
