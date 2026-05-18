@@ -1,11 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { fetchPosts, isWordpressConfigured } from '../lib/wordpress';
+import { getAllPosts } from '../lib/posts';
 import { getSiteOrigin } from '../lib/site';
 
-const configured = isWordpressConfigured();
-const allPosts = configured ? await fetchPosts() : [];
+const allPosts = getAllPosts();
 const recent = allPosts.slice(0, 10);
 const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';

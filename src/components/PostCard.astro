@@ -1,9 +1,9 @@
 ---
-import type { WPPost } from '../lib/wordpress';
-import { getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/wordpress';
+import type { LocalPost } from '../lib/posts';
+import { getFeaturedImageUrl, getFeaturedImageAlt } from '../lib/posts';
 
 interface Props {
-	post: WPPost;
+	post: LocalPost;
 	headingLevel?: 'h2' | 'h3';
 }
 

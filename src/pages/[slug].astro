@@ -1,48 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import type { WPPost } from '../lib/wordpress';
-import { fetchPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostTags } from '../lib/wordpress';
+import type { LocalPost } from '../lib/posts';
+import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostTags } from '../lib/posts';
 import { getSiteOrigin } from '../lib/site';
-import { autoLinkHtml } from '../lib/autolink';
-import { enhancePostContentImages } from '../lib/wp-content-images';
 
 export async function getStaticPaths() {
-	const reservedSlugs = new Set([
-		'blog',
-		'contact',
-		'rab-sue-notebook',
-		'rab-sue-com',
-		'rab-sue-iphone',
-		'rab-sue-klong',
-		'rab-sue-ipad',
-		'rab-sue-macbook',
-		'rab-sue-lamphong',
-		'robots.txt',
-		'llms.txt',
-		'sitemap-index.xml',
-		'sitemap-0.xml',
-		'404',
-	]);
-	const posts = await fetchPosts();
-	const filtered = posts.filter((post) => !reservedSlugs.has(post.slug));
-	return filtered.map((post) => ({
+	return getAllPosts().map((post) => ({
 		params: { slug: post.slug },
 		props: { post },
 	}));
 }
 
 interface Props {
-	post: WPPost;
+	post: LocalPost;
 }
 
 const { post } = Astro.props;
 const featuredAttrs = getFeaturedImageAttrs(post);
 const featuredUrl = getFeaturedImageUrl(post);
 const tags = getPostTags(post);
-const wpPublicBase =
-	typeof import.meta.env.PUBLIC_WORDPRESS_URL === 'string'
-		? import.meta.env.PUBLIC_WORDPRESS_URL.replace(/\/+$/, '')
-		: '';
 const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
 const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
 const site = getSiteOrigin();
@@ -50,53 +26,6 @@ const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
 const articlePath = `/${post.slug}/`;
 const articleUrl = `${site}${articlePath}`;
-
-const autoLinkRules = [
-	{
-		patterns: [
-			'รับซื้อโน๊ตบุ๊ค',
-			'รับซื้อโน๊ตบุ๊ก',
-			/รับซื้อ\s*(?:โน๊ตบุ๊ค|โน๊ตบุ๊ก|notebook|laptop)/i,
-		],
-		href: '/rab-sue-notebook/',
-		title: 'รับซื้อโน๊ตบุ๊คมือสอง',
-	},
-	{
-		patterns: ['รับซื้อคอม', /รับซื้อ\s*(?:คอม|คอมพิวเตอร์|computer|pc)/i],
-		href: '/rab-sue-com/',
-		title: 'รับซื้อคอมพิวเตอร์',
-	},
-	{
-		patterns: ['รับซื้อไอโฟน', /รับซื้อ\s*(?:ไอโฟน|iphone)/i],
-		href: '/rab-sue-iphone/',
-		title: 'รับซื้อไอโฟน iPhone',
-	},
-	{
-		patterns: ['รับซื้อกล้อง', /รับซื้อ\s*(?:กล้อง|camera)/i],
-		href: '/rab-sue-klong/',
-		title: 'รับซื้อกล้องมือสอง',
-	},
-	{
-		patterns: ['รับซื้อไอแพด', /รับซื้อ\s*(?:ไอแพด|ipad)/i],
-		href: '/rab-sue-ipad/',
-		title: 'รับซื้อ iPad',
-	},
-	{
-		patterns: ['รับซื้อ macbook', 'รับซื้อ MacBook', /รับซื้อ\s*macbook/i],
-		href: '/rab-sue-macbook/',
-		title: 'รับซื้อ MacBook',
-	},
-	{
-		patterns: ['รับซื้อลำโพง', /รับซื้อ\s*(?:ลำโพง|speaker)/i, /(?:JBL|Marshall)\b/i],
-		href: '/rab-sue-lamphong/',
-		title: 'รับซื้อลำโพง JBL / Marshall',
-	},
-];
-
-const linkedHtml = enhancePostContentImages(
-	autoLinkHtml(post.content.rendered, autoLinkRules, { maxLinksTotal: 10, maxPerHref: 1 }),
-	wpPublicBase,
-);
 
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
@@ -119,7 +48,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			name: orgName,
 			logo: { '@type': 'ImageObject', url: new URL(orgLogo, site).toString() },
 		},
-		image: featuredUrl ? [featuredUrl] : undefined,
+		image: featuredUrl ? [new URL(featuredUrl, site).toString()] : undefined,
 		inLanguage: 'th-TH',
 		isAccessibleForFree: true,
 		...(tags.length > 0 && { keywords: tags.join(', ') }),
@@ -146,8 +75,6 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	modifiedTime={post.modified ?? post.date}
 	jsonLd={articleJsonLd}
 >
-	{wpPublicBase && <link rel="preconnect" href={wpPublicBase} crossorigin slot="head" />}
-	{wpPublicBase && <link rel="dns-prefetch" href={wpPublicBase} slot="head" />}
 	<article class="container article">
 		<header class="article-head">
 			<p class="back">
@@ -168,8 +95,6 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 				<img
 					class="hero-img"
 					src={featuredAttrs.src}
-					srcset={featuredAttrs.srcset}
-					sizes={featuredAttrs.sizes}
 					alt={featuredAttrs.alt}
 					width={featuredAttrs.width}
 					height={featuredAttrs.height}
@@ -180,7 +105,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			)
 		}
 
-		<div class="prose content" set:html={linkedHtml} />
+		<div class="prose content" set:html={post.content.rendered} />
 	</article>
 </BaseLayout>
 

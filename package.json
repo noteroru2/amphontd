@@ -17,7 +17,6 @@
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/ibm-plex-sans-thai": "^5.2.8",
     "astro": "^6.0.8",
-    "node-html-parser": "^6.1.13",
     "serve": "^14.2.6",
     "sirv": "^3.0.2"
   }
