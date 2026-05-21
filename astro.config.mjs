@@ -8,7 +8,7 @@ const siteUrl =
 	env.SITE_URL ??
 		(env.COOLIFY_FQDN ? `https://${env.COOLIFY_FQDN}` : null) ??
 		env.COOLIFY_URL ??
-		'https://example.com';
+		'https://amphontd.com';
 
 // https://astro.build/config
 export default defineConfig({

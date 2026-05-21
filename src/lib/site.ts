@@ -9,7 +9,7 @@ export function getSiteOrigin(): string {
   const coolifyUrl = typeof env.COOLIFY_URL === 'string' ? env.COOLIFY_URL : undefined;
   if (coolifyUrl) return coolifyUrl.replace(/\/+$/, '');
 
-  return 'https://example.com';
+  return 'https://amphontd.com';
 }
 
 /** Ensures internal paths match `trailingSlash: 'always'` in astro.config. */
