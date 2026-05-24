@@ -43,6 +43,9 @@ const listJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={listJsonLd}
 >
 	<div class="container page-head">
+		<nav aria-label="breadcrumb" class="breadcrumb" style="margin-bottom: 1rem;">
+			<a href="/">หน้าแรก</a> &gt; <span>บทความ</span>
+		</nav>
 		<h1 class="page-title">บทความ</h1>
 		<p class="intro">รวมบทความให้ความรู้เกี่ยวกับการรับซื้อสินค้าไอที วิธีประเมินราคา เตรียมเครื่องก่อนขาย และเทคนิคได้ราคาดี จาก AMPHON TRADING</p>
 		{posts.length === 0 ? <p class="hint">ยังไม่มีบทความ</p> : <p class="meta">{posts.length} บทความ</p>}
