@@ -14,6 +14,8 @@ const serviceAreas = serviceAreasRaw
 	.map((item) => item.trim())
 	.filter(Boolean);
 
+const lastModifiedDate = new Date().toISOString().split('T')[0];
+
 const faqItems = [
 	{
 		q: 'รับซื้อ iPhone รุ่นไหนบ้าง?',
@@ -69,7 +71,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		publisher: { '@type': 'Organization', name: orgName },
 		mainEntityOfPage: `${site}/rab-sue-iphone/`,
 		datePublished: '2026-03-24',
-		dateModified: '2026-03-24',
+		dateModified: lastModifiedDate,
 		image: [new URL('/og-default.png', site).toString()],
 		keywords:
 			'รับซื้อไอโฟน, ขายไอโฟนมือสอง, รับซื้อ iPhone, ประเมินราคาไอโฟน, รับซื้อ iPhone มือสอง, ขาย iPhone ได้ราคาดี, รับซื้อไอโฟนจอแตก, รับซื้อ iPhone ทุกรุ่น, รับซื้อไอโฟนแบตเสื่อม, ขายไอโฟนเก่า',
@@ -138,6 +140,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	description="AMPHON TRADING รับซื้อ iPhone มือสองทุกรุ่น iPhone 8 ถึง 16 Pro Max ประเมินราคาโปร่งใส จ่ายเงินทันที ดูจากรุ่น ความจุ Battery Health ติดต่อ Line @webuy 24 ชม."
 	pathname="/rab-sue-iphone/"
 	type="article"
+	publishedTime="2026-03-24"
+	modifiedTime={lastModifiedDate}
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">

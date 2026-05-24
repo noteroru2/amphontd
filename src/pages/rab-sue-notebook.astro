@@ -49,6 +49,8 @@ const faqItems = [
 	},
 ];
 
+const lastModifiedDate = new Date().toISOString().split('T')[0];
+
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -61,7 +63,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		publisher: { '@type': 'Organization', name: orgName },
 		mainEntityOfPage: `${site}/rab-sue-notebook/`,
 		datePublished: '2026-03-24',
-		dateModified: '2026-03-24',
+		dateModified: lastModifiedDate,
 		image: [new URL('/og-default.png', site).toString()],
 		keywords:
 			'รับซื้อโน๊ตบุ๊ค, ขายโน๊ตบุ๊คมือสอง, ประเมินราคาโน๊ตบุ๊ค, รับซื้อ laptop, รับซื้อ notebook, รับซื้อ AI PC, รับซื้อโน๊ตบุ๊คเกมมิง, ขายโน๊ตบุ๊คได้ราคาดี, Copilot+ PC',
@@ -114,6 +116,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	description="AMPHON TRADING รับซื้อโน๊ตบุ๊คมือสองทุกแบรนด์ ASUS, Acer, Lenovo, MSI, Dell ประเมินสเปกลึกถึง CPU/GPU (Core Ultra, Ryzen AI, RTX) จ่ายเงินทันที 24 ชม."
 	pathname="/rab-sue-notebook/"
 	type="article"
+	publishedTime="2026-03-24"
+	modifiedTime={lastModifiedDate}
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">

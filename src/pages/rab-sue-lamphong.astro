@@ -45,6 +45,8 @@ const faqItems = [
   },
 ];
 
+const lastModifiedDate = new Date().toISOString().split('T')[0];
+
 const jsonLd: Array<Record<string, unknown>> = [
   {
     '@context': 'https://schema.org',
@@ -57,7 +59,7 @@ const jsonLd: Array<Record<string, unknown>> = [
     publisher: { '@type': 'Organization', name: orgName },
     mainEntityOfPage: `${site}/rab-sue-lamphong/`,
     datePublished: '2026-03-25',
-    dateModified: '2026-03-25',
+    dateModified: lastModifiedDate,
     image: [new URL('/og-default.png', site).toString()],
     keywords:
       'รับซื้อลำโพง, รับซื้อลำโพง JBL, รับซื้อลำโพง Marshall, ขายลำโพงมือสอง, ประเมินราคาลำโพง, รับซื้อ Marshall Acton 3, รับซื้อ JBL PartyBox, รับซื้อ Harman Kardon',
@@ -97,6 +99,8 @@ const jsonLd: Array<Record<string, unknown>> = [
   description="AMPHON TRADING รับซื้อลำโพง Bluetooth มือสอง (Marshall, JBL, Harman, Bose) ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
   pathname="/rab-sue-lamphong/"
   type="article"
+  publishedTime="2026-03-25"
+  modifiedTime={lastModifiedDate}
   jsonLd={jsonLd}
 >
   <article class="container longform">

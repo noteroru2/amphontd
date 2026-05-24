@@ -57,6 +57,8 @@ const faqItems = [
 	},
 ];
 
+const lastModifiedDate = new Date().toISOString().split('T')[0];
+
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -69,7 +71,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		publisher: { '@type': 'Organization', name: orgName },
 		mainEntityOfPage: `${site}/rab-sue-com/`,
 		datePublished: '2026-03-24',
-		dateModified: '2026-03-24',
+		dateModified: lastModifiedDate,
 		keywords:
 			'รับซื้อคอม, ขายคอมมือสอง, รับซื้อคอมพิวเตอร์, รับซื้อคอมตั้งโต๊ะ, รับซื้อคอมเกมมิ่ง, รับซื้อ PC, ประเมินราคาคอม, ขายคอมเก่า, รับซื้อคอมสำนักงาน, รับซื้อเวิร์กสเตชัน',
 		image: [new URL('/og-default.png', site).toString()],
@@ -138,6 +140,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	description="AMPHON TRADING รับซื้อคอมพิวเตอร์มือสองทุกประเภท คอมประกอบ คอมแบรนด์เนม Gaming PC Workstation ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy 24 ชม."
 	pathname="/rab-sue-com/"
 	type="article"
+	publishedTime="2026-03-24"
+	modifiedTime={lastModifiedDate}
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">

@@ -53,6 +53,8 @@ const faqItems = [
 	},
 ];
 
+const lastModifiedDate = new Date().toISOString().split('T')[0];
+
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -65,7 +67,7 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		publisher: { '@id': `${site}/#organization` },
 		mainEntityOfPage: `${site}/rab-sue-macbook/`,
 		datePublished: '2026-03-25',
-		dateModified: '2026-03-25',
+		dateModified: lastModifiedDate,
 		image: [new URL('/og-default.png', site).toString()],
 		keywords:
 			'รับซื้อ macbook, รับซื้อ MacBook Air, รับซื้อ MacBook Pro, ขาย macbook มือสอง, ประเมินราคา macbook, รับซื้อ macbook m3, รับซื้อ macbook m4, รับซื้อ macbook m5, ขายแมคบุ๊ค',
@@ -106,6 +108,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	description="AMPHON TRADING รับซื้อ MacBook มือสองทุกรุ่น ทั้ง MacBook Air และ Pro ชิป Intel และ M-Series ประเมินตาม Cycle Count อย่างโปร่งใส จ่ายเงินทันที 24 ชม."
 	pathname="/rab-sue-macbook/"
 	type="article"
+	publishedTime="2026-03-25"
+	modifiedTime={lastModifiedDate}
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">
