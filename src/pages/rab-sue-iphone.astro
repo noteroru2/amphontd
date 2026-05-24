@@ -141,6 +141,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รับซื้อไอโฟน</span>
+		</nav>
 		<header>
 			<p class="kicker">iPhone Buyback Guide</p>
 			<h1>รับซื้อไอโฟน (iPhone) มือสอง ทุกรุ่น ทุกความจุ ประเมินราคาโปร่งใส จ่ายเงินทันที</h1>
@@ -257,6 +260,29 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 				รุ่นเต็ม + ความจุ, สุขภาพแบตเตอรี่, สภาพจอ, สถานะ Face ID/True Tone, และสถานะ iCloud
 				ข้อมูลครบตั้งแต่แรก = ได้ราคาเร็วและแม่นยำ
 			</div>
+		</section>
+
+		<section>
+			<h2>ราคาอ้างอิงรับซื้อ (อัปเดต 2026)</h2>
+			<p class="price-note">ราคาด้านล่างเป็นช่วงอ้างอิงเบื้องต้น ราคาจริงขึ้นอยู่กับสภาพเครื่อง สเปก และอุปกรณ์ที่มี ทักไลน์เพื่อรับราคาที่แม่นยำที่สุด</p>
+			<div class="price-table-wrap">
+				<table class="price-table">
+					<thead><tr><th>รุ่น / สเปก</th><th>ราคารับซื้อโดยประมาณ</th></tr></thead>
+					<tbody>
+						<tr><td>iPhone 16 Pro Max (256GB+)</td><td>32,000 – 40,000 บาท</td></tr>
+						<tr><td>iPhone 16 Pro</td><td>28,000 – 35,000 บาท</td></tr>
+						<tr><td>iPhone 16 / 16 Plus</td><td>20,000 – 27,000 บาท</td></tr>
+						<tr><td>iPhone 15 Pro Max</td><td>24,000 – 32,000 บาท</td></tr>
+						<tr><td>iPhone 15 Pro</td><td>20,000 – 26,000 บาท</td></tr>
+						<tr><td>iPhone 15 / 15 Plus</td><td>14,000 – 22,000 บาท</td></tr>
+						<tr><td>iPhone 14 Pro Max</td><td>16,000 – 22,000 บาท</td></tr>
+						<tr><td>iPhone 14 / 14 Plus</td><td>10,000 – 16,000 บาท</td></tr>
+						<tr><td>iPhone 13 series</td><td>7,000 – 11,000 บาท</td></tr>
+						<tr><td>iPhone 12 series</td><td>4,500 – 7,500 บาท</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="price-cta">ต้องการราคาแม่นยำ? <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">ทักไลน์ @webuy ได้เลย</a> ตอบภายใน 15-30 นาที</p>
 		</section>
 
 		<ContactBox heading="อยากรู้ราคาไอโฟนของคุณ?" text="ส่งรุ่น ความจุ สุขภาพแบต สภาพเครื่องมาประเมินราคาได้เลย ฟรีไม่มีค่าใช้จ่าย" variant="primary" />
@@ -766,4 +792,39 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			</ul>
 		</section>
 	</article>
+<style>
+.price-note {
+	color: var(--muted);
+	font-size: 0.93rem;
+	margin-bottom: 1rem;
+}
+.price-table-wrap {
+	overflow-x: auto;
+}
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.price-table th {
+	background: var(--accent);
+	color: #fff;
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	font-weight: 700;
+}
+.price-table td {
+	padding: 0.55rem 0.8rem;
+	border-bottom: 1px solid rgba(36,48,67,0.1);
+}
+.price-table tr:nth-child(even) td {
+	background: rgba(10,124,111,0.04);
+}
+.price-cta {
+	margin-top: 1rem;
+	font-size: 0.93rem;
+	color: var(--muted);
+}
+</style>
+
 </BaseLayout>

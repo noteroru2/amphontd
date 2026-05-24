@@ -104,6 +104,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
   jsonLd={articleJsonLd}
 >
   <article class="container longform">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รับซื้อ iPad</span>
+		</nav>
     <header>
       <p class="kicker">iPad Buyback Guide 2026</p>
       <h1>รับซื้อ iPad มือสอง ทุกรุ่น (Pro, Air, Mini, Gen) ให้ราคาดี ประเมินโปร่งใส จ่ายสดทันที</h1>
@@ -161,6 +164,26 @@ const articleJsonLd: Array<Record<string, unknown>> = [
       <p>
         กล่องตรงรุ่น, อะแดปเตอร์+สายชาร์จแท้, <strong>Apple Pencil</strong> (Gen 1/2/USB-C/Pro) และ <strong>Magic Keyboard</strong> มีมูลค่าในตัวเองสูง หากขายมาเป็นเซ็ต จะทำให้มูลค่ารวมของดีลนั้นเพิ่มขึ้น
       </p>
+    </section>
+
+    <section>
+      <h2>ราคาอ้างอิงรับซื้อ (อัปเดต 2026)</h2>
+      <p class="price-note">ราคาด้านล่างเป็นช่วงอ้างอิงเบื้องต้น ราคาจริงขึ้นอยู่กับสภาพเครื่อง สเปก และอุปกรณ์ที่มี ทักไลน์เพื่อรับราคาที่แม่นยำที่สุด</p>
+      <div class="price-table-wrap">
+        <table class="price-table">
+          <thead><tr><th>รุ่น / สเปก</th><th>ราคารับซื้อโดยประมาณ</th></tr></thead>
+          <tbody>
+            <tr><td>iPad Pro 13" M4 (Wi-Fi)</td><td>25,000 – 38,000 บาท</td></tr>
+            <tr><td>iPad Pro 11" M4 (Wi-Fi)</td><td>18,000 – 28,000 บาท</td></tr>
+            <tr><td>iPad Air M2 (11"/13")</td><td>14,000 – 22,000 บาท</td></tr>
+            <tr><td>iPad mini 7</td><td>12,000 – 18,000 บาท</td></tr>
+            <tr><td>iPad Gen 10 (Wi-Fi)</td><td>7,000 – 12,000 บาท</td></tr>
+            <tr><td>iPad Pro M2 (2022)</td><td>15,000 – 25,000 บาท</td></tr>
+            <tr><td>iPad Air M1 (2022)</td><td>10,000 – 16,000 บาท</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="price-cta">ต้องการราคาแม่นยำ? <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">ทักไลน์ @webuy ได้เลย</a> ตอบภายใน 15-30 นาที</p>
     </section>
 
     <ContactBox heading="เช็คสเปก iPad ของคุณครบแล้วใช่ไหม?" text="ส่งข้อมูลรุ่น ความจุ Cellular/Wi-Fi พร้อมรูปถ่าย มาประเมินราคาฟรีทาง Line @webuy ได้เลย" variant="primary" />
@@ -239,4 +262,39 @@ const articleJsonLd: Array<Record<string, unknown>> = [
     text="ทักไลน์ ส่งรุ่น ความจุ (Wi-Fi/Cellular) และรูปถ่าย เพื่อรับราคาประเมินทันที!"
     ctaText="แอดไลน์ @webuy"
   />
+<style>
+.price-note {
+	color: var(--muted);
+	font-size: 0.93rem;
+	margin-bottom: 1rem;
+}
+.price-table-wrap {
+	overflow-x: auto;
+}
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.price-table th {
+	background: var(--accent);
+	color: #fff;
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	font-weight: 700;
+}
+.price-table td {
+	padding: 0.55rem 0.8rem;
+	border-bottom: 1px solid rgba(36,48,67,0.1);
+}
+.price-table tr:nth-child(even) td {
+	background: rgba(10,124,111,0.04);
+}
+.price-cta {
+	margin-top: 1rem;
+	font-size: 0.93rem;
+	color: var(--muted);
+}
+</style>
+
 </BaseLayout>

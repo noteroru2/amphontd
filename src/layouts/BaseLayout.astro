@@ -164,6 +164,26 @@ const finalJsonLd = jsonLd
 				margin-inline: auto;
 				padding-block: 2rem 4rem;
 			}
+			/* Breadcrumbs style */
+			.breadcrumb {
+				margin-bottom: 1.25rem;
+				font-size: 0.88rem;
+				color: var(--muted);
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.4rem;
+				align-items: center;
+			}
+			.breadcrumb a {
+				color: var(--accent);
+				text-decoration: none;
+			}
+			.breadcrumb a:hover {
+				text-decoration: underline;
+			}
+			.breadcrumb span {
+				color: var(--text);
+			}
 			.skip-link {
 				position: absolute;
 				left: 12px;

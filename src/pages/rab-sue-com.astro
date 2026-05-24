@@ -141,6 +141,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รับซื้อคอม</span>
+		</nav>
 		<header>
 			<p class="kicker">Desktop PC Buyback Service</p>
 			<h1>รับซื้อคอม — บริการรับซื้อคอมพิวเตอร์ตั้งโต๊ะมือสอง ทุกรุ่น ทุกแบรนด์ ได้ราคาดี ประเมินโปร่งใส</h1>
@@ -277,6 +280,26 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 				<strong>สรุปง่าย ๆ:</strong> ยิ่งส่งข้อมูลสเปกละเอียดมากเท่าไร ราคาประเมินจะยิ่งแม่นยำและใกล้เคียงราคาตลาดจริง
 				อย่าลืมถ่ายรูปภายในเครื่องด้วย เพราะช่วยให้เราเห็นสภาพชิ้นส่วนจริงก่อนนัดรับ
 			</div>
+		</section>
+
+		<section>
+			<h2>ราคาอ้างอิงรับซื้อ (อัปเดต 2026)</h2>
+			<p class="price-note">ราคาด้านล่างเป็นช่วงอ้างอิงเบื้องต้น ราคาจริงขึ้นอยู่กับสภาพเครื่อง สเปก และอุปกรณ์ที่มี ทักไลน์เพื่อรับราคาที่แม่นยำที่สุด</p>
+			<div class="price-table-wrap">
+				<table class="price-table">
+					<thead><tr><th>รุ่น / สเปก</th><th>ราคารับซื้อโดยประมาณ</th></tr></thead>
+					<tbody>
+						<tr><td>Gaming PC RTX 4070 Ti / 4080 / 4090</td><td>35,000 – 70,000 บาท</td></tr>
+						<tr><td>Gaming PC RTX 4060 / 4070</td><td>20,000 – 38,000 บาท</td></tr>
+						<tr><td>Gaming PC RTX 3070 / 3080</td><td>15,000 – 28,000 บาท</td></tr>
+						<tr><td>PC สำนักงาน / Business Desktop</td><td>5,000 – 15,000 บาท</td></tr>
+						<tr><td>Workstation (Xeon / Threadripper)</td><td>15,000 – 45,000 บาท</td></tr>
+						<tr><td>GPU การ์ดจอแยก (RTX 40-Series)</td><td>8,000 – 30,000 บาท (ขึ้นอยู่กับรุ่น)</td></tr>
+						<tr><td>Mac mini M4 / M4 Pro</td><td>15,000 – 30,000 บาท</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="price-cta">ต้องการราคาแม่นยำ? <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">ทักไลน์ @webuy ได้เลย</a> ตอบภายใน 15-30 นาที</p>
 		</section>
 
 		<ContactBox heading="อยากรู้ราคาคอมของคุณ?" text="ถ่ายรูปสเปกเครื่อง ส่งมาประเมินราคาฟรี ไม่มีค่าใช้จ่าย ตอบกลับเร็ว" />
@@ -792,4 +815,39 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			</ul>
 		</section>
 	</article>
+<style>
+.price-note {
+	color: var(--muted);
+	font-size: 0.93rem;
+	margin-bottom: 1rem;
+}
+.price-table-wrap {
+	overflow-x: auto;
+}
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.price-table th {
+	background: var(--accent);
+	color: #fff;
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	font-weight: 700;
+}
+.price-table td {
+	padding: 0.55rem 0.8rem;
+	border-bottom: 1px solid rgba(36,48,67,0.1);
+}
+.price-table tr:nth-child(even) td {
+	background: rgba(10,124,111,0.04);
+}
+.price-cta {
+	margin-top: 1rem;
+	font-size: 0.93rem;
+	color: var(--muted);
+}
+</style>
+
 </BaseLayout>

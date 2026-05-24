@@ -5,18 +5,52 @@ import { getSiteOrigin } from '../lib/site';
 const site = getSiteOrigin();
 const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'AboutPage',
-  name: `เกี่ยวกับเรา | ${siteName}`,
-  description: 'ทำความรู้จักกับ AMPHON TRADING (อำพล เทรดดิ้ง) ผู้เชี่ยวชาญด้านการรับซื้อสินค้าไอทีมือสองด้วยประสบการณ์และความจริงใจ',
-  url: `${site}/about/`,
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: `เกี่ยวกับเรา | ${siteName}`,
+    description: 'ทำความรู้จักกับ AMPHON TRADING (อำพล เทรดดิ้ง) ผู้เชี่ยวชาญด้านการรับซื้อสินค้าไอทีมือสองด้วยประสบการณ์และความจริงใจ',
+    url: `${site}/about/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${site}/#organization`,
+    name: siteName,
+    url: site,
+    description: 'AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองระดับมืออาชีพในประเทศไทย ให้บริการประเมินราคาโปร่งใส จ่ายเงินทันที รองรับทั้งลูกค้าในกรุงเทพฯ และต่างจังหวัดผ่านระบบพัสดุ',
+    foundingDate: '2020',
+    knowsAbout: [
+      'รับซื้อโน๊ตบุ๊ค',
+      'รับซื้อคอมพิวเตอร์',
+      'รับซื้อไอโฟน',
+      'รับซื้อกล้อง',
+      'ประเมินราคาสินค้าไอทีมือสอง',
+      'รับซื้อ MacBook',
+      'รับซื้อ iPad',
+      'รับซื้อลำโพง',
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'บริการรับซื้อสินค้าไอที',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อโน๊ตบุ๊ค' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อ MacBook' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อไอโฟน' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อกล้อง' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อคอมพิวเตอร์' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อ iPad' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'รับซื้อลำโพง' } },
+      ],
+    },
+  },
+];
 ---
 
 <BaseLayout
-  title="เกี่ยวกับเรา | AMPHON TRADING"
-  description="รู้จักกับ AMPHON TRADING (อำพล เทรดดิ้ง) แพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่เน้นความโปร่งใสและยุติธรรม"
+  title="เกี่ยวกับเรา | AMPHON TRADING (อำพล เทรดดิ้ง)"
+  description="รู้จักกับ AMPHON TRADING (อำพล เทรดดิ้ง) แพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่เน้นความโปร่งใส ยุติธรรม และประสบการณ์ตรงด้านฮาร์ดแวร์"
   pathname="/about/"
   jsonLd={jsonLd}
 >
@@ -25,36 +59,104 @@ const jsonLd = {
       <p class="eyebrow">About Us</p>
       <h1>รู้จักกับ AMPHON TRADING (อำพล เทรดดิ้ง)</h1>
       <p class="intro">
-        จากจุดเริ่มต้นที่เป็นกลุ่มคนรักไอที สู่แพลตฟอร์ม <strong>AMPHON TRADING</strong> ที่มุ่งมั่นยกระดับตลาดซื้อขายสินค้าไอทีมือสองในไทยให้มีความเป็นธรรม โปร่งใส และปลอดภัยสำหรับทุกคน
+        จากจุดเริ่มต้นที่เป็นกลุ่มคนรักไอทีที่เบื่อกับการถูกกดราคาและไม่ได้รับข้อมูลที่โปร่งใส สู่แพลตฟอร์ม <strong>AMPHON TRADING</strong> ที่มุ่งมั่นยกระดับตลาดซื้อขายสินค้าไอทีมือสองในไทยให้มีความเป็นธรรม โปร่งใส และปลอดภัยสำหรับทุกคน
       </p>
     </header>
+
+    <section class="stat-band" aria-label="ตัวเลขสำคัญ">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <p class="stat-num">2020</p>
+          <p class="stat-label">ปีที่เริ่มให้บริการ</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num">24/7</p>
+          <p class="stat-label">พร้อมตอบทุกเวลา</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num">8+</p>
+          <p class="stat-label">จังหวัดที่ให้บริการ</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num">7 ประเภท</p>
+          <p class="stat-label">สินค้าที่รับซื้อ</p>
+        </div>
+      </div>
+    </section>
 
     <section>
       <h2>ภารกิจของเรา (Mission)</h2>
       <p>เราไม่ได้มองว่าการรับซื้อคือการค้ากำไรสูงสุดเพียงอย่างเดียว แต่เรามองว่ามันคือการ "ส่งต่อความคุ้มค่า" และการช่วยให้คนไทยเข้าถึงสินค้าเทคโนโลยีได้ง่ายขึ้นผ่านการหมุนเวียนทรัพยากรอย่างมีประสิทธิภาพ</p>
       <ul>
-        <li><strong>ความโปร่งใส:</strong> ทุกขั้นตอนการประเมินราคาต้องอธิบายเหตุผลได้</li>
-        <li><strong>ความเป็นธรรม:</strong> ให้ราคาสูงตามสภาพสเปคจริง ไม่กดราคามั่วซั่ว</li>
-        <li><strong>ความเร็ว:</strong> ตอบคำถามไว จ่ายเงินทันที ปิดดีลให้เร็วที่สุด</li>
+        <li><strong>ความโปร่งใส:</strong> ทุกขั้นตอนการประเมินราคาต้องอธิบายเหตุผลได้ — เราบอกตรงๆ ว่าทำไมหักราคา ไม่ใช่กดราคาแบบขอไปที</li>
+        <li><strong>ความเป็นธรรม:</strong> ให้ราคาสูงตามสภาพสเปกจริง ไม่มีเงื่อนไขซ่อนเร้น ไม่มีการแจ้งราคาสูงในแชทแล้วกดราคาหน้างาน</li>
+        <li><strong>ความเร็ว:</strong> ตอบคำถามไว ประเมินราคาเบื้องต้นภายใน 15-30 นาที จ่ายเงินทันทีหลังตรวจเครื่องผ่าน</li>
+        <li><strong>ความปลอดภัย:</strong> ทีมงานช่วยล้างข้อมูลตามมาตรฐาน และตรวจ Serial Number ก่อนรับซื้อทุกครั้ง</li>
       </ul>
     </section>
 
     <section>
       <h2>ทำไมต้องชื่อ "อำพล เทรดดิ้ง"?</h2>
-      <p>ชื่อร้านของเราสื่อถึงความมั่นคงและความซื่อสัตย์ เราต้องการสร้างแบรนด์ที่คนไทยนึกถึงเป็นอันดับแรกเมื่อต้องการขายโน๊ตบุ๊ค ไอโฟน หรือคอมพิวเตอร์ โดยไม่ต้องกังวลเรื่องการถูกหลอกหรือถูกเอารัดเอาเปรียบ</p>
+      <p>ชื่อร้านของเราสื่อถึงความมั่นคงและความซื่อสัตย์ เราต้องการสร้างแบรนด์ที่คนไทยนึกถึงเป็นอันดับแรกเมื่อต้องการขายโน๊ตบุ๊ค ไอโฟน หรือคอมพิวเตอร์ โดยไม่ต้องกังวลเรื่องการถูกหลอกหรือถูกเอารัดเอาเปรียบ ชื่อ "อำพล" มาจากผู้ก่อตั้งที่มีความเชี่ยวชาญด้านฮาร์ดแวร์และเริ่มต้นธุรกิจนี้ด้วยหัวใจที่ต้องการสร้างมาตรฐานใหม่ให้กับตลาดรับซื้อสินค้าไอทีมือสองในไทย</p>
     </section>
 
     <section>
-      <h2>ทีมงานมืออาชีพ</h2>
-      <p>เรามีทีมงานที่เชี่ยวชาญด้าน Hardware โดยเฉพาะ ทำให้เราสามารถประเมินสเปกลึกๆ ของโน๊ตบุ๊คหรือคอมพิวเตอร์ประกอบได้อย่างแม่นยำ ไม่ว่าจะเป็นค่า TGP ของการ์ดจอ, ชนิดของชิป SSD หรือความสมบูรณ์ของเมนบอร์ด เราตรวจสอบอย่างละเอียดเพื่อให้ผู้ขายได้ราคาที่คุ้มค่าที่สุด</p>
+      <h2>ทีมงานมืออาชีพด้านฮาร์ดแวร์</h2>
+      <p>เรามีทีมงานที่เชี่ยวชาญด้าน Hardware โดยเฉพาะ ทำให้เราสามารถประเมินสเปกลึกๆ ของโน๊ตบุ๊คหรือคอมพิวเตอร์ประกอบได้อย่างแม่นยำ:</p>
+      <ul>
+        <li><strong>โน๊ตบุ๊คและ MacBook:</strong> เช็ค CPU generation, TGP ของ GPU, Battery Cycle Count, OLED Burn-in, NPU สำหรับ AI PC</li>
+        <li><strong>iPhone และ iPad:</strong> ตรวจสอบ Battery Health %, Face ID / Touch ID, Activation Lock, True Tone, และสภาพจอ</li>
+        <li><strong>กล้องถ่ายภาพ:</strong> นับ Shutter Count, ตรวจสภาพเลนส์ (รา, ฝ้า, Coating), ระบบ AF และ IBIS</li>
+        <li><strong>คอมพิวเตอร์:</strong> ตรวจ GPU Vram สุขภาพ, สภาพ Thermal Pad, คุณภาพ SSD และ RAM</li>
+      </ul>
+      <p>ความเชี่ยวชาญนี้คือสิ่งที่ทำให้เราให้ราคาที่ยุติธรรมกว่า — เพราะเราเข้าใจมูลค่าจริงของสเปกที่คุณมี ไม่ใช่แค่ดูชื่อรุ่น</p>
+    </section>
+
+    <section>
+      <h2>สินค้าที่เรารับซื้อ</h2>
+      <div class="service-list">
+        <a href="/rab-sue-notebook/" class="service-link">
+          <strong>โน๊ตบุ๊ค (Windows/Linux)</strong>
+          <span>ASUS, Lenovo, Dell, HP, MSI, Acer, Razer, Microsoft Surface และ AI PC Copilot+</span>
+        </a>
+        <a href="/rab-sue-macbook/" class="service-link">
+          <strong>MacBook</strong>
+          <span>Air/Pro ทุกรุ่น ตั้งแต่ Intel ถึง M4</span>
+        </a>
+        <a href="/rab-sue-iphone/" class="service-link">
+          <strong>iPhone</strong>
+          <span>ทุกรุ่นตั้งแต่ iPhone 8 ถึง 16 Pro Max</span>
+        </a>
+        <a href="/rab-sue-ipad/" class="service-link">
+          <strong>iPad</strong>
+          <span>Gen, Air, Mini, Pro ทุก generation</span>
+        </a>
+        <a href="/rab-sue-com/" class="service-link">
+          <strong>คอมพิวเตอร์ตั้งโต๊ะ</strong>
+          <span>Gaming PC, Workstation, PC สำนักงาน, Mac mini</span>
+        </a>
+        <a href="/rab-sue-klong/" class="service-link">
+          <strong>กล้องถ่ายภาพ</strong>
+          <span>DSLR, Mirrorless, Action Cam, เลนส์ ทุกแบรนด์</span>
+        </a>
+        <a href="/rab-sue-lamphong/" class="service-link">
+          <strong>ลำโพงและเครื่องเสียง</strong>
+          <span>JBL, Marshall, Sonos และแบรนด์ชั้นนำอื่นๆ</span>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>ความมุ่งมั่นด้านสิ่งแวดล้อม (E-Waste)</h2>
+      <p>การรับซื้อสินค้าไอทีมือสองไม่ใช่แค่ธุรกิจ แต่เป็นการมีส่วนร่วมในการลดขยะอิเล็กทรอนิกส์ (E-Waste) ซึ่งเป็นปัญหาสิ่งแวดล้อมที่สำคัญในปี 2026 เมื่อสินค้าผ่านมือเรา เราจะประเมินว่ายังสามารถ refurbish ใช้งานต่อได้หรือไม่ และหากไม่สามารถใช้งานได้ เราจะส่งต่อชิ้นส่วนไปยังช่องทางรีไซเคิลที่เหมาะสม ไม่ใช่ทิ้งในถังขยะทั่วไป</p>
     </section>
 
     <div class="highlight-box">
-      <strong>ขอบคุณที่ไว้วางใจ:</strong> ทุกการซื้อขายกับเรา คือแรงผลักดันให้เราพัฒนาบริการให้ดียิ่งขึ้นไปอีกครับ
+      <strong>ขอบคุณที่ไว้วางใจ:</strong> ทุกการซื้อขายกับเรา คือแรงผลักดันให้เราพัฒนาบริการให้ดียิ่งขึ้นไปอีกครับ — ทีมงาน AMPHON TRADING
     </div>
 
     <section>
-      <a href="/contact/" class="inline-contact">ติดต่อเราเพื่อเริ่มประเมินราคา</a>
+      <a href="/contact/" class="inline-contact">ติดต่อเราเพื่อเริ่มประเมินราคา →</a>
     </section>
   </article>
 </BaseLayout>
@@ -65,5 +167,78 @@ const jsonLd = {
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.9rem;
+    margin: 0 0 0.4rem;
+  }
+  /* Stat Band */
+  .stat-band {
+    background: rgba(10, 124, 111, 0.05);
+    border: 1px solid rgba(10, 124, 111, 0.15);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-block: 2rem;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  @media (min-width: 600px) {
+    .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    margin: 0 0 0.2rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-label {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  /* Service list */
+  .service-list {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+  .service-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid rgba(36, 48, 67, 0.1);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .service-link:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(10, 124, 111, 0.1);
+    text-decoration: none;
+  }
+  .service-link strong {
+    color: var(--text);
+    font-size: 0.97rem;
+  }
+  .service-link span {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .inline-contact {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: var(--radius);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .inline-contact:hover {
+    background: var(--accent-dim);
+    text-decoration: none;
   }
 </style>

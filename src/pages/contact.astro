@@ -15,6 +15,8 @@ const mapUrl =
 	'https://maps.google.com/?q=13.7563,100.5018';
 const businessPhone = import.meta.env.PUBLIC_BUSINESS_PHONE ?? '+66-64-257-9353';
 const openingHours = import.meta.env.PUBLIC_OPENING_HOURS ?? 'เปิดบริการทุกวัน 24 ชั่วโมง';
+const geoLat = parseFloat(import.meta.env.PUBLIC_GEO_LAT ?? '13.7563');
+const geoLng = parseFloat(import.meta.env.PUBLIC_GEO_LNG ?? '100.5018');
 const serviceAreasRaw =
 	import.meta.env.PUBLIC_SERVICE_AREAS ??
 	'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
@@ -40,8 +42,8 @@ const contactJsonLd: Array<Record<string, unknown>> = [
 			hasMap: mapUrl,
 			geo: {
 				'@type': 'GeoCoordinates',
-				latitude: 13.7563,
-				longitude: 100.5018,
+				latitude: geoLat,
+				longitude: geoLng,
 			},
 			openingHoursSpecification: [
 				{

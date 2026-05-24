@@ -109,6 +109,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รับซื้อ MacBook</span>
+		</nav>
 		<header>
 			<p class="kicker">MacBook Buyback Guide 2026</p>
 			<h1>รับซื้อ MacBook มือสอง ครบทุกรุ่น (Air/Pro) อัปเดตราคาล่าสุด ให้ราคาสูง จ่ายเงินไว</h1>
@@ -163,6 +166,28 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			<p>
 				<strong>ต้องไม่มีการล็อก</strong> ใดๆ เครื่องต้องสามารถ Sign out จาก Apple ID, ปิด Find My Mac และรีเซ็ตกลับเป็นค่าโรงงานได้ หากเป็นเครื่ององค์กร ต้องปลด Profile MDM (Mobile Device Management) ออกให้หมดก่อนขาย
 			</p>
+		</section>
+
+		<section>
+			<h2>ราคาอ้างอิงรับซื้อ (อัปเดต 2026)</h2>
+			<p class="price-note">ราคาด้านล่างเป็นช่วงอ้างอิงเบื้องต้น ราคาจริงขึ้นอยู่กับสภาพเครื่อง สเปก และอุปกรณ์ที่มี ทักไลน์เพื่อรับราคาที่แม่นยำที่สุด</p>
+			<div class="price-table-wrap">
+				<table class="price-table">
+					<thead><tr><th>รุ่น / สเปก</th><th>ราคารับซื้อโดยประมาณ</th></tr></thead>
+					<tbody>
+						<tr><td>MacBook Pro 16" M4 Pro / M4 Max</td><td>55,000 – 80,000 บาท</td></tr>
+						<tr><td>MacBook Pro 14" M4 Pro</td><td>42,000 – 60,000 บาท</td></tr>
+						<tr><td>MacBook Pro 14" M4</td><td>35,000 – 48,000 บาท</td></tr>
+						<tr><td>MacBook Air M3 (15")</td><td>28,000 – 38,000 บาท</td></tr>
+						<tr><td>MacBook Air M3 (13")</td><td>22,000 – 32,000 บาท</td></tr>
+						<tr><td>MacBook Air M2</td><td>18,000 – 28,000 บาท</td></tr>
+						<tr><td>MacBook Pro M2 Pro/Max</td><td>35,000 – 55,000 บาท</td></tr>
+						<tr><td>MacBook Air M1</td><td>12,000 – 18,000 บาท</td></tr>
+						<tr><td>MacBook Pro Intel (2019-2020)</td><td>8,000 – 18,000 บาท</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="price-cta">ต้องการราคาแม่นยำ? <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">ทักไลน์ @webuy ได้เลย</a> ตอบภายใน 15-30 นาที</p>
 		</section>
 
 		<ContactBox heading="เช็คสเปก MacBook ของคุณแล้วใช่ไหม?" text="ส่งภาพ About This Mac และ Cycle Count มาประเมินราคาฟรีทาง Line @webuy ได้เลย" variant="primary" />
@@ -259,7 +284,39 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			</ul>
 		</section>
 	</article>
+<style>
+.price-note {
+	color: var(--muted);
+	font-size: 0.93rem;
+	margin-bottom: 1rem;
+}
+.price-table-wrap {
+	overflow-x: auto;
+}
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.price-table th {
+	background: var(--accent);
+	color: #fff;
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	font-weight: 700;
+}
+.price-table td {
+	padding: 0.55rem 0.8rem;
+	border-bottom: 1px solid rgba(36,48,67,0.1);
+}
+.price-table tr:nth-child(even) td {
+	background: rgba(10,124,111,0.04);
+}
+.price-cta {
+	margin-top: 1rem;
+	font-size: 0.93rem;
+	color: var(--muted);
+}
+</style>
+
 </BaseLayout>
-
-ayout>
-

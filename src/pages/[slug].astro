@@ -27,6 +27,12 @@ const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
 const articlePath = `/${post.slug}/`;
 const articleUrl = `${site}${articlePath}`;
 
+// Related posts: 3 most recent, excluding current
+const allPosts = getAllPosts();
+const relatedPosts = allPosts
+	.filter((p) => p.slug !== post.slug)
+	.slice(0, 3);
+
 const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
@@ -76,10 +82,10 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={articleJsonLd}
 >
 	<article class="container article">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <a href="/blog/">บทความ</a> &gt; <span set:html={post.title.rendered} />
+		</nav>
 		<header class="article-head">
-			<p class="back">
-				<a href="/blog/">← กลับไปหน้าบทความ</a>
-			</p>
 			<time class="date" datetime={post.date}>
 				{new Date(post.date).toLocaleDateString('th-TH', {
 					year: 'numeric',
@@ -106,6 +112,30 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		}
 
 		<div class="prose content" set:html={post.content.rendered} />
+
+		{/* CTA Section */}
+		<aside class="post-cta" aria-label="ติดต่อประเมินราคา">
+			<p class="post-cta-text">อยากขายสินค้าไอที? ทักหาทีมงานได้เลยตลอด 24 ชั่วโมง</p>
+			<a class="post-cta-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">แอดไลน์ @webuy รับประเมินราคาฟรี →</a>
+		</aside>
+
+		{/* Related Articles */}
+		{relatedPosts.length > 0 && (
+			<section class="related" aria-labelledby="related-heading">
+				<h2 id="related-heading" class="related-title">บทความที่เกี่ยวข้อง</h2>
+				<div class="related-grid">
+					{relatedPosts.map((rp) => (
+						<a href={`/${rp.slug}/`} class="related-card">
+							<p class="related-card-date">
+								{new Date(rp.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
+							</p>
+							<p class="related-card-title" set:html={rp.title.rendered} />
+						</a>
+					))}
+				</div>
+				<a href="/blog/" class="related-all">ดูบทความทั้งหมด →</a>
+			</section>
+		)}
 	</article>
 </BaseLayout>
 
@@ -190,4 +220,93 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		max-width: 100%;
 		height: auto;
 	}
+	/* Post CTA */
+	.post-cta {
+		margin-top: 2.5rem;
+		padding: 1.25rem 1.5rem;
+		background: linear-gradient(105deg, #0b3d5c 0%, #0a6b5c 100%);
+		border-radius: var(--radius);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.8rem 1.5rem;
+	}
+	.post-cta-text {
+		margin: 0;
+		color: #e8f5f3;
+		font-size: 0.97rem;
+		flex: 1 1 200px;
+	}
+	.post-cta-btn {
+		display: inline-block;
+		padding: 0.55rem 1.1rem;
+		background: #0a8a46;
+		color: #fff;
+		border-radius: 999px;
+		font-weight: 700;
+		font-size: 0.9rem;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.post-cta-btn:hover {
+		background: #087a3e;
+		text-decoration: none;
+	}
+	/* Related Articles */
+	.related {
+		margin-top: 2.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid rgba(36, 48, 67, 0.1);
+	}
+	.related-title {
+		margin: 0 0 1rem;
+		font-size: 1.1rem;
+	}
+	.related-grid {
+		display: grid;
+		gap: 0.65rem;
+	}
+	@media (min-width: 600px) {
+		.related-grid { grid-template-columns: repeat(3, 1fr); }
+	}
+	.related-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		padding: 0.85rem 1rem;
+		background: var(--surface);
+		border: 1px solid rgba(36, 48, 67, 0.1);
+		border-radius: var(--radius);
+		text-decoration: none;
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+	.related-card:hover {
+		border-color: var(--accent);
+		box-shadow: 0 4px 12px rgba(10, 124, 111, 0.1);
+		text-decoration: none;
+	}
+	.related-card-date {
+		margin: 0;
+		font-size: 0.78rem;
+		color: var(--muted);
+	}
+	.related-card-title {
+		margin: 0;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--text);
+		line-height: 1.35;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.related-all {
+		display: inline-block;
+		margin-top: 1rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--accent);
+	}
 </style>
+

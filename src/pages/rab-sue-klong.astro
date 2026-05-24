@@ -111,6 +111,9 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	jsonLd={articleJsonLd}
 >
 	<article class="container longform">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รับซื้อกล้อง</span>
+		</nav>
 		<header>
 			<p class="kicker">CAMERA BUYBACK GUIDE</p>
 			<h1>รับซื้อกล้อง: บริการรับซื้อกล้องมือสอง DSLR Mirrorless กล้องฟิล์ม เลนส์ และอุปกรณ์เสริม ทุกยี่ห้อ ราคาดี ประเมินฟรี</h1>
@@ -147,6 +150,28 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 				<a class="inline-contact" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
 				แล้วส่งรูปมาให้ดู ทีมงานพร้อมช่วยประเมินให้ทันที
 			</p>
+		</section>
+
+		<section>
+			<h2>ราคาอ้างอิงรับซื้อ (อัปเดต 2026)</h2>
+			<p class="price-note">ราคาด้านล่างเป็นช่วงอ้างอิงเบื้องต้น ราคาจริงขึ้นอยู่กับสภาพเครื่อง สเปก และอุปกรณ์ที่มี ทักไลน์เพื่อรับราคาที่แม่นยำที่สุด</p>
+			<div class="price-table-wrap">
+				<table class="price-table">
+					<thead><tr><th>รุ่น / สเปก</th><th>ราคารับซื้อโดยประมาณ</th></tr></thead>
+					<tbody>
+						<tr><td>Sony A7 IV / A7C II / ZV-E1</td><td>28,000 – 50,000 บาท</td></tr>
+						<tr><td>Sony A6700 / A6400</td><td>12,000 – 22,000 บาท</td></tr>
+						<tr><td>Fujifilm X100VI / X-T5</td><td>25,000 – 40,000 บาท</td></tr>
+						<tr><td>Fujifilm X-S20 / X-T30 II</td><td>10,000 – 18,000 บาท</td></tr>
+						<tr><td>Canon EOS R6 II / R8</td><td>20,000 – 38,000 บาท</td></tr>
+						<tr><td>Canon EOS R50 / M50 II</td><td>8,000 – 15,000 บาท</td></tr>
+						<tr><td>Nikon Z6 III / Z8</td><td>30,000 – 55,000 บาท</td></tr>
+						<tr><td>GoPro Hero 12/13</td><td>5,000 – 10,000 บาท</td></tr>
+						<tr><td>เลนส์ (ขึ้นอยู่กับรุ่นและยี่ห้อ)</td><td>3,000 – 40,000 บาท</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="price-cta">ต้องการราคาแม่นยำ? <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">ทักไลน์ @webuy ได้เลย</a> ตอบภายใน 15-30 นาที</p>
 		</section>
 
 		<ContactBox heading="มีกล้องอยากขาย?" text="ส่งรูปกล้อง เลนส์ อุปกรณ์เสริมมาให้ประเมินราคาได้เลย ไม่มีค่าใช้จ่าย ตอบกลับเร็ว" />
@@ -675,4 +700,39 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			</ul>
 		</section>
 	</article>
+<style>
+.price-note {
+	color: var(--muted);
+	font-size: 0.93rem;
+	margin-bottom: 1rem;
+}
+.price-table-wrap {
+	overflow-x: auto;
+}
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.price-table th {
+	background: var(--accent);
+	color: #fff;
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	font-weight: 700;
+}
+.price-table td {
+	padding: 0.55rem 0.8rem;
+	border-bottom: 1px solid rgba(36,48,67,0.1);
+}
+.price-table tr:nth-child(even) td {
+	background: rgba(10,124,111,0.04);
+}
+.price-cta {
+	margin-top: 1rem;
+	font-size: 0.93rem;
+	color: var(--muted);
+}
+</style>
+
 </BaseLayout>
