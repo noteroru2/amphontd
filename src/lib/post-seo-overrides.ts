@@ -1,4 +1,5 @@
 import postsData from '../data/local-posts.generated.json';
+import { appendTrustBridge } from './post-trust-bridge';
 
 export interface InternalLink {
 	href: string;
@@ -206,11 +207,14 @@ export function getPostSeoOverride(slug: string): PostSeoOverride | undefined {
 
 export function preparePostContent(slug: string, html: string): string {
 	const override = getPostSeoOverride(slug);
-	if (!override) return html;
+	let output = html;
 
-	let output = patchIntro(html, override);
-	if (override.transformContent) {
-		output = override.transformContent(output);
+	if (override) {
+		output = patchIntro(html, override);
+		if (override.transformContent) {
+			output = override.transformContent(output);
+		}
 	}
-	return output;
+
+	return appendTrustBridge(slug, output);
 }
