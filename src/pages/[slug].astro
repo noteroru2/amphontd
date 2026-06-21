@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { LocalPost } from '../lib/posts';
 import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostTags } from '../lib/posts';
+import { getPostSeoOverride, preparePostContent } from '../lib/post-seo-overrides';
 import { getSiteOrigin } from '../lib/site';
 
 export async function getStaticPaths() {
@@ -21,6 +22,12 @@ const featuredUrl = getFeaturedImageUrl(post);
 const tags = getPostTags(post);
 const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
 const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
+const seoOverride = getPostSeoOverride(post.slug);
+const pageTitle = seoOverride?.title ?? plainTitle;
+const pageDescription =
+	seoOverride?.description ?? (plainExcerpt || `อ่านบทความ ${plainTitle} จาก AMPHON TRADING`);
+const pageContent = preparePostContent(post.slug, post.content.rendered);
+const introCta = seoOverride?.introCta;
 const site = getSiteOrigin();
 const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
 const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
@@ -37,8 +44,8 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
 		'@type': 'Article',
-		headline: plainTitle,
-		description: plainExcerpt || `บทความ ${plainTitle}`,
+		headline: pageTitle,
+		description: pageDescription,
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': articleUrl,
@@ -65,15 +72,15 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		itemListElement: [
 			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
 			{ '@type': 'ListItem', position: 2, name: 'บทความ', item: `${site}/blog/` },
-			{ '@type': 'ListItem', position: 3, name: plainTitle, item: articleUrl },
+			{ '@type': 'ListItem', position: 3, name: pageTitle, item: articleUrl },
 		],
 	},
 ];
 ---
 
 <BaseLayout
-	title={`${plainTitle} | AMPHON TRADING`}
-	description={plainExcerpt || `อ่านบทความ ${plainTitle} จาก AMPHON TRADING`}
+	title={`${pageTitle} | AMPHON TRADING`}
+	description={pageDescription}
 	pathname={articlePath}
 	type="article"
 	ogImage={featuredUrl}
@@ -111,7 +118,32 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 			)
 		}
 
-		<div class="prose content" set:html={post.content.rendered} />
+		{
+			introCta && (
+				<aside class="intro-cta" aria-label="ติดต่อบริการ">
+					<p class="intro-cta-text">{introCta.text}</p>
+					<div class="intro-cta-actions">
+						{introCta.lineHref && introCta.lineLabel && (
+							<a
+								class="intro-cta-btn intro-cta-btn--line"
+								href={introCta.lineHref}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{introCta.lineLabel}
+							</a>
+						)}
+						{introCta.phoneHref && introCta.phoneLabel && (
+							<a class="intro-cta-btn intro-cta-btn--phone" href={introCta.phoneHref}>
+								{introCta.phoneLabel}
+							</a>
+						)}
+					</div>
+				</aside>
+			)
+		}
+
+		<div class="prose content" set:html={pageContent} />
 
 		{/* CTA Section */}
 		<aside class="post-cta" aria-label="ติดต่อประเมินราคา">
@@ -175,6 +207,55 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 		height: auto;
 		border-radius: var(--radius);
 		margin-bottom: 2rem;
+	}
+	.intro-cta {
+		margin-bottom: 1.5rem;
+		padding: 1rem 1.15rem;
+		background: linear-gradient(105deg, rgba(11, 61, 92, 0.06) 0%, rgba(10, 107, 92, 0.08) 100%);
+		border: 1px solid rgba(10, 124, 111, 0.18);
+		border-radius: var(--radius);
+		display: grid;
+		gap: 0.75rem;
+	}
+	.intro-cta-text {
+		margin: 0;
+		font-size: 0.98rem;
+		line-height: 1.55;
+		color: var(--text);
+	}
+	.intro-cta-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+	}
+	.intro-cta-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem 0.95rem;
+		border-radius: 999px;
+		font-weight: 700;
+		font-size: 0.88rem;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.intro-cta-btn--line {
+		background: #0a8a46;
+		color: #fff;
+	}
+	.intro-cta-btn--line:hover {
+		background: #087a3e;
+		text-decoration: none;
+	}
+	.intro-cta-btn--phone {
+		background: var(--surface);
+		color: var(--text);
+		border: 1px solid rgba(36, 48, 67, 0.14);
+	}
+	.intro-cta-btn--phone:hover {
+		border-color: var(--accent);
+		color: var(--accent-dim);
+		text-decoration: none;
 	}
 	.content {
 		font-size: 1.05rem;
