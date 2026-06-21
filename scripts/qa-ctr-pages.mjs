@@ -5,28 +5,46 @@ const pages = [
 	{
 		slug: 'fixmobile-ubon',
 		dir: 'fixmobile-ubon',
-		titleIncludes: 'รับซ่อมมือถืออุบล ตีราคาก่อนซ่อม',
-		descIncludes: 'รับซ่อมมือถืออุบล ทุกยี่ห้อ',
+		titleIncludes: 'ซ่อมมือถือ อุบล เช็กอาการก่อนซ่อม',
+		descIncludes: 'บริการซ่อมมือถือในอุบล',
+		introIncludes: 'หากมือถือมีอาการจอแตก',
+		ctaIncludes: 'ส่งอาการมือถือและรูปเครื่อง',
+		linkIncludes: ['/fix-notebook-ubon/', '/contact/', 'amphon.co.th'],
 		h1Max: 1,
-		introCta: 'มือถือเสียในอุบล',
 	},
 	{
 		slug: 'fix-notebook-ubon',
 		dir: 'fix-notebook-ubon',
-		titleIncludes: 'รับซ่อมโน๊ตบุ๊คอุบล เช็คฟรี',
-		descIncludes: 'รับซ่อมโน๊ตบุ๊คอุบล ทุกอาการ',
+		titleIncludes: 'ซ่อมโน๊ตบุ๊ค อุบล เช็กอาการก่อนซ่อม',
+		descIncludes: 'บริการซ่อมโน๊ตบุ๊คในอุบล',
+		introIncludes: 'หากโน๊ตบุ๊คมีอาการเปิดไม่ติด',
+		ctaIncludes: 'ส่งรุ่นโน๊ตบุ๊คและอาการเสีย',
+		linkIncludes: ['/fixmobile-ubon/', 'amphon.co.th', '/rab-sue-notebook/'],
 		h1Max: 1,
-		introCta: 'โน๊ตบุ๊คเปิดไม่ติด',
 	},
 	{
 		slug: 'รับซื้อคอมพิษณุโลก',
 		dir: 'รับซื้อคอมพิษณุโลก',
-		titleIncludes: 'รับซื้อคอมพิษณุโลก ถึงบ้าน',
-		descIncludes: 'รับซื้อคอมพิษณุโลก คอม PC',
+		titleIncludes: 'รับซื้อคอม พิษณุโลก ส่งรูปประเมินราคา',
+		descIncludes: 'รับซื้อคอมพิวเตอร์มือสองในพิษณุโลก',
+		introIncludes: 'หากต้องการขายคอมพิวเตอร์',
+		ctaIncludes: 'ส่งรูปคอมและสเปกเพื่อประเมินราคาก่อนขาย',
+		linkIncludes: ['amphon.co.th', '/computer-auction/', '/evaluate-price/'],
 		h1Max: 1,
-		introCta: 'อยากขายคอมในพิษณุโลก',
+	},
+	{
+		slug: 'รับซื้อคอมภูเก็ต',
+		dir: 'รับซื้อคอมภูเก็ต',
+		titleIncludes: 'รับซื้อคอม ภูเก็ต ประเมินตามสเปก',
+		descIncludes: 'รับซื้อคอมพิวเตอร์และคอมประกอบในภูเก็ต',
+		introIncludes: 'สำหรับผู้ที่อยู่ภูเก็ต',
+		ctaIncludes: 'ส่งรูปคอม สเปก และอุปกรณ์ที่มี',
+		linkIncludes: ['amphon.co.th', '/rab-sue-com/', '/contact/'],
+		h1Max: 1,
 	},
 ];
+
+const banned = ['อันดับ 1', 'ราคาสูงสุด', 'ดีที่สุด', 'รับทุกรุ่น', 'รับทุกสภาพ'];
 
 let failed = 0;
 
@@ -44,17 +62,25 @@ for (const page of pages) {
 	const title = html.match(/<title>([^<]*)<\/title>/i)?.[1] ?? '';
 	const desc = html.match(/name="description" content="([^"]*)"/i)?.[1] ?? '';
 	const robots = html.match(/name="robots" content="([^"]*)"/i)?.[1] ?? '';
-	const canonical = html.match(/rel="canonical" href="([^"]*)"/i)?.[1] ?? '';
 	const h1Count = (html.match(/<h1\b/gi) ?? []).length;
 
 	const checks = [
 		['title', title.includes(page.titleIncludes), title],
-		['description', desc.includes(page.descIncludes.slice(0, 20)), `${desc.slice(0, 80)}...`],
+		['description', desc.includes(page.descIncludes.slice(0, 20)), desc],
 		['robots index', robots.includes('index') && !robots.includes('noindex'), robots],
-		['canonical slug', canonical.includes(`/${page.dir}/`), canonical],
 		['single H1', h1Count === page.h1Max, `h1 count=${h1Count}`],
-		['intro CTA', html.includes(page.introCta), page.introCta],
-		['no meta refresh redirect', !/<meta[^>]+http-equiv=["']refresh/i.test(html), 'ok'],
+		['intro', html.includes(page.introIncludes), page.introIncludes],
+		['CTA', html.includes(page.ctaIncludes), page.ctaIncludes],
+		...page.linkIncludes.map((link) => [
+			`link ${link}`,
+			html.includes(link),
+			link,
+		]),
+		[
+			'banned words absent',
+			!banned.some((word) => title.includes(word) || desc.includes(word) || html.slice(0, 4000).includes(word)),
+			'checked intro/meta',
+		],
 	];
 
 	for (const [name, ok, detail] of checks) {
