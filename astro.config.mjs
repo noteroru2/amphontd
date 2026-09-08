@@ -4,6 +4,7 @@ import path from 'node:path';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
+import { applyMoneyOwnershipOverrides } from './src/lib/money-query-ownership.mjs';
 import { buildPostIndexPolicy, buildRedirectConfig } from './src/lib/post-index-policy.mjs';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
@@ -15,7 +16,7 @@ const siteUrl =
 
 const generatedPostsPath = path.resolve('src/data/local-posts.generated.json');
 const generatedPosts = JSON.parse(fs.readFileSync(generatedPostsPath, 'utf8'));
-const generatedPolicy = buildPostIndexPolicy(generatedPosts);
+const generatedPolicy = applyMoneyOwnershipOverrides(buildPostIndexPolicy(generatedPosts));
 const generatedRedirects = buildRedirectConfig(generatedPolicy);
 const nonIndexGeneratedSlugs = new Set(
 	generatedPosts

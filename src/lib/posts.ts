@@ -4,6 +4,7 @@ import {
 	isIndexLifecycle,
 	isRoutableLifecycle,
 } from './post-index-policy.mjs';
+import { applyMoneyOwnershipOverrides } from './money-query-ownership.mjs';
 
 export interface LocalFeaturedImage {
 	src: string;
@@ -44,7 +45,9 @@ const posts = [...(postsData as LocalPost[])].sort((a, b) => {
 	return a.slug.localeCompare(b.slug);
 });
 
-const postIndexPolicy = buildPostIndexPolicy(posts) as Map<string, PostIndexPolicy>;
+const postIndexPolicy = applyMoneyOwnershipOverrides(
+	buildPostIndexPolicy(posts),
+) as Map<string, PostIndexPolicy>;
 
 export function getAllPosts(): LocalPost[] {
 	return posts;

@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build:astro": "astro build",
     "postbuild:p4": "node scripts/postbuild-static-money-schema.mjs",
-    "build": "npm run build:astro && npm run postbuild:p4",
+    "postbuild:p5": "node scripts/postbuild-money-ranking.mjs",
+    "build": "npm run build:astro && npm run postbuild:p4 && npm run postbuild:p5",
     "preview": "astro preview",
     "start": "node scripts/start.mjs",
     "astro": "astro",
@@ -19,11 +20,14 @@
     "audit:p3-service-authority": "node scripts/qa-p3-service-authority.mjs",
     "audit:p4-static-money-schema": "node scripts/qa-p4-static-money-schema.mjs",
     "audit:p4-dist": "node scripts/qa-p4-static-money-schema.mjs --dist",
+    "audit:p5-money-ranking": "node scripts/qa-p5-money-ranking.mjs",
+    "audit:p5-dist": "node scripts/qa-p5-money-ranking.mjs --dist",
     "qa:p0": "npm run audit:p0-index-surface && npm run build",
     "qa:p1": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run build",
     "qa:p2": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run build",
     "qa:p3": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run build",
-    "qa:p4": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run build && npm run audit:p4-dist"
+    "qa:p4": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run build && npm run audit:p4-dist",
+    "qa:p5": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run audit:p5-money-ranking && npm run build && npm run audit:p4-dist && npm run audit:p5-dist"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",
