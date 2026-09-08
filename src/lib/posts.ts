@@ -1,5 +1,9 @@
 import postsData from '../data/local-posts.generated.json';
-import { buildPostIndexPolicy, isIndexLifecycle } from './post-index-policy.mjs';
+import {
+	buildPostIndexPolicy,
+	isIndexLifecycle,
+	isRoutableLifecycle,
+} from './post-index-policy.mjs';
 
 export interface LocalFeaturedImage {
 	src: string;
@@ -28,9 +32,10 @@ export type FeaturedImageAttrs = {
 };
 
 export interface PostIndexPolicy {
-	lifecycle: 'INDEX' | 'HOLD_NOINDEX';
+	lifecycle: 'INDEX' | 'HOLD_NOINDEX' | 'REDIRECT' | 'GONE';
 	reason: string;
 	ownerSlug?: string;
+	ownerPath?: string;
 }
 
 const posts = [...(postsData as LocalPost[])].sort((a, b) => {
@@ -47,6 +52,10 @@ export function getAllPosts(): LocalPost[] {
 
 export function getIndexablePosts(): LocalPost[] {
 	return posts.filter((post) => isIndexLifecycle(postIndexPolicy.get(post.slug)));
+}
+
+export function getRoutablePosts(): LocalPost[] {
+	return posts.filter((post) => isRoutableLifecycle(postIndexPolicy.get(post.slug)));
 }
 
 export function getPostIndexPolicy(postOrSlug: LocalPost | string): PostIndexPolicy {

@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { LocalPost } from '../lib/posts';
-import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostIndexPolicy, getPostTags } from '../lib/posts';
+import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostIndexPolicy, getPostTags, getRoutablePosts } from '../lib/posts';
 import { getPostSeoOverride, preparePostContent } from '../lib/post-seo-overrides';
 import { getSiteOrigin } from '../lib/site';
 
 export async function getStaticPaths() {
-	return getAllPosts().map((post) => ({
+	return getRoutablePosts().map((post) => ({
 		params: { slug: post.slug },
 		props: { post },
 	}));

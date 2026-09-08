@@ -79,6 +79,16 @@ const FORCE_INDEX_SLUGS = new Set([
 	'computer-auction',
 ]);
 
+export const STATIC_OWNER_PATHS = new Set([
+	'/rab-sue-notebook/',
+	'/rab-sue-com/',
+	'/rab-sue-iphone/',
+	'/rab-sue-ipad/',
+	'/rab-sue-macbook/',
+	'/rab-sue-klong/',
+	'/buynotebookubon/',
+]);
+
 function htmlToText(value = '') {
 	return String(value)
 		.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
@@ -100,6 +110,10 @@ function normalizedTitle(post) {
 		.trim();
 }
 
+function normalizedSlug(slug) {
+	return String(slug ?? '').trim().toLocaleLowerCase('th');
+}
+
 function searchText(post) {
 	return `${post?.slug ?? ''} ${htmlToText(post?.title?.rendered ?? '')}`.toLocaleLowerCase('th');
 }
@@ -110,6 +124,55 @@ function plainContentLength(post) {
 
 function hasAny(text, terms) {
 	return terms.some((term) => text.includes(term));
+}
+
+function stripNumericSuffix(slug) {
+	return String(slug ?? '').replace(/-\d+$/, '');
+}
+
+function matchesGenericFamily(slug, roots) {
+	const value = normalizedSlug(slug);
+	const base = stripNumericSuffix(value);
+	return roots.includes(base);
+}
+
+export function getStaticOwnerPath(slug) {
+	if (
+		matchesGenericFamily(slug, [
+			'รับซื้อโน๊ตบุ๊คมือสอง',
+			'รับซื้อโน้ตบุ๊คมือสอง',
+			'รับซื้อโน๊ตบุ๊ค',
+			'รับซื้อโน้ตบุ๊ค',
+		])
+	) {
+		return '/rab-sue-notebook/';
+	}
+
+	if (matchesGenericFamily(slug, ['rab-sue-notebook-ubon-ratchathani'])) {
+		return '/buynotebookubon/';
+	}
+
+	if (matchesGenericFamily(slug, ['รับซื้อคอม', 'รับซื้อคอมพิวเตอร์'])) {
+		return '/rab-sue-com/';
+	}
+
+	if (matchesGenericFamily(slug, ['รับซื้อไอโฟน', 'รับซื้อiphone'])) {
+		return '/rab-sue-iphone/';
+	}
+
+	if (matchesGenericFamily(slug, ['รับซื้อไอแพด', 'รับซื้อipad'])) {
+		return '/rab-sue-ipad/';
+	}
+
+	if (matchesGenericFamily(slug, ['รับซื้อmacbook', 'รับซื้อ-macbook'])) {
+		return '/rab-sue-macbook/';
+	}
+
+	if (matchesGenericFamily(slug, ['รับซื้อกล้องมือสอง', 'รับซื้อกล้อง'])) {
+		return '/rab-sue-klong/';
+	}
+
+	return undefined;
 }
 
 function duplicateWinnerScore(post) {
@@ -127,6 +190,60 @@ function chooseWinner(posts) {
 		if (scoreDiff !== 0) return scoreDiff;
 		return String(a.slug).localeCompare(String(b.slug), 'th');
 	})[0];
+}
+
+function resolveGeneratedRedirectOwner(policy, startSlug) {
+	const seen = new Set();
+	let currentSlug = startSlug;
+
+	while (currentSlug) {
+		if (seen.has(currentSlug)) return undefined;
+		seen.add(currentSlug);
+
+		const item = policy.get(currentSlug);
+		if (!item) return undefined;
+
+		if (item.lifecycle === 'INDEX') {
+			return `/${currentSlug}/`;
+		}
+
+		if (item.lifecycle !== 'REDIRECT') return undefined;
+		if (item.ownerPath) return item.ownerPath;
+		currentSlug = item.ownerSlug;
+	}
+
+	return undefined;
+}
+
+function finalizeRedirectOwners(policy) {
+	for (const [slug, item] of policy.entries()) {
+		if (item.lifecycle !== 'REDIRECT') continue;
+
+		if (item.ownerPath) {
+			policy.set(slug, {
+				...item,
+				ownerPath: item.ownerPath.endsWith('/') ? item.ownerPath : `${item.ownerPath}/`,
+			});
+			continue;
+		}
+
+		const ownerPath = item.ownerSlug
+			? resolveGeneratedRedirectOwner(policy, item.ownerSlug)
+			: undefined;
+
+		if (!ownerPath) {
+			policy.set(slug, {
+				lifecycle: 'HOLD_NOINDEX',
+				reason: `${item.reason}_owner_not_indexable`,
+			});
+			continue;
+		}
+
+		policy.set(slug, {
+			...item,
+			ownerPath,
+		});
+	}
 }
 
 export function buildPostIndexPolicy(posts) {
@@ -154,20 +271,30 @@ export function buildPostIndexPolicy(posts) {
 		const text = searchText(post);
 		const titleKey = normalizedTitle(post);
 		const duplicateTitleWinner = duplicateWinnerByTitle.get(titleKey);
-		const baseSlug = slug.replace(/-\d+$/, '');
+		const baseSlug = stripNumericSuffix(slug);
 		const hasBaseSlugSibling = baseSlug !== slug && bySlug.has(baseSlug);
+		const staticOwnerPath = getStaticOwnerPath(slug);
 
 		if (hasAny(text, OFF_TOPIC_TERMS)) {
 			policy.set(slug, {
-				lifecycle: 'HOLD_NOINDEX',
-				reason: 'off_topic',
+				lifecycle: 'GONE',
+				reason: 'off_topic_removed',
+			});
+			continue;
+		}
+
+		if (staticOwnerPath) {
+			policy.set(slug, {
+				lifecycle: 'REDIRECT',
+				reason: 'static_money_owner',
+				ownerPath: staticOwnerPath,
 			});
 			continue;
 		}
 
 		if (duplicateTitleWinner && duplicateTitleWinner !== slug) {
 			policy.set(slug, {
-				lifecycle: 'HOLD_NOINDEX',
+				lifecycle: 'REDIRECT',
 				reason: 'duplicate_title',
 				ownerSlug: duplicateTitleWinner,
 			});
@@ -176,7 +303,7 @@ export function buildPostIndexPolicy(posts) {
 
 		if (hasBaseSlugSibling) {
 			policy.set(slug, {
-				lifecycle: 'HOLD_NOINDEX',
+				lifecycle: 'REDIRECT',
 				reason: 'duplicate_slug_family',
 				ownerSlug: baseSlug,
 			});
@@ -213,7 +340,20 @@ export function buildPostIndexPolicy(posts) {
 		});
 	}
 
+	finalizeRedirectOwners(policy);
 	return policy;
+}
+
+export function buildRedirectConfig(policy) {
+	const redirects = {};
+	for (const [slug, item] of policy.entries()) {
+		if (item.lifecycle !== 'REDIRECT' || !item.ownerPath) continue;
+		redirects[`/${slug}/`] = {
+			status: 301,
+			destination: item.ownerPath,
+		};
+	}
+	return redirects;
 }
 
 export function getPolicySummary(policy) {
@@ -221,6 +361,8 @@ export function getPolicySummary(policy) {
 		total: 0,
 		INDEX: 0,
 		HOLD_NOINDEX: 0,
+		REDIRECT: 0,
+		GONE: 0,
 		reasons: {},
 	};
 
@@ -235,4 +377,8 @@ export function getPolicySummary(policy) {
 
 export function isIndexLifecycle(value) {
 	return value?.lifecycle === 'INDEX';
+}
+
+export function isRoutableLifecycle(value) {
+	return value?.lifecycle === 'INDEX' || value?.lifecycle === 'HOLD_NOINDEX';
 }

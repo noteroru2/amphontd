@@ -12,7 +12,9 @@
     "start": "node scripts/start.mjs",
     "astro": "astro",
     "audit:p0-index-surface": "node scripts/qa-index-surface.mjs",
-    "qa:p0": "npm run audit:p0-index-surface && npm run build"
+    "audit:p1-ownership": "node scripts/qa-p1-ownership.mjs",
+    "qa:p0": "npm run audit:p0-index-surface && npm run build",
+    "qa:p1": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",

@@ -9,22 +9,18 @@ const summary = getPolicySummary(policy);
 
 const indexed = posts.filter((post) => policy.get(post.slug)?.lifecycle === 'INDEX');
 const held = posts.filter((post) => policy.get(post.slug)?.lifecycle === 'HOLD_NOINDEX');
-const offTopicIndexed = indexed.filter((post) => policy.get(post.slug)?.reason === 'off_topic');
-const duplicateOwners = new Map();
+const redirected = posts.filter((post) => policy.get(post.slug)?.lifecycle === 'REDIRECT');
+const gone = posts.filter((post) => policy.get(post.slug)?.lifecycle === 'GONE');
+const offTopicIndexed = indexed.filter((post) =>
+	String(policy.get(post.slug)?.reason ?? '').startsWith('off_topic'),
+);
 
-for (const post of held) {
-	const item = policy.get(post.slug);
-	if (!item?.ownerSlug) continue;
-	const list = duplicateOwners.get(item.ownerSlug) ?? [];
-	list.push(post.slug);
-	duplicateOwners.set(item.ownerSlug, list);
-}
-
-console.log('AMPHONTD P0 INDEX SURFACE');
+console.log('AMPHONTD P0/P1 INDEX SURFACE');
 console.log(JSON.stringify(summary, null, 2));
 console.log(`INDEX=${indexed.length}`);
 console.log(`HOLD_NOINDEX=${held.length}`);
-console.log(`DUPLICATE_FAMILIES=${duplicateOwners.size}`);
+console.log(`REDIRECT=${redirected.length}`);
+console.log(`GONE=${gone.length}`);
 
 if (summary.total !== posts.length) {
 	throw new Error(`Policy coverage mismatch: policy=${summary.total} posts=${posts.length}`);
@@ -34,8 +30,8 @@ if (indexed.length === 0) {
 	throw new Error('Index policy produced zero indexable generated posts.');
 }
 
-if (held.length === 0) {
-	throw new Error('Index policy did not quarantine any generated posts; P0 cleanup is ineffective.');
+if (held.length + redirected.length + gone.length === 0) {
+	throw new Error('Index policy did not reduce the generated index surface.');
 }
 
 if (offTopicIndexed.length > 0) {
@@ -43,7 +39,7 @@ if (offTopicIndexed.length > 0) {
 }
 
 for (const [slug, item] of policy.entries()) {
-	if (!['INDEX', 'HOLD_NOINDEX'].includes(item.lifecycle)) {
+	if (!['INDEX', 'HOLD_NOINDEX', 'REDIRECT', 'GONE'].includes(item.lifecycle)) {
 		throw new Error(`Unknown lifecycle for ${slug}: ${item.lifecycle}`);
 	}
 }

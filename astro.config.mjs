@@ -4,7 +4,7 @@ import path from 'node:path';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
-import { buildPostIndexPolicy } from './src/lib/post-index-policy.mjs';
+import { buildPostIndexPolicy, buildRedirectConfig } from './src/lib/post-index-policy.mjs';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 const siteUrl =
@@ -16,7 +16,8 @@ const siteUrl =
 const generatedPostsPath = path.resolve('src/data/local-posts.generated.json');
 const generatedPosts = JSON.parse(fs.readFileSync(generatedPostsPath, 'utf8'));
 const generatedPolicy = buildPostIndexPolicy(generatedPosts);
-const heldGeneratedSlugs = new Set(
+const generatedRedirects = buildRedirectConfig(generatedPolicy);
+const nonIndexGeneratedSlugs = new Set(
 	generatedPosts
 		.filter((post) => generatedPolicy.get(post.slug)?.lifecycle !== 'INDEX')
 		.map((post) => post.slug),
@@ -26,7 +27,7 @@ function sitemapIncludesPage(page) {
 	try {
 		const pathname = decodeURIComponent(new URL(page).pathname);
 		const slug = pathname.replace(/^\/+|\/+$/g, '');
-		return !heldGeneratedSlugs.has(slug);
+		return !nonIndexGeneratedSlugs.has(slug);
 	} catch {
 		return true;
 	}
@@ -36,6 +37,7 @@ function sitemapIncludesPage(page) {
 export default defineConfig({
 	site: siteUrl,
 	trailingSlash: 'always',
+	redirects: generatedRedirects,
 	build: {
 		// Inlines global CSS into HTML to cut a render-blocking stylesheet request (small total CSS budget).
 		inlineStylesheets: 'always',
