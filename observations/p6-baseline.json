@@ -1,0 +1,49 @@
+{
+  "batch": "P6",
+  "capturedAt": "2026-09-08T22:07:00+07:00",
+  "timezone": "Asia/Bangkok",
+  "sourceCommit": "3921593ab23f33e2da82f8e101bcbe6a287a9182",
+  "gsc": {
+    "property": "sc-domain:amphontd.com",
+    "finalizedThrough": "2026-09-06",
+    "current28d": {
+      "dateFrom": "2026-08-10",
+      "dateTo": "2026-09-06",
+      "clicks": 380,
+      "impressions": 8637,
+      "ctr": 0.044,
+      "position": 14.4807
+    },
+    "previous28d": {
+      "dateFrom": "2026-07-13",
+      "dateTo": "2026-08-09",
+      "clicks": 804,
+      "impressions": 16242,
+      "ctr": 0.0495,
+      "position": 9.8615
+    },
+    "moneyPages": {
+      "/rab-sue-macbook/": { "clicks": 0, "impressions": 192, "ctr": 0, "position": 47.1667, "previousPosition": 34.9733 },
+      "/rab-sue-ipad/": { "clicks": 1, "impressions": 172, "ctr": 0.0058, "position": 54.7791, "previousPosition": 43.5932 },
+      "/rab-sue-com/": { "clicks": 0, "impressions": 39, "ctr": 0, "position": 16.6667, "previousPosition": 14.4706 },
+      "/rab-sue-notebook/": { "clicks": 1, "impressions": 7, "ctr": 0.1429, "position": 28, "previousPosition": 18 },
+      "/rab-sue-lamphong/": { "clicks": 1, "impressions": 8, "ctr": 0.125, "position": 35.875, "previousPosition": 16.8 }
+    }
+  },
+  "productionEvidence": {
+    "checkedAt": "2026-09-08T22:07:00+07:00",
+    "verdict": "WAIT_FOR_DEPLOY_OR_RECRAWL",
+    "notes": [
+      "Fresh public search fetches still surfaced pre-P5 titles for MacBook and iPad.",
+      "The P3 /services/ hub was not reliably surfaced by public fetch at capture time.",
+      "GitHub main contained P5 source, but no CI status/check was attached to the P5 commit."
+    ]
+  },
+  "observation": {
+    "clockActive": false,
+    "clockStart": null,
+    "minimumNewFinalizedDaysAfterLivePass": 7,
+    "primaryDecisionWindowDays": 14,
+    "rule": "Do not judge ranking recovery until production verification passes and GSC has at least 7 new finalized days after that live pass."
+  }
+}

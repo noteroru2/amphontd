@@ -22,12 +22,15 @@
     "audit:p4-dist": "node scripts/qa-p4-static-money-schema.mjs --dist",
     "audit:p5-money-ranking": "node scripts/qa-p5-money-ranking.mjs",
     "audit:p5-dist": "node scripts/qa-p5-money-ranking.mjs --dist",
+    "audit:p6-observation": "node scripts/qa-p6-observation.mjs",
+    "verify:p6-production": "node scripts/p6-production-gate.mjs",
     "qa:p0": "npm run audit:p0-index-surface && npm run build",
     "qa:p1": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run build",
     "qa:p2": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run build",
     "qa:p3": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run build",
     "qa:p4": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run build && npm run audit:p4-dist",
-    "qa:p5": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run audit:p5-money-ranking && npm run build && npm run audit:p4-dist && npm run audit:p5-dist"
+    "qa:p5": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run audit:p5-money-ranking && npm run build && npm run audit:p4-dist && npm run audit:p5-dist",
+    "qa:p6": "npm run qa:p5 && npm run audit:p6-observation"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",

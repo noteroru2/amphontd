@@ -1,0 +1,7 @@
+{
+  "batch": "P6",
+  "includesThrough": "P5",
+  "sourceCommit": "3921593ab23f33e2da82f8e101bcbe6a287a9182",
+  "baselineFinalizedGscDate": "2026-09-06",
+  "purpose": "Production deployment fingerprint for SEO recovery verification"
+}
