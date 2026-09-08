@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getAllPosts } from '../../lib/posts';
+import { getIndexablePosts } from '../../lib/posts';
 import { getSiteOrigin } from '../../lib/site';
 
-const posts = getAllPosts();
+const posts = getIndexablePosts();
 const site = getSiteOrigin();
 const listJsonLd: Array<Record<string, unknown>> = [
 	{
@@ -38,7 +38,7 @@ const listJsonLd: Array<Record<string, unknown>> = [
 
 <BaseLayout
 	title="บทความ | AMPHON TRADING"
-	description="รวมบทความให้ความรู้เกี่ยวกับการรับซื้อสินค้าไอทีมือสอง ประเมินราคา เตรียมเครื่องก่อนขาย และเทคนิคได้ราคาดี จาก AMPHON TRADING"
+	description="รวมบทความให้ความรู้เกี่ยวกับการรับซื้อสินค้าไอที วิธีประเมินราคา เตรียมเครื่องก่อนขาย และเทคนิคได้ราคาดี จาก AMPHON TRADING"
 	pathname="/blog/"
 	jsonLd={listJsonLd}
 >
@@ -48,7 +48,7 @@ const listJsonLd: Array<Record<string, unknown>> = [
 		</nav>
 		<h1 class="page-title">บทความ</h1>
 		<p class="intro">รวมบทความให้ความรู้เกี่ยวกับการรับซื้อสินค้าไอที วิธีประเมินราคา เตรียมเครื่องก่อนขาย และเทคนิคได้ราคาดี จาก AMPHON TRADING</p>
-		{posts.length === 0 ? <p class="hint">ยังไม่มีบทความ</p> : <p class="meta">{posts.length} บทความ</p>}
+		{posts.length === 0 ? <p class="hint">ยังไม่มีบทความ</p> : <p class="meta">{posts.length} บทความที่ผ่านเกณฑ์ Index</p>}
 	</div>
 
 	{

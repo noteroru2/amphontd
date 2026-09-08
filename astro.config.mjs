@@ -1,7 +1,10 @@
 // @ts-check
+import fs from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
+import { buildPostIndexPolicy } from './src/lib/post-index-policy.mjs';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 const siteUrl =
@@ -9,6 +12,25 @@ const siteUrl =
 		(env.COOLIFY_FQDN ? `https://${env.COOLIFY_FQDN}` : null) ??
 		env.COOLIFY_URL ??
 		'https://amphontd.com';
+
+const generatedPostsPath = path.resolve('src/data/local-posts.generated.json');
+const generatedPosts = JSON.parse(fs.readFileSync(generatedPostsPath, 'utf8'));
+const generatedPolicy = buildPostIndexPolicy(generatedPosts);
+const heldGeneratedSlugs = new Set(
+	generatedPosts
+		.filter((post) => generatedPolicy.get(post.slug)?.lifecycle !== 'INDEX')
+		.map((post) => post.slug),
+);
+
+function sitemapIncludesPage(page) {
+	try {
+		const pathname = decodeURIComponent(new URL(page).pathname);
+		const slug = pathname.replace(/^\/+|\/+$/g, '');
+		return !heldGeneratedSlugs.has(slug);
+	} catch {
+		return true;
+	}
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,6 +42,7 @@ export default defineConfig({
 	},
 	integrations: [
 		sitemap({
+			filter: sitemapIncludesPage,
 			changefreq: 'weekly',
 			priority: 0.7,
 			serialize(item) {

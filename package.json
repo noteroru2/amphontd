@@ -10,7 +10,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "start": "node scripts/start.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "audit:p0-index-surface": "node scripts/qa-index-surface.mjs",
+    "qa:p0": "npm run audit:p0-index-surface && npm run build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",

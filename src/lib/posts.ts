@@ -1,4 +1,5 @@
 import postsData from '../data/local-posts.generated.json';
+import { buildPostIndexPolicy, isIndexLifecycle } from './post-index-policy.mjs';
 
 export interface LocalFeaturedImage {
 	src: string;
@@ -26,14 +27,36 @@ export type FeaturedImageAttrs = {
 	alt: string;
 };
 
+export interface PostIndexPolicy {
+	lifecycle: 'INDEX' | 'HOLD_NOINDEX';
+	reason: string;
+	ownerSlug?: string;
+}
+
 const posts = [...(postsData as LocalPost[])].sort((a, b) => {
 	const dateDiff = new Date(b.date).getTime() - new Date(a.date).getTime();
 	if (dateDiff !== 0) return dateDiff;
 	return a.slug.localeCompare(b.slug);
 });
 
+const postIndexPolicy = buildPostIndexPolicy(posts) as Map<string, PostIndexPolicy>;
+
 export function getAllPosts(): LocalPost[] {
 	return posts;
+}
+
+export function getIndexablePosts(): LocalPost[] {
+	return posts.filter((post) => isIndexLifecycle(postIndexPolicy.get(post.slug)));
+}
+
+export function getPostIndexPolicy(postOrSlug: LocalPost | string): PostIndexPolicy {
+	const slug = typeof postOrSlug === 'string' ? postOrSlug : postOrSlug.slug;
+	return (
+		postIndexPolicy.get(slug) ?? {
+			lifecycle: 'HOLD_NOINDEX',
+			reason: 'missing_policy',
+		}
+	);
 }
 
 export function findPostBySlug(slug: string): LocalPost | undefined {
