@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { LocalPost } from '../lib/posts';
 import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostIndexPolicy, getPostTags, getRoutablePosts } from '../lib/posts';
+import { sanitizePostContentHtml } from '../lib/post-content-hygiene.mjs';
+import { buildPostStructuredData, classifyPostPageIntent, isEditorialIntent } from '../lib/post-page-intent.mjs';
 import { getPostSeoOverride, preparePostContent } from '../lib/post-seo-overrides';
 import { getSiteOrigin } from '../lib/site';
 
@@ -21,86 +23,81 @@ const featuredAttrs = getFeaturedImageAttrs(post);
 const featuredUrl = getFeaturedImageUrl(post);
 const tags = getPostTags(post);
 const indexPolicy = getPostIndexPolicy(post);
+const pageIntent = classifyPostPageIntent(post);
+const isEditorial = isEditorialIntent(pageIntent);
 const plainTitle = post.title.rendered.replace(/<[^>]+>/g, '').trim();
 const plainExcerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim();
 const seoOverride = getPostSeoOverride(post.slug);
 const pageTitle = seoOverride?.title ?? plainTitle;
 const pageDescription =
-	seoOverride?.description ?? (plainExcerpt || `อ่านบทความ ${plainTitle} จาก AMPHON TRADING`);
-const pageContent = preparePostContent(post.slug, post.content.rendered);
+	seoOverride?.description ?? (plainExcerpt || `${isEditorial ? 'อ่านบทความ' : 'ดูรายละเอียดบริการ'} ${plainTitle} จาก AMPHON TRADING`);
+const pageContent = sanitizePostContentHtml(preparePostContent(post.slug, post.content.rendered));
 const site = getSiteOrigin();
-const orgName = import.meta.env.PUBLIC_ORG_NAME ?? 'AMPHON TRADING';
-const orgLogo = import.meta.env.PUBLIC_ORG_LOGO_URL ?? '/favicon.svg';
-const articlePath = `/${post.slug}/`;
-const articleUrl = `${site}${articlePath}`;
+const pagePath = `/${post.slug}/`;
+const pageUrl = `${site}${pagePath}`;
 
-// Related posts: keep links inside the indexable surface only.
+// Related links stay inside the same broad page intent so service pages do not
+// point to arbitrary editorial posts and vice versa.
 const allPosts = getAllPosts();
 const relatedPosts = allPosts
-	.filter((p) => p.slug !== post.slug && getPostIndexPolicy(p).lifecycle === 'INDEX')
+	.filter((candidate) => {
+		if (candidate.slug === post.slug) return false;
+		if (getPostIndexPolicy(candidate).lifecycle !== 'INDEX') return false;
+		return isEditorialIntent(classifyPostPageIntent(candidate)) === isEditorial;
+	})
+	.sort((a, b) => {
+		if (!isEditorial) {
+			const aIntent = classifyPostPageIntent(a);
+			const bIntent = classifyPostPageIntent(b);
+			const aSameFamily = aIntent.familyKey === pageIntent.familyKey ? 1 : 0;
+			const bSameFamily = bIntent.familyKey === pageIntent.familyKey ? 1 : 0;
+			if (aSameFamily !== bSameFamily) return bSameFamily - aSameFamily;
+		}
+		return new Date(b.modified ?? b.date).getTime() - new Date(a.modified ?? a.date).getTime();
+	})
 	.slice(0, 3);
 
-const articleJsonLd: Array<Record<string, unknown>> = [
-	{
-		'@context': 'https://schema.org',
-		'@type': 'Article',
-		headline: pageTitle,
-		description: pageDescription,
-		mainEntityOfPage: {
-			'@type': 'WebPage',
-			'@id': articleUrl,
-		},
-		datePublished: post.date,
-		dateModified: post.modified ?? post.date,
-		author: {
-			'@type': 'Organization',
-			name: orgName,
-		},
-		publisher: {
-			'@type': 'Organization',
-			name: orgName,
-			logo: { '@type': 'ImageObject', url: new URL(orgLogo, site).toString() },
-		},
-		image: featuredUrl ? [new URL(featuredUrl, site).toString()] : undefined,
-		inLanguage: 'th-TH',
-		isAccessibleForFree: true,
-		...(tags.length > 0 && { keywords: tags.join(', ') }),
-	},
-	{
-		'@context': 'https://schema.org',
-		'@type': 'BreadcrumbList',
-		itemListElement: [
-			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: site },
-			{ '@type': 'ListItem', position: 2, name: 'บทความ', item: `${site}/blog/` },
-			{ '@type': 'ListItem', position: 3, name: pageTitle, item: articleUrl },
-		],
-	},
-];
+const pageJsonLd = buildPostStructuredData({
+	post,
+	intent: pageIntent,
+	title: pageTitle,
+	description: pageDescription,
+	url: pageUrl,
+	site,
+	featuredUrl,
+	tags,
+});
 ---
 
 <BaseLayout
 	title={`${pageTitle} | AMPHON TRADING`}
 	description={pageDescription}
-	pathname={articlePath}
-	type="article"
+	pathname={pagePath}
+	type={isEditorial ? 'article' : 'website'}
 	ogImage={featuredUrl}
-	publishedTime={post.date}
-	modifiedTime={post.modified ?? post.date}
-	jsonLd={articleJsonLd}
+	publishedTime={isEditorial ? post.date : undefined}
+	modifiedTime={isEditorial ? (post.modified ?? post.date) : undefined}
+	jsonLd={pageJsonLd}
 	noindex={indexPolicy.lifecycle !== 'INDEX'}
 >
-	<article class="container article">
+	<main class="container article">
 		<nav aria-label="breadcrumb" class="breadcrumb">
-			<a href="/">หน้าแรก</a> &gt; <a href="/blog/">บทความ</a> &gt; <span set:html={post.title.rendered} />
+			<a href="/">หน้าแรก</a> &gt;
+			{isEditorial ? <a href="/blog/">บทความ</a> : <span>{pageIntent.kind === 'LOCAL_SERVICE' ? 'พื้นที่ให้บริการ' : 'บริการ'}</span>} &gt;
+			<span set:html={post.title.rendered} />
 		</nav>
 		<header class="article-head">
-			<time class="date" datetime={post.date}>
-				{new Date(post.date).toLocaleDateString('th-TH', {
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric',
-				})}
-			</time>
+			{
+				isEditorial && (
+					<time class="date" datetime={post.date}>
+						{new Date(post.date).toLocaleDateString('th-TH', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}
+					</time>
+				)
+			}
 			<h1 class="title" set:html={post.title.rendered} />
 		</header>
 
@@ -128,21 +125,23 @@ const articleJsonLd: Array<Record<string, unknown>> = [
 
 		{relatedPosts.length > 0 && (
 			<section class="related" aria-labelledby="related-heading">
-				<h2 id="related-heading" class="related-title">บทความที่เกี่ยวข้อง</h2>
+				<h2 id="related-heading" class="related-title">{isEditorial ? 'บทความที่เกี่ยวข้อง' : 'บริการที่เกี่ยวข้อง'}</h2>
 				<div class="related-grid">
 					{relatedPosts.map((rp) => (
 						<a href={`/${rp.slug}/`} class="related-card">
-							<p class="related-card-date">
-								{new Date(rp.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
-							</p>
+							{isEditorial && (
+								<p class="related-card-date">
+									{new Date(rp.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
+								</p>
+							)}
 							<p class="related-card-title" set:html={rp.title.rendered} />
 						</a>
 					))}
 				</div>
-				<a href="/blog/" class="related-all">ดูบทความทั้งหมด →</a>
+				{isEditorial && <a href="/blog/" class="related-all">ดูบทความทั้งหมด →</a>}
 			</section>
 		)}
-	</article>
+	</main>
 </BaseLayout>
 
 <style>

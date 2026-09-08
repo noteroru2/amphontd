@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import { classifyPostPageIntent, isEditorialIntent } from '../../lib/post-page-intent.mjs';
 import { getIndexablePosts } from '../../lib/posts';
 import { getSiteOrigin } from '../../lib/site';
 
-const posts = getIndexablePosts();
+const posts = getIndexablePosts().filter((post) => isEditorialIntent(classifyPostPageIntent(post)));
 const site = getSiteOrigin();
 const listJsonLd: Array<Record<string, unknown>> = [
 	{
