@@ -14,9 +14,11 @@
     "audit:p0-index-surface": "node scripts/qa-index-surface.mjs",
     "audit:p1-ownership": "node scripts/qa-p1-ownership.mjs",
     "audit:p2-template-schema": "node scripts/qa-p2-template-schema.mjs",
+    "audit:p3-service-authority": "node scripts/qa-p3-service-authority.mjs",
     "qa:p0": "npm run audit:p0-index-surface && npm run build",
     "qa:p1": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run build",
-    "qa:p2": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run build"
+    "qa:p2": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run build",
+    "qa:p3": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",

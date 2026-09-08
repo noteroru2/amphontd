@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { LocalPost } from '../../lib/posts';
+import { getIndexablePosts } from '../../lib/posts';
+import {
+	SERVICE_AUTHORITY_FAMILIES,
+	buildFamilyServiceEntries,
+	getAuthorityFamilyBySlug,
+} from '../../lib/service-authority-core.mjs';
+import { getSiteOrigin } from '../../lib/site';
+
+export function getStaticPaths() {
+	return SERVICE_AUTHORITY_FAMILIES.map((family) => ({
+		params: { family: family.slug },
+		props: { familySlug: family.slug },
+	}));
+}
+
+interface Props {
+	familySlug: string;
+}
+
+const { familySlug } = Astro.props;
+const family = getAuthorityFamilyBySlug(familySlug);
+if (!family) throw new Error(`Unknown service family: ${familySlug}`);
+
+const site = getSiteOrigin();
+const entries = buildFamilyServiceEntries(getIndexablePosts() as LocalPost[], family.key);
+const localEntries = entries.filter((entry) => entry.kind === 'LOCAL_SERVICE');
+const nationalEntries = entries.filter((entry) => entry.kind !== 'LOCAL_SERVICE');
+const pagePath = `/services/${family.slug}/`;
+
+const jsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'CollectionPage',
+		name: `${family.label} — พื้นที่และบริการ | AMPHON TRADING`,
+		description: family.description,
+		url: `${site}${pagePath}`,
+		inLanguage: 'th-TH',
+		mainEntity: {
+			'@type': 'ItemList',
+			numberOfItems: entries.length + 1,
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: `${family.label} — หน้าหลัก`, url: `${site}${family.moneyPath}` },
+				...entries.map((entry, index) => ({
+					'@type': 'ListItem',
+					position: index + 2,
+					name: entry.label,
+					url: `${site}${entry.href}`,
+				})),
+			],
+		},
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${site}/` },
+			{ '@type': 'ListItem', position: 2, name: 'รวมบริการรับซื้อ', item: `${site}/services/` },
+			{ '@type': 'ListItem', position: 3, name: family.label, item: `${site}${pagePath}` },
+		],
+	},
+];
+---
+
+<BaseLayout
+	title={`${family.label} แยกตามพื้นที่ | AMPHON TRADING`}
+	description={family.description}
+	pathname={pagePath}
+	jsonLd={jsonLd}
+>
+	<div class="container family-hub">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <a href="/services/">รวมบริการรับซื้อ</a> &gt; <span>{family.label}</span>
+		</nav>
+
+		<header class="family-head">
+			<p class="eyebrow">พื้นที่บริการ</p>
+			<h1>{family.label} — หน้าหลักและพื้นที่ให้บริการ</h1>
+			<p>{family.description}</p>
+			<div class="family-actions">
+				<a class="money-link" href={family.moneyPath}>ไปหน้ารับซื้อหลัก →</a>
+				<a href="/services/">ดูบริการทุกหมวด</a>
+			</div>
+		</header>
+
+		{localEntries.length > 0 && (
+			<section class="service-list" aria-labelledby="local-heading">
+				<div class="section-head">
+					<h2 id="local-heading">พื้นที่ให้บริการ</h2>
+					<p>{localEntries.length} หน้า</p>
+				</div>
+				<div class="link-grid">
+					{localEntries.map((entry) => (
+						<a class="service-card" href={entry.href}>
+							<span>{entry.label}</span>
+							{entry.locationLabel && <small>{entry.locationLabel}</small>}
+						</a>
+					))}
+				</div>
+			</section>
+		)}
+
+		{nationalEntries.length > 0 && (
+			<section class="service-list" aria-labelledby="other-heading">
+				<div class="section-head">
+					<h2 id="other-heading">บริการที่เกี่ยวข้อง</h2>
+					<p>{nationalEntries.length} หน้า</p>
+				</div>
+				<div class="link-grid">
+					{nationalEntries.map((entry) => (
+						<a class="service-card" href={entry.href}><span>{entry.label}</span></a>
+					))}
+				</div>
+			</section>
+		)}
+	</div>
+</BaseLayout>
+
+<style>
+	.family-hub { padding-block: 2rem 4rem; }
+	.family-head { max-width: 760px; margin-bottom: 1.75rem; }
+	.eyebrow { margin: 0 0 0.35rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; color: var(--muted); }
+	.family-head h1 { margin: 0 0 0.65rem; line-height: 1.2; }
+	.family-head p { margin: 0.5rem 0; }
+	.family-actions { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; margin-top: 0.85rem; font-weight: 700; }
+	.money-link { color: var(--text); }
+	.service-list + .service-list { margin-top: 2rem; }
+	.section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.75rem; }
+	.section-head h2 { margin: 0; font-size: 1.2rem; }
+	.section-head p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+	.link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 0.55rem; }
+	.service-card { display: grid; gap: 0.2rem; padding: 0.7rem 0.8rem; border: 1px solid rgba(36, 48, 67, 0.1); border-radius: 10px; background: var(--surface); text-decoration: none; }
+	.service-card:hover { border-color: rgba(10, 124, 111, 0.38); text-decoration: none; }
+	.service-card span { color: var(--text); font-size: 0.9rem; font-weight: 650; line-height: 1.35; }
+	.service-card small { color: var(--muted); font-size: 0.78rem; }
+</style>

@@ -1,0 +1,114 @@
+---
+import { getIndexablePosts } from '../lib/posts';
+import {
+	getAuthorityFamilyByKey,
+	getFamilyHubPath,
+	getMoneyAuthorityLinks,
+	getServiceSiblingLinks,
+} from '../lib/service-authority-core.mjs';
+
+interface Props {
+	familyKey: string;
+	mode: 'money' | 'service';
+	currentSlug?: string;
+}
+
+const { familyKey, mode, currentSlug } = Astro.props;
+const family = getAuthorityFamilyByKey(familyKey);
+const indexablePosts = getIndexablePosts();
+const links = mode === 'money'
+	? getMoneyAuthorityLinks(indexablePosts, familyKey, 8)
+	: getServiceSiblingLinks(indexablePosts, familyKey, currentSlug, 5);
+const familyHubPath = getFamilyHubPath(familyKey);
+---
+
+{family && (
+	<aside class:list={['service-authority', `service-authority--${mode}`]} aria-label={`ลิงก์บริการ ${family.label}`}>
+		<div class="service-authority-head">
+			<div>
+				<p class="service-authority-kicker">บริการและพื้นที่</p>
+				<h3>{mode === 'money' ? `พื้นที่บริการ ${family.label}` : `สำรวจบริการ ${family.label} เพิ่มเติม`}</h3>
+			</div>
+			<div class="service-authority-core-links">
+				<a href={family.moneyPath}>หน้าบริการหลัก</a>
+				<a href={familyHubPath}>ดูพื้นที่ทั้งหมด</a>
+				<a href="/services/">รวมบริการรับซื้อ</a>
+			</div>
+		</div>
+
+		{links.length > 0 && (
+			<div class="service-authority-grid">
+				{links.map((link) => (
+					<a class="service-authority-card" href={link.href}>
+						<span class="service-authority-card-title">{link.label}</span>
+						{link.locationLabel && <small>{link.locationLabel}</small>}
+					</a>
+				))}
+			</div>
+		)}
+	</aside>
+)}
+
+<style>
+	.service-authority {
+		margin-block: 1.5rem;
+		padding: 1rem;
+		border: 1px solid rgba(36, 48, 67, 0.12);
+		border-radius: var(--radius);
+		background: rgba(255, 255, 255, 0.72);
+	}
+	.service-authority-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.75rem 1rem;
+	}
+	.service-authority-kicker {
+		margin: 0 0 0.15rem;
+		font-size: 0.75rem;
+		font-weight: 800;
+		letter-spacing: 0.05em;
+		color: var(--muted);
+	}
+	.service-authority h3 {
+		margin: 0;
+		font-size: 1.05rem;
+	}
+	.service-authority-core-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem 0.8rem;
+		font-size: 0.88rem;
+		font-weight: 650;
+	}
+	.service-authority-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+		gap: 0.55rem;
+		margin-top: 0.9rem;
+	}
+	.service-authority-card {
+		display: grid;
+		gap: 0.2rem;
+		padding: 0.65rem 0.75rem;
+		border: 1px solid rgba(36, 48, 67, 0.1);
+		border-radius: 10px;
+		background: var(--surface);
+		text-decoration: none;
+	}
+	.service-authority-card:hover {
+		border-color: rgba(10, 124, 111, 0.38);
+		text-decoration: none;
+	}
+	.service-authority-card-title {
+		font-size: 0.9rem;
+		font-weight: 650;
+		color: var(--text);
+		line-height: 1.35;
+	}
+	.service-authority-card small {
+		font-size: 0.78rem;
+		color: var(--muted);
+	}
+</style>

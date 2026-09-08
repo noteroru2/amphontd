@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceAuthorityLinks from '../components/ServiceAuthorityLinks.astro';
 import type { LocalPost } from '../lib/posts';
 import { getAllPosts, getFeaturedImageAttrs, getFeaturedImageUrl, getPostIndexPolicy, getPostTags, getRoutablePosts } from '../lib/posts';
 import { sanitizePostContentHtml } from '../lib/post-content-hygiene.mjs';
 import { buildPostStructuredData, classifyPostPageIntent, isEditorialIntent } from '../lib/post-page-intent.mjs';
+import { normalizeAuthorityFamilyKey } from '../lib/service-authority-core.mjs';
 import { getPostSeoOverride, preparePostContent } from '../lib/post-seo-overrides';
 import { getSiteOrigin } from '../lib/site';
 
@@ -35,26 +37,24 @@ const pageContent = sanitizePostContentHtml(preparePostContent(post.slug, post.c
 const site = getSiteOrigin();
 const pagePath = `/${post.slug}/`;
 const pageUrl = `${site}${pagePath}`;
+const pageAuthorityFamily = normalizeAuthorityFamilyKey(pageIntent.familyKey);
 
-// Related links stay inside the same broad page intent so service pages do not
-// point to arbitrary editorial posts and vice versa.
+// Editorial pages stay within editorial content. Service pages are stricter:
+// related links must stay inside the same topical service family.
 const allPosts = getAllPosts();
 const relatedPosts = allPosts
 	.filter((candidate) => {
 		if (candidate.slug === post.slug) return false;
 		if (getPostIndexPolicy(candidate).lifecycle !== 'INDEX') return false;
-		return isEditorialIntent(classifyPostPageIntent(candidate)) === isEditorial;
-	})
-	.sort((a, b) => {
+		const candidateIntent = classifyPostPageIntent(candidate);
+		const candidateEditorial = isEditorialIntent(candidateIntent);
+		if (candidateEditorial !== isEditorial) return false;
 		if (!isEditorial) {
-			const aIntent = classifyPostPageIntent(a);
-			const bIntent = classifyPostPageIntent(b);
-			const aSameFamily = aIntent.familyKey === pageIntent.familyKey ? 1 : 0;
-			const bSameFamily = bIntent.familyKey === pageIntent.familyKey ? 1 : 0;
-			if (aSameFamily !== bSameFamily) return bSameFamily - aSameFamily;
+			return normalizeAuthorityFamilyKey(candidateIntent.familyKey) === pageAuthorityFamily;
 		}
-		return new Date(b.modified ?? b.date).getTime() - new Date(a.modified ?? a.date).getTime();
+		return true;
 	})
+	.sort((a, b) => new Date(b.modified ?? b.date).getTime() - new Date(a.modified ?? a.date).getTime())
 	.slice(0, 3);
 
 const pageJsonLd = buildPostStructuredData({
@@ -122,6 +122,10 @@ const pageJsonLd = buildPostStructuredData({
 			<p class="post-cta-text">อยากขายสินค้าไอที? ทักหาทีมงานได้เลยตลอด 24 ชั่วโมง</p>
 			<a class="post-cta-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">แอดไลน์ @webuy รับประเมินราคาฟรี →</a>
 		</aside>
+
+		{!isEditorial && indexPolicy.lifecycle === 'INDEX' && (
+			<ServiceAuthorityLinks familyKey={pageIntent.familyKey ?? ''} mode="service" currentSlug={post.slug} />
+		)}
 
 		{relatedPosts.length > 0 && (
 			<section class="related" aria-labelledby="related-heading">

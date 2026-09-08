@@ -1,4 +1,7 @@
 ---
+import ServiceAuthorityLinks from './ServiceAuthorityLinks.astro';
+import { getMoneyAuthorityTrigger } from '../lib/service-authority-core.mjs';
+
 interface Props {
 	heading?: string;
 	text?: string;
@@ -10,6 +13,8 @@ const {
 	text = 'ส่งรูป รุ่น สเปก และสภาพเครื่องมาได้เลย ทีมงานพร้อมประเมินให้เร็วที่สุด',
 	variant = 'primary',
 } = Astro.props;
+
+const authorityTrigger = getMoneyAuthorityTrigger(Astro.url.pathname, heading);
 ---
 
 <aside class:list={['cta-box', variant]} aria-label="ช่องทางติดต่อ">
@@ -27,6 +32,8 @@ const {
 		<p class="cta-sub">ติดต่อได้ 24 ชั่วโมง ไม่มีวันหยุด</p>
 	</div>
 </aside>
+
+{authorityTrigger && <ServiceAuthorityLinks familyKey={authorityTrigger.familyKey} mode="money" />}
 
 <style>
 	.cta-box {

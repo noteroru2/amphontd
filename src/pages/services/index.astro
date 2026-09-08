@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getIndexablePosts } from '../../lib/posts';
+import { buildAuthorityClusters } from '../../lib/service-authority-core.mjs';
+import { getSiteOrigin } from '../../lib/site';
+
+const site = getSiteOrigin();
+const clusters = buildAuthorityClusters(getIndexablePosts());
+const serviceCount = clusters.reduce((sum, cluster) => sum + cluster.entries.length, 0);
+const localCount = clusters.reduce((sum, cluster) => sum + cluster.localEntries.length, 0);
+
+const jsonLd: Array<Record<string, unknown>> = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'CollectionPage',
+		name: 'รวมบริการรับซื้อสินค้าไอที | AMPHON TRADING',
+		description: 'รวมหน้าบริการหลักและพื้นที่รับซื้อสินค้าไอที แยกตามหมวดสินค้า เพื่อให้ค้นหาบริการที่ตรงกับอุปกรณ์และพื้นที่ได้ง่ายขึ้น',
+		url: `${site}/services/`,
+		inLanguage: 'th-TH',
+		mainEntity: {
+			'@type': 'ItemList',
+			numberOfItems: clusters.length,
+			itemListElement: clusters.map((cluster, index) => ({
+				'@type': 'ListItem',
+				position: index + 1,
+				name: cluster.label,
+				url: `${site}${cluster.hubPath}`,
+			})),
+		},
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${site}/` },
+			{ '@type': 'ListItem', position: 2, name: 'รวมบริการรับซื้อ', item: `${site}/services/` },
+		],
+	},
+];
+---
+
+<BaseLayout
+	title="รวมบริการรับซื้อสินค้าไอที แยกตามหมวดและพื้นที่ | AMPHON TRADING"
+	description="ค้นหาบริการรับซื้อโน๊ตบุ๊ค คอม iPhone iPad MacBook กล้อง และพื้นที่ให้บริการของ AMPHON TRADING"
+	pathname="/services/"
+	jsonLd={jsonLd}
+>
+	<div class="container service-hub">
+		<nav aria-label="breadcrumb" class="breadcrumb">
+			<a href="/">หน้าแรก</a> &gt; <span>รวมบริการรับซื้อ</span>
+		</nav>
+		<header class="hub-head">
+			<p class="eyebrow">SERVICE HUB</p>
+			<h1>รวมบริการรับซื้อสินค้าไอที แยกตามหมวดและพื้นที่</h1>
+			<p>
+				เลือกประเภทสินค้าที่ต้องการขาย เช่น โน๊ตบุ๊ค คอมพิวเตอร์ iPhone iPad MacBook หรือกล้อง แล้วดูหน้าบริการหลักและพื้นที่ให้บริการที่เกี่ยวข้องได้จากที่เดียว
+			</p>
+			<p class="hub-stats">{clusters.length} หมวดหลัก · {serviceCount} หน้าบริการ · {localCount} หน้าพื้นที่</p>
+		</header>
+
+		<div class="cluster-grid">
+			{clusters.map((cluster) => (
+				<section class="cluster-card">
+					<h2>{cluster.label}</h2>
+					<p>{cluster.description}</p>
+					<p class="cluster-meta">{cluster.entries.length} หน้าบริการ · {cluster.localEntries.length} หน้าพื้นที่</p>
+					<div class="cluster-actions">
+						<a class="primary-link" href={cluster.moneyPath}>หน้ารับซื้อหลัก</a>
+						<a href={cluster.hubPath}>ดูพื้นที่และบริการทั้งหมด →</a>
+					</div>
+					{cluster.localEntries.length > 0 && (
+						<ul class="preview-links">
+							{cluster.localEntries.slice(0, 4).map((entry) => (
+								<li><a href={entry.href}>{entry.label}</a></li>
+							))}
+						</ul>
+					)}
+				</section>
+			))}
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.service-hub { padding-block: 2rem 4rem; }
+	.hub-head { max-width: 760px; margin-bottom: 1.5rem; }
+	.eyebrow { margin: 0 0 0.35rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.08em; color: var(--muted); }
+	.hub-head h1 { margin: 0 0 0.75rem; line-height: 1.2; }
+	.hub-head p { margin: 0.5rem 0; }
+	.hub-stats { color: var(--muted); font-weight: 650; }
+	.cluster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 1rem; }
+	.cluster-card { padding: 1.1rem; border: 1px solid rgba(36, 48, 67, 0.12); border-radius: var(--radius); background: var(--surface); }
+	.cluster-card h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+	.cluster-card p { margin: 0.35rem 0; color: var(--muted); }
+	.cluster-meta { font-size: 0.86rem; }
+	.cluster-actions { display: flex; flex-wrap: wrap; gap: 0.55rem 0.9rem; margin-top: 0.8rem; font-weight: 650; font-size: 0.92rem; }
+	.primary-link { color: var(--text); }
+	.preview-links { margin: 0.85rem 0 0; padding-left: 1.2rem; font-size: 0.88rem; }
+	.preview-links li + li { margin-top: 0.3rem; }
+</style>
