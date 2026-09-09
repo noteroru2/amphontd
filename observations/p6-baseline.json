@@ -31,17 +31,19 @@
     }
   },
   "productionEvidence": {
-    "checkedAt": "2026-09-08T22:07:00+07:00",
-    "verdict": "WAIT_FOR_DEPLOY_OR_RECRAWL",
+    "checkedAt": "2026-09-09T23:20:57+07:00",
+    "verdict": "PASS",
     "notes": [
-      "Fresh public search fetches still surfaced pre-P5 titles for MacBook and iPad.",
-      "The P3 /services/ hub was not reliably surfaced by public fetch at capture time.",
-      "GitHub main contained P5 source, but no CI status/check was attached to the P5 commit."
+      "Live /rab-sue-macbook/ now serves the recovered P5 title and updated 2026 money-page content.",
+      "Live /rab-sue-ipad/ now serves the recovered P5 title.",
+      "Live /services/ is publicly reachable with the intended services-hub title and content.",
+      "Production verification gate therefore passes; ranking observation may start from this live verification point."
     ]
   },
   "observation": {
-    "clockActive": false,
-    "clockStart": null,
+    "clockActive": true,
+    "clockStart": "2026-09-09T23:20:57+07:00",
+    "clockStartFinalizedThrough": "2026-09-06",
     "minimumNewFinalizedDaysAfterLivePass": 7,
     "primaryDecisionWindowDays": 14,
     "rule": "Do not judge ranking recovery until production verification passes and GSC has at least 7 new finalized days after that live pass."
