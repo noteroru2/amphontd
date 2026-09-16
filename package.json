@@ -10,7 +10,8 @@
     "build:astro": "astro build",
     "postbuild:p4": "node scripts/postbuild-static-money-schema.mjs",
     "postbuild:p5": "node scripts/postbuild-money-ranking.mjs",
-    "build": "npm run build:astro && npm run postbuild:p4 && npm run postbuild:p5",
+    "postbuild:p7-routing": "node scripts/postbuild-cloudflare-routing.mjs",
+    "build": "npm run build:astro && npm run postbuild:p4 && npm run postbuild:p5 && npm run postbuild:p7-routing",
     "preview": "astro preview",
     "start": "node scripts/start.mjs",
     "astro": "astro",
@@ -24,13 +25,15 @@
     "audit:p5-dist": "node scripts/qa-p5-money-ranking.mjs --dist",
     "audit:p6-observation": "node scripts/qa-p6-observation.mjs",
     "verify:p6-production": "node scripts/p6-production-gate.mjs",
+    "audit:p7-recovery": "node scripts/qa-p7-recovery.mjs",
     "qa:p0": "npm run audit:p0-index-surface && npm run build",
     "qa:p1": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run build",
     "qa:p2": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run build",
     "qa:p3": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run build",
     "qa:p4": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run build && npm run audit:p4-dist",
     "qa:p5": "npm run audit:p0-index-surface && npm run audit:p1-ownership && npm run audit:p2-template-schema && npm run audit:p3-service-authority && npm run audit:p4-static-money-schema && npm run audit:p5-money-ranking && npm run build && npm run audit:p4-dist && npm run audit:p5-dist",
-    "qa:p6": "npm run qa:p5 && npm run audit:p6-observation"
+    "qa:p6": "npm run qa:p5 && npm run audit:p6-observation",
+    "qa:p7": "npm run qa:p5 && npm run audit:p7-recovery"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.1",

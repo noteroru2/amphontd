@@ -1,0 +1,67 @@
+{
+  "batch": "P7_RECOVERY_V2",
+  "capturedAt": "2026-09-16T23:00:00+07:00",
+  "timezone": "Asia/Bangkok",
+  "gsc": {
+    "property": "sc-domain:amphontd.com",
+    "comparison": {
+      "previous": {
+        "dateFrom": "2026-09-06",
+        "dateTo": "2026-09-10",
+        "clicks": 62,
+        "impressions": 1506,
+        "ctr": 0.0412,
+        "position": 15.1653
+      },
+      "latest": {
+        "dateFrom": "2026-09-11",
+        "dateTo": "2026-09-15",
+        "clicks": 59,
+        "impressions": 1377,
+        "ctr": 0.0428,
+        "position": 15.2571
+      }
+    },
+    "latestMoneyPages": {
+      "/rab-sue-com/": { "clicks": 0, "impressions": 2, "ctr": 0, "position": 7.5 },
+      "/rab-sue-ipad/": { "clicks": 0, "impressions": 59, "ctr": 0, "position": 23.7627 },
+      "/rab-sue-macbook/": { "clicks": 0, "impressions": 30, "ctr": 0, "position": 52.8667 },
+      "/rab-sue-notebook/": { "clicks": 0, "impressions": 11, "ctr": 0, "position": 27.9091 },
+      "/rab-sue-lamphong/": { "clicks": 0, "impressions": 2, "ctr": 0, "position": 39.0 }
+    },
+    "conflicts": [
+      {
+        "owner": "/rab-sue-iphone/",
+        "competitor": "/webuy-iphone",
+        "evidence": "Generic queries including รับซื้อไอโฟน and รับซื้อ iphone still resolve to legacy /webuy-iphone around positions 57-69."
+      },
+      {
+        "owners": ["/rab-sue-ipad/", "/rab-sue-macbook/", "/rab-sue-iphone/"],
+        "competitor": "/รับซื้อเมืองเลย/",
+        "evidence": "Broad city page appears for generic product queries without matching the national product intent."
+      }
+    ]
+  },
+  "rootCauses": [
+    "Production uses Cloudflare Workers Static Assets, so Astro-generated redirect pages need Cloudflare _redirects output to guarantee HTTP 301 ownership consolidation.",
+    "Homepage recent-post listing used raw imported posts and linked directly to HOLD_NOINDEX, REDIRECT and GONE URLs, leaking internal authority back to retired pages.",
+    "Legacy /webuy-iphone still owns generic iPhone impressions instead of the dedicated /rab-sue-iphone/ money page.",
+    "Broad /รับซื้อเมืองเลย/ competes with several generic product intents and requires temporary noindex while dedicated owners recover."
+  ],
+  "protectedWinners": [
+    { "path": "/buynotebookubon/", "reason": "local notebook queries around positions 4-6" },
+    { "path": "/รับซื้อไอโฟนสุพรรณบุรี/", "reason": "5 clicks / 67 impressions / position 8.12 in latest five days" },
+    { "path": "/รับซื้อชุมแพ/", "reason": "4 clicks / 36 impressions / position 7.31 in latest five days" },
+    { "path": "/รับซื้อคอมจันทบุรี/", "reason": "2 clicks / 31 impressions / position 8.71 in latest five days" },
+    { "path": "/รับซื้อสินค้าค้างสต๊อก-2/", "reason": "5 clicks / 39 impressions / position 9.28 in latest five days" }
+  ],
+  "p7Actions": [
+    "Generate Cloudflare dist/_redirects from SEO ownership policy on every production build.",
+    "Generate Cloudflare dist/_headers noindex reinforcement for explicit money-query HOLD conflicts.",
+    "Enforce real 301/410 behavior in the Node fallback server.",
+    "Restrict public/listing getAllPosts() to INDEX lifecycle to stop homepage authority leakage.",
+    "Redirect /webuy-iphone to /rab-sue-iphone/.",
+    "Keep /รับซื้อเมืองเลย/ HOLD_NOINDEX until generic money owners recover.",
+    "Add P7 build QA to verify routing output and homepage authority hygiene."
+  ]
+}

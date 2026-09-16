@@ -49,7 +49,20 @@ const postIndexPolicy = applyMoneyOwnershipOverrides(
 	buildPostIndexPolicy(posts),
 ) as Map<string, PostIndexPolicy>;
 
+/**
+ * Public/listing-safe posts only.
+ *
+ * Historically this returned every imported WordPress record. That caused the
+ * homepage "latest" section to keep linking to REDIRECT, HOLD_NOINDEX and GONE
+ * URLs, leaking internal authority back into pages the recovery policy was
+ * explicitly trying to retire. Raw imported records remain available through
+ * getAllGeneratedPosts() for tooling that genuinely needs them.
+ */
 export function getAllPosts(): LocalPost[] {
+	return posts.filter((post) => isIndexLifecycle(postIndexPolicy.get(post.slug)));
+}
+
+export function getAllGeneratedPosts(): LocalPost[] {
 	return posts;
 }
 

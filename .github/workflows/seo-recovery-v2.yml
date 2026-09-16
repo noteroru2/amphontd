@@ -1,0 +1,35 @@
+name: SEO Recovery V2 QA
+
+on:
+  pull_request:
+    paths:
+      - 'astro.config.mjs'
+      - 'package.json'
+      - 'scripts/**'
+      - 'src/**'
+      - 'public/**'
+      - '.github/workflows/seo-recovery-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recovery-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run P7 recovery gate
+        run: npm run qa:p7
