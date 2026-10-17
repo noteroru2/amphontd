@@ -1,3 +1,4 @@
+import { STOCK_LOT_SLUG, STOCK_LOT_CONTENT } from './stock-lot-content';
 import postsData from '../data/local-posts.generated.json';
 import { appendTrustBridge } from './post-trust-bridge';
 
@@ -116,6 +117,14 @@ function patchIntro(html: string, override: PostSeoOverride): string {
 }
 
 const POST_SEO_OVERRIDES: Record<string, PostSeoOverride> = {
+	[STOCK_LOT_SLUG]: {
+		title: 'รับซื้อสินค้าค้างสต๊อก กรุงเทพฯ',
+		description: 'รับซื้อสินค้าค้างสต๊อกและอุปกรณ์ไอทีเป็นล็อต ส่งรายการ รุ่น จำนวน รูปสภาพ และพื้นที่ให้ร้านอำพล เทรดดิ้งประเมินเบื้องต้น ตกลงราคาและเงื่อนไขก่อนส่งมอบ',
+		leadingBlocksToReplace: 0,
+		introParagraphs: [],
+		cta: { text: 'ส่งรายการสินค้าทาง LINE @webuy', href: LINE_URL, external: true },
+		internalLinks: [{ href: '/rab-sue-klong/', label: 'บริการรับซื้อกล้อง' }],
+	},
 	'fixmobile-ubon': {
 		title: 'ซ่อมมือถือ อุบล เช็กอาการก่อนซ่อมโดยช่างร้านจริง',
 		description:
@@ -206,6 +215,7 @@ export function getPostSeoOverride(slug: string): PostSeoOverride | undefined {
 }
 
 export function preparePostContent(slug: string, html: string): string {
+	if (slug === STOCK_LOT_SLUG) return appendTrustBridge(slug, STOCK_LOT_CONTENT);
 	const override = getPostSeoOverride(slug);
 	let output = html;
 

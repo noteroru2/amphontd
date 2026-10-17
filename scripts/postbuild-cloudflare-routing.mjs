@@ -29,6 +29,14 @@ for (const [slug, item] of policy.entries()) {
 	redirects.push({ source, destination });
 }
 
+// Legacy Thai stock-lot URLs arrive percent-encoded at the edge.
+// Retain readable policy rules and add exact wire-format and slashless aliases.
+for (const suffix of ['-2', '-3']) {
+	const source = encodeURI(`/รับซื้อสินค้าค้างสต๊อก${suffix}`);
+	const destination = encodeURI('/รับซื้อสินค้าค้างสต๊อก/');
+	redirects.push({ source, destination }, { source: `${source}/`, destination });
+}
+
 redirects.sort((a, b) => a.source.localeCompare(b.source, 'th'));
 
 if (redirects.length > MAX_STATIC_REDIRECTS) {
