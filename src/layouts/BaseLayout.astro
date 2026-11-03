@@ -38,7 +38,7 @@ const robotsContent = noindex
 	? 'noindex, nofollow, noarchive'
 	: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 
-const orgId = `${site.toString()}#organization`;
+const orgId = 'https://amphon.co.th/#organization';
 
 const webPageJsonLd = {
 	'@context': 'https://schema.org',
@@ -60,9 +60,17 @@ const baseOrgJsonLd = pathname === '/' ? {
 	'@context': 'https://schema.org',
 	'@type': 'Organization',
 	'@id': orgId,
-	name: orgName,
-	url: site.toString(),
-	logo: new URL('/favicon.svg', site).toString(),
+	name: 'อำพล เทรดดิ้ง',
+	alternateName: ['AMPHON TRADING', 'Amphon Trading', 'อำพล เทรดดิ้ง'],
+	legalName: 'บริษัท อำพล เทรดดิ้ง จำกัด',
+	url: 'https://amphon.co.th/',
+	logo: 'https://amphon.co.th/images/brand/amphon-trading-logo.webp',
+	sameAs: [
+		'https://amphontd.com/',
+		'https://webuy.in.th/',
+		'https://www.facebook.com/Amphontrading',
+		'https://line.me/ti/p/~@webuy',
+	],
 } : null;
 
 const initialJsonLdArray = baseOrgJsonLd ? [baseOrgJsonLd, webPageJsonLd] : [webPageJsonLd];
