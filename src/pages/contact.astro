@@ -4,19 +4,15 @@ import { getSiteOrigin } from '../lib/site';
 
 const site = getSiteOrigin();
 const siteName = import.meta.env.PUBLIC_SITE_NAME ?? 'AMPHON TRADING';
-const addressLocality = import.meta.env.PUBLIC_ADDRESS_LOCALITY ?? 'กรุงเทพมหานคร';
-const addressRegion = import.meta.env.PUBLIC_ADDRESS_REGION ?? 'ประเทศไทย';
-const postalCode = import.meta.env.PUBLIC_POSTAL_CODE ?? '10200';
-const mapEmbedSrc =
-	import.meta.env.PUBLIC_GOOGLE_MAP_EMBED ??
-	'https://www.google.com/maps?q=13.7563,100.5018&z=12&output=embed';
-const mapUrl =
-	import.meta.env.PUBLIC_GOOGLE_MAP_URL ??
-	'https://maps.google.com/?q=13.7563,100.5018';
+const addressLocality = 'อำเภอเมืองอุบลราชธานี';
+const addressRegion = 'อุบลราชธานี';
+const postalCode = '34000';
+const mapEmbedSrc = 'https://www.google.com/maps?q=15.2664215,104.844358&z=16&output=embed';
+const mapUrl = 'https://maps.app.goo.gl/krv97o14jPTRrnpW8';
 const businessPhone = import.meta.env.PUBLIC_BUSINESS_PHONE ?? '+66-64-257-9353';
-const openingHours = import.meta.env.PUBLIC_OPENING_HOURS ?? 'เปิดบริการทุกวัน 24 ชั่วโมง';
-const geoLat = parseFloat(import.meta.env.PUBLIC_GEO_LAT ?? '13.7563');
-const geoLng = parseFloat(import.meta.env.PUBLIC_GEO_LNG ?? '100.5018');
+const openingHours = 'หน้าร้าน 09:00–19:00 น.';
+const geoLat = 15.2664215;
+const geoLng = 104.844358;
 const serviceAreasRaw =
 	import.meta.env.PUBLIC_SERVICE_AREAS ??
 	'กรุงเทพมหานคร,ปริมณฑล,อุบลราชธานี,ขอนแก่น,นครราชสีมา,อุดรธานี';
@@ -33,7 +29,7 @@ const contactJsonLd: Array<Record<string, unknown>> = [
 		url: `${site}/contact/`,
 		mainEntity: {
 			'@type': 'LocalBusiness',
-			name: siteName,
+			name: 'บริษัท อำพล เทรดดิ้ง จำกัด',
 			telephone: businessPhone,
 			areaServed: serviceAreas.map((area) => ({
 				'@type': 'AdministrativeArea',
@@ -49,12 +45,13 @@ const contactJsonLd: Array<Record<string, unknown>> = [
 				{
 					'@type': 'OpeningHoursSpecification',
 					dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-					opens: '00:00',
-					closes: '23:59',
+					opens: '09:00',
+					closes: '19:00',
 				},
 			],
 			address: {
 				'@type': 'PostalAddress',
+				streetAddress: '740/8 ถนนชยางกูร ตำบลในเมือง',
 				addressLocality,
 				addressRegion,
 				postalCode,
@@ -95,7 +92,7 @@ const contactJsonLd: Array<Record<string, unknown>> = [
 			<h1>ช่องทางติดต่อหลักของ AMPHON TRADING (อำพล เทรดดิ้ง)</h1>
 			<p>
 				ต้องการประเมินราคาสินค้าหรือสอบถามบริการ ติดต่อเราผ่าน LINE ได้ทันที
-				พร้อมทีมงานตอบกลับต่อเนื่อง
+				รับข้อความเสนอขายผ่าน LINE @webuy ได้ตลอด 24 ชั่วโมง เจ้าหน้าที่ตอบตามคิวงาน
 			</p>
 		</div>
 
@@ -107,7 +104,9 @@ const contactJsonLd: Array<Record<string, unknown>> = [
 					<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">@webuy</a>
 				</p>
 				<p>โทรศัพท์: <a href={`tel:${businessPhone.replace(/\s+/g, '')}`}>{businessPhone}</a></p>
-				<p>เวลาทำการ: {openingHours}</p>
+				<p>เวลาเปิดหน้าร้าน: {openingHours}</p>
+				<p>จุดสังเกต: ติดปากซอยชยางกูร 32</p>
+				<p>LINE @webuy: ติดต่อขายได้ตลอด 24 ชั่วโมง เจ้าหน้าที่ตอบตามคิวงาน</p>
 				<a class="btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
 					แชท LINE ตอนนี้
 				</a>
