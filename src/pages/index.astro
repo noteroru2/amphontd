@@ -22,14 +22,12 @@ const serviceAreas = serviceAreasRaw
 	.split(',')
 	.map((item) => item.trim())
 	.filter(Boolean);
-const mapUrl =
-	import.meta.env.PUBLIC_GOOGLE_MAP_URL ??
-	'https://maps.google.com/?q=13.7563,100.5018';
-const geoLat = parseFloat(import.meta.env.PUBLIC_GEO_LAT ?? '13.7563');
-const geoLng = parseFloat(import.meta.env.PUBLIC_GEO_LNG ?? '100.5018');
-const addressLocality = import.meta.env.PUBLIC_ADDRESS_LOCALITY ?? 'กรุงเทพมหานคร';
-const addressRegion = import.meta.env.PUBLIC_ADDRESS_REGION ?? 'ประเทศไทย';
-const postalCode = import.meta.env.PUBLIC_POSTAL_CODE ?? '10200';
+const mapUrl = 'https://maps.app.goo.gl/krv97o14jPTRrnpW8';
+const geoLat = 15.2664215;
+const geoLng = 104.844358;
+const addressLocality = 'อำเภอเมืองอุบลราชธานี';
+const addressRegion = 'อุบลราชธานี';
+const postalCode = '34000';
 const techPillars = [
 	{
 		title: 'AI-Assisted Pricing',
@@ -40,8 +38,8 @@ const techPillars = [
 		text: 'ทุกขั้นตอนมีหลักฐานการคุยและการตกลงราคา ช่วยให้ตรวจสอบย้อนหลังได้',
 	},
 	{
-		title: '24/7 Response Layer',
-		text: 'มีช่องทางติดต่อหลักผ่าน LINE @webuy พร้อมการตอบกลับต่อเนื่องตลอดวัน',
+		title: '24/7 LINE Intake',
+		text: 'ลูกค้าส่งรูปเสนอขายผ่าน LINE @webuy ได้ตลอด 24 ชั่วโมง เจ้าหน้าที่ตอบกลับตามคิวงาน',
 	},
 	{
 		title: 'Knowledge Hub',
@@ -88,7 +86,7 @@ const faqItems = [
 	},
 	{
 		question: 'ติดต่อช่วงเวลาไหนได้บ้าง?',
-		answer: 'แพลตฟอร์มของเราออกแบบมาเพื่อตอบโจทย์คนรุ่นใหม่ คุณสามารถทัก Line @webuy ทิ้งไว้ได้ตลอด 24 ชั่วโมง (24/7 Service) แม้จะเป็นช่วงดึกหรือวันหยุดยาว เรามีทีมงานคอยแสตนด์บายเพื่อตอบคำถามและประเมินราคาให้เร็วที่สุด',
+		answer: 'แพลตฟอร์มของเราออกแบบมาเพื่อตอบโจทย์คนรุ่นใหม่ คุณสามารถทัก Line @webuy ทิ้งไว้ได้ตลอด 24 ชั่วโมง (24/7 Service) แม้จะเป็นช่วงดึกหรือวันหยุดยาว เรามีโดยเจ้าหน้าที่จะตอบตามคิวงาน ไม่รับประกันเวลาตอบกลับทันที',
 	},
 	{
 		question: 'มีบริการรับซื้อถึงที่ (On-site Pick up) ไหม?',
@@ -119,15 +117,16 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		name: orgName,
 		url: site,
 		inLanguage: 'th-TH',
-		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อสินค้าไอทีมือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง',
+		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อสินค้าไอทีมือสอง ประเมินราคาโปร่งใส ชำระเงินหลังตรวจและตกลงราคา ติดต่อ Line @webuy ตลอด 24 ชั่วโมง',
 	},
 	{
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
-		name: orgName,
+		name: 'บริษัท อำพล เทรดดิ้ง จำกัด',
+		alternateName: ['AMPHON TRADING', 'อำพล เทรดดิ้ง'],
 		url: site,
 		logo: new URL(orgLogo, site).toString(),
-		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+		sameAs: [...new Set([...socialLinks, 'https://amphon.co.th/'])],
 		knowsAbout: ['รับซื้อโน๊ตบุ๊ค', 'รับซื้อคอมพิวเตอร์', 'รับซื้อไอโฟน', 'รับซื้อกล้อง', 'ประเมินราคาสินค้าไอทีมือสอง', 'รับซื้อ MacBook', 'รับซื้อ iPad'],
 	},
 	{
@@ -145,11 +144,11 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 	{
 		'@context': 'https://schema.org',
 		'@type': 'LocalBusiness',
-		name: orgName,
+		name: 'ร้านอำพล เทรดดิ้ง',
 		url: site,
 		logo: new URL(orgLogo, site).toString(),
 		image: [new URL('/hero-soft.svg', site).toString()],
-		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อ ฝากขาย และประเมินสินค้าไอทีมือสอง ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อผ่าน Line @webuy ตลอด 24 ชั่วโมง',
+		description: 'AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อ ฝากขาย และประเมินสินค้าไอทีมือสอง ประเมินราคาโปร่งใส ชำระเงินหลังตรวจและตกลงราคา ติดต่อผ่าน Line @webuy ตลอด 24 ชั่วโมง',
 		telephone: businessPhone,
 		priceRange: '$$',
 		knowsAbout: ['รับซื้อโน๊ตบุ๊ค', 'รับซื้อคอมพิวเตอร์', 'รับซื้อไอโฟน', 'รับซื้อกล้อง', 'ประเมินราคาสินค้าไอทีมือสอง', 'รับซื้อ MacBook', 'รับซื้อ iPad'],
@@ -169,8 +168,8 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 					'Saturday',
 					'Sunday',
 				],
-				opens: '00:00',
-				closes: '23:59',
+				opens: '09:00',
+				closes: '19:00',
 			},
 		],
 		contactPoint: [
@@ -190,44 +189,20 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		},
 		address: {
 			'@type': 'PostalAddress',
+			streetAddress: '740/8 ถนนชยางกูร ตำบลในเมือง',
 			addressLocality,
 			addressRegion,
 			postalCode,
 			addressCountry: 'TH',
 		},
 		sameAs: socialLinks.length > 0 ? socialLinks : undefined,
-		aggregateRating: {
-			'@type': 'AggregateRating',
-			ratingValue: '4.9',
-			reviewCount: '154',
-		},
-		review: [
-			{
-				'@type': 'Review',
-				author: { '@type': 'Person', name: 'ลูกค้า - โซนกรุงเทพ' },
-				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-				reviewBody: 'ส่งรูปไปสอบถามในไลน์ ตอบเร็วมาก ประเมินเข้าใจง่าย และนัดรับสะดวก',
-			},
-			{
-				'@type': 'Review',
-				author: { '@type': 'Person', name: 'ลูกค้า - ภาคอีสาน' },
-				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-				reviewBody: 'ชอบที่แจ้งราคาตามสภาพจริงและอธิบายละเอียด ทำให้ตัดสินใจได้ง่าย',
-			},
-			{
-				'@type': 'Review',
-				author: { '@type': 'Person', name: 'ลูกค้า - ภาคกลาง' },
-				reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-				reviewBody: 'ติดต่อ 24 ชั่วโมงจริง มีแอดมินตอบตลอด เหมาะกับคนที่สะดวกทักดึกๆ',
-			},
-		],
 	},
 ];
 ---
 
 <BaseLayout
-	title="AMPHON TRADING (อำพล เทรดดิ้ง) | รับซื้อสินค้าไอทีมือสอง ประเมินราคาฟรี จ่ายเงินทันที"
-	description="AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อโน๊ตบุ๊ค คอม ไอโฟน กล้อง และสินค้าไอทีทุกชนิด ประเมินราคาโปร่งใส จ่ายเงินทันที ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
+	title="AMPHON TRADING | รับซื้อสินค้าไอทีมือสอง เช็กราคาก่อนขาย"
+	description="AMPHON TRADING (อำพล เทรดดิ้ง) บริการรับซื้อโน๊ตบุ๊ค คอม ไอโฟน กล้อง และสินค้าไอทีทุกชนิด ประเมินราคาโปร่งใส ชำระเงินหลังตรวจและตกลงราคา ติดต่อ Line @webuy ตลอด 24 ชั่วโมง"
 	pathname="/"
 	jsonLd={homeJsonLd}
 >
@@ -238,7 +213,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 				<h1 class="headline">รับซื้อสินค้าไอทีด้วยกระบวนการที่เร็ว โปร่งใส และตรวจสอบได้</h1>
 				<p class="lede">
 					AMPHON TRADING ผสาน workflow แบบเทคโนโลยีเข้ากับทีมงานจริง เพื่อให้การประเมินราคาและการปิดดีล
-					ชัดเจนทุกขั้นตอน พร้อมช่องทางติดต่อที่ตอบไวตลอด 24 ชั่วโมง
+					ชัดเจนทุกขั้นตอน พร้อมช่องทาง LINE @webuy สำหรับส่งข้อมูลได้ตลอด 24 ชั่วโมง เจ้าหน้าที่ตอบตามคิว
 				</p>
 				<div class="hero-actions">
 					<a class="primary-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener noreferrer">
@@ -268,7 +243,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 			</div>
 			<div class="trust-stat-item">
 				<p class="trust-stat-num">24/7</p>
-				<p class="trust-stat-label">ตอบคำถามตลอดเวลา</p>
+				<p class="trust-stat-label">ส่งข้อความทาง LINE ได้ทุกเวลา</p>
 			</div>
 			<div class="trust-stat-item">
 				<p class="trust-stat-num">{serviceAreas.length}+ จังหวัด</p>
@@ -374,7 +349,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 
 	<section class="container services-section" aria-labelledby="services-heading">
 		<h2 id="services-heading" class="section-title">บริการรับซื้อสินค้าไอทีของเรา</h2>
-		<p class="services-intro">AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่ครอบคลุมทุกประเภท ประเมินราคาโปร่งใส จ่ายเงินทันที</p>
+		<p class="services-intro">AMPHON TRADING (อำพล เทรดดิ้ง) คือแพลตฟอร์มรับซื้อสินค้าไอทีมือสองที่ครอบคลุมทุกประเภท ประเมินราคาโปร่งใส ชำระเงินหลังตรวจและตกลงราคา</p>
 		<div class="services-grid">
 			<a href="/rab-sue-notebook/" class="service-card">
 				<svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="8" width="28" height="18" rx="3" stroke="#e8650a" stroke-width="2"/><path d="M2 26h32" stroke="#e8650a" stroke-width="2" stroke-linecap="round"/></svg>
@@ -435,7 +410,7 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 		<div class="authority-grid">
 			<article class="authority-item">
 				<p class="authority-number">24 ชั่วโมง</p>
-				<p class="authority-label">ทีมงานตอบผ่าน LINE ต่อเนื่อง</p>
+				<p class="authority-label">LINE @webuy รับข้อความได้ตลอดเวลา</p>
 			</article>
 			<article class="authority-item">
 				<p class="authority-number">{allPosts.length}+</p>
@@ -477,12 +452,6 @@ const homeJsonLd: Array<Record<string, unknown>> = [
 					“ชอบที่แจ้งราคาตามสภาพจริงและอธิบายละเอียด ทำให้ตัดสินใจได้ง่าย”
 				</p>
 				<cite>ลูกค้า - ภาคอีสาน</cite>
-			</blockquote>
-			<blockquote class="testimonial-item">
-				<p>
-					“ติดต่อ 24 ชั่วโมงจริง มีแอดมินตอบตลอด เหมาะกับคนที่สะดวกทักดึกๆ”
-				</p>
-				<cite>ลูกค้า - ภาคกลาง</cite>
 			</blockquote>
 		</div>
 	</section>
